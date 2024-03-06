@@ -335,7 +335,7 @@
                             </tr>
                             <tr>
                                 <td width="100px">Nama MTK</td>
-                                <td>{{ $soal->nm_mtk ?? 'Data tidak tersedia' }}</td>
+                                <td>{{ $soal->nm_mtk ?? 'Data tidak tersedia.' }}</td>
                             </tr>
                             <tr style="font-weight: 600; color: #e61111;">
                                 <td>Kode MTK</td>

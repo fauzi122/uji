@@ -53,6 +53,7 @@ class ujianController extends Controller
 
     public function index_uts(Request $request, $id)
     {
+      
 
         // masi ada yg masalah
         try {
@@ -63,7 +64,7 @@ class ujianController extends Controller
             // Tangani error dekripsi
             return redirect()->back()->withErrors('Gagal mendekripsi ID.');
         }
-    
+        // dd($pecah);
         // Periksa apakah nilai yang didekripsi menunjukkan 'latihan'
         if ($pecah[0] == 'LATIHAN') {
             // Query untuk kasus 'latihan'

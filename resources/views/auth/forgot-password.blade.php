@@ -1,8 +1,16 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <center>
+        <div class="avatar sm">
+            <img src="{{ asset('assets_login/images/mybest_3.png') }}" class="circle" style="width:240px;height:100px;" alt="biAdmin"/>
     </div>
-
+    <br>
+</center>
+    <p>
+        <p>
+    <div class="mb-4 text-sm text-gray-600">
+        {{ __('lupa kata sandi Anda? masukan alamat email Anda yang terdaftar pada sistem dan kami akan mengirimkan email berisi tautan pengaturan ulang kata sandi atau dapat dibantu KK/SO/ADM Cabang untuk mereset Password anda.') }}
+    </div>
+    <b  class="text-2xl"> *catatan : silahkan cek spam / inbox pada email anda</b>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

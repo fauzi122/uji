@@ -22,7 +22,6 @@ use App\Http\Controllers\mhs\{
     KuisonerpmdController
 };
 
-
 use App\Http\Controllers\baak\{
     MhsController,
     KpbaakController,

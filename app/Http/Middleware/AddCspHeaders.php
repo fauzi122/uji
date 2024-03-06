@@ -25,14 +25,24 @@ class AddCspHeaders
         $response = $next($request);
 
         // Set the CSP header with nonce
+        // $response->headers->set(
+        //     'Content-Security-Policy',
+        //     "default-src 'self';" .
+        //         "script-src 'self' 'unsafe-inline' 'unsafe-eval' example.com https://code.jquery.com https://cdnjs.cloudflare.com;" .  // 'unsafe-eval' added here
+        //         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.ionicframework.com https://cdnjs.cloudflare.com;" .
+        //         "font-src 'self' https://fonts.gstatic.com;" .
+        //         "connect-src 'self';"
+        // );
+
         $response->headers->set(
             'Content-Security-Policy',
             "default-src 'self';" .
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' example.com https://code.jquery.com https://cdnjs.cloudflare.com;" .  // 'unsafe-eval' added here
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.ionicframework.com https://cdnjs.cloudflare.com;" .
-                "font-src 'self' https://fonts.gstatic.com;" .
-                "connect-src 'self';"
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' example.com https://code.jquery.com https://cdnjs.cloudflare.com;" . // 'unsafe-eval' added here
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.ionicframework.com https://cdnjs.cloudflare.com;" . // cdnjs.cloudflare.com already included
+            "font-src 'self' https://fonts.gstatic.com;" .
+            "connect-src 'self';"
         );
+        
 
 
         return $response;

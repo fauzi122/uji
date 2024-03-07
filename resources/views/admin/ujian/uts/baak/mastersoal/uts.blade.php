@@ -57,8 +57,10 @@
                 <th><center>No</center></th>                
                 <th>Matakuliah</th>
                 <th>Paket</th>       
-                <th><center>soal</center></th>        
-                <th><center>jml</center></th>        
+                <th>Soal PG</th>
+                <th>Soal ESSAY</th>
+                <th>Jml PG</th>
+                <th>Jml ESSAY</th>       
                 <th><center>Status</center></th>        
                  <th><center> Aksi </center></th>
               </tr>
@@ -74,8 +76,10 @@
                       <td><center>{{ ++$no }}</center></td>
                       <td><b>{{ $soal->kd_mtk }}</b> - {{ $soal->nm_mtk }}</td>
                       <td>{{ $soal->paket }}</td>
-                      <td><center><span class='badge badge-pill badge-light'>{{ $detailsoal[$soal->kd_mtk] ?? '0' }} soal </span></center></td>
-                      <td><center><span class='badge badge-pill badge-light'>{{ $soal->jml_soal }} soal </span></center></td>
+                      <td>{{ $detailsoal[$soal->kd_mtk] ?? '0' }} SOAL PG</td>
+                                  <td>{{ $detailsoal_essay[$soal->kd_mtk] ?? '0' }} SOAL ESSAY</td>
+                                  <td>{{ $soal->jml_soal }} soal</td>
+                                  <td>{{ $soal->jml_essay }} soal</td>
                       <td></td>
                       <td><center>
                           <a href="/baak/uts-soal-show/{{ $id }}" class="btn btn-xs btn-info">SOAL</a>

@@ -19,7 +19,10 @@
                     $id=Crypt::encryptString($soal->kd_mtk);                                    
                     @endphp
 									<a href="/baak/uts-create-pilih/{{$id}}" class="btn btn-success">Input Soal Pilihan Ganda</a>
-									<a href="" class="btn btn-info">Import Excel Soal Pilihan Ganda</a>
+									
+                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal">
+										Import Excel Soal Pilihan Ganda
+									</button>
                             </div>
                             <div class="invoice-body">
                               <!-- Row start -->
@@ -30,7 +33,8 @@
                                   <h4>List Soal Pilihan Ganda</h4>	
                                   <hr>
                                   </p>
-                                    <table id="myTable2" class="table custom-table">
+                                  <table id="copy-print-csv" class="table custom-table">
+                                 
                                       <thead>
                                         <tr>
                                           <th>NO</th>                               
@@ -118,7 +122,9 @@
                         <br>
                         <br>
                         	<a href="/baak/uts-create-essay/{{$id}}" class="btn btn-success">Input Soal Essay</a>
-									<a href="" class="btn btn-info">Import Excel Soal Essay</a>
+                          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal1">
+                            Import Excel Soal Essay
+                          </button>
                         <br>
                         <br>
                          
@@ -126,7 +132,7 @@
                           <hr>
                           </p>
 													<div class="table-responsive">
-                                   <table id="copy-print-csv" class="table custom-table">
+                            <table id="myTable2" class="table custom-table">
                                       <thead>
                                         <tr>
                                           <th>No</th>
@@ -262,7 +268,100 @@
         </div>
       </div>
 					<!-- Row end -->
+									<!-- Modal -->
+									<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="basicModalLabel">Import Excel Soal Ujian Pilihan Ganda</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+                         <form action="/baak/upload-soalpg-ujian" method="post" enctype="multipart/form-data">
+                            @csrf
+												  <label for="">File (.xls, .xlsx) <a href="{{ Storage::url('public/formatfile/soalpg.xlsx') }}"
+                                        class="btn btn-info btn-sm">
+                                        Unduh Format File<a></label>
 
+                                         <div class="form-group">
+                                
+                                    <input type="text" hidden  name="kd_mtk" value="{{ $soal->kd_mtk }}">
+                                    <input type="text" hidden  name="jenis" value="{{ $soal->paket }}">
+                                      <br>
+                                    <input type="text" hidden  name="sesi" value="{{ md5(rand(0000000000, mt_getrandmax())) }}">
+                           
+                                <p class="text-danger">{{ $errors->first('file') }}</p>
+                                <input type="file" class="btn btn-primary" name="file">                           
+                              <button class="btn btn-info btn-lg">
+                                    <i class="icon-upload"></i> Upload </button>
+                                   
+                            </div>
+                        </form>
+
+                            	<hr>
+                           <label><h5>*Catatan :</h5> 
+                           <br>
+                          <h6> 1.Upload soal harus sesuai format excel yang tersedia.  
+
+                           <br>
+                           2.Soal yang di upload statusnya <span class='badge badge-pill badge-light'>TAMPIL</span></label> .
+                          <br>
+                           3.tidak dapat menyertakan  <span class='badge badge-pill badge-info'>Audio/Gambar</span> saat upload excel. </h6> 
+												</div>
+									
+                    
+											</div>
+										</div>
+									</div>
+                          <!-- Modal -->
+                          <div class="modal fade" id="basicModal1" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="basicModalLabel">Import Excel Soal Ujian Essay</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                 <form action="/baak/upload-soalessay-ujian" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                  <label for="">File (.xls, .xlsx) <a href="{{ Storage::url('public/formatfile/soalessay.xlsx') }}"
+                                                class="btn btn-info btn-sm">
+                                                Unduh Format File<a></label>
+        
+                                                 <div class="form-group">
+                                        
+                                            <input type="number" hidden name="kd_mtk" value="{{ $soal->kd_mtk }}">
+                                            <input type="text" hidden name="jenis" value="{{ $soal->paket }}">
+                                              <br>
+                                           
+                                   
+                                        <p class="text-danger">{{ $errors->first('file') }}</p>
+                                        <input type="file" class="btn btn-primary" name="file">                           
+                                      <button class="btn btn-info btn-lg">
+                                            <i class="icon-upload"></i> Upload </button>
+                                           
+                                    </div>
+                                </form>
+        
+                                      <hr>
+                                   <label><h5>*Catatan :</h5> 
+                                   <br>
+                                  <h6> 1.Upload soal harus sesuai format excel yang tersedia.  
+        
+                                   <br>
+                                   2.Soal yang di upload statusnya <span class='badge badge-pill badge-light'>TAMPIL</span></label> .
+                                  <br>
+                                   3.tidak dapat menyertakan  <span class='badge badge-pill badge-info'>Audio/Gambar</span> saat upload excel. </h6> 
+                                </div>
+                          
+                            
+                              </div>
+                            </div>
+                          </div>
 
 				</div>
 			

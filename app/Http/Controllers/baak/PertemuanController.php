@@ -27,7 +27,13 @@ class PertemuanController extends Controller
     public function index()
     {
         $pertemuan=PertemuanBaak::first();
-        return view('baak.pertemuan.index',compact('pertemuan'));
+
+        $temu = DB::table('pertemuan')
+            ->when(request()->q, function ($temu) {
+                $temu = $temu->where('kd_dosen', 'like', '%' . request()->q . '%');
+            })->paginate(15);
+
+        return view('baak.pertemuan.index',compact('pertemuan','temu'));
     }
     public function datajson()
 	{
@@ -132,4 +138,24 @@ class PertemuanController extends Controller
         }
     return view('api.penilaian');
     }
+
+    public function cariDataRekapp(Request $request)
+{
+    $kd_dosen = $request->input('kd_dosen');
+    $kd_mtk = $request->input('kd_mtk');
+
+    $rekapData = Pertemuan::query();
+
+    if ($kd_dosen) {
+        $rekapData->where('kd_dosen', $kd_dosen);
+    }
+
+    if ($kd_mtk) {
+        $rekapData->where('kd_mtk', $kd_mtk); 
+    }
+
+    $rekapData = $rekapData->get();
+    return view('administrasi.rekap.caridata_praktek', compact('rekapData', 'kd_dosen', 'kd_mtk'));
+}
+
 }

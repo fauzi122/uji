@@ -68,7 +68,7 @@
                @php 
      $hari_ini = date('Y-m-d');
      echo 'Hari ini. : '.dateIndonesia($hari_ini);
-     echo '<br>IP : '.ambilIP();
+     echo '<br>IP  : '.ambilIP();
 
    
      @endphp

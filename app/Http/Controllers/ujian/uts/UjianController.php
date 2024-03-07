@@ -19,6 +19,7 @@ use App\Models\Soal_ujian;
 use App\Models\Perakit_soal;
 use App\Models\Paket_ujian;
 use App\Models\Mtk_ujian;
+use App\Models\perakit_bahan_ajar;
 
 
 
@@ -39,8 +40,6 @@ class ujianController extends Controller
     {
         $examTypes = Paket_ujian::distinct()->pluck('paket');
 
-       
-
         $encryptedExamTypes = $examTypes->mapWithKeys(function ($item) {
             return [$item => Crypt::encryptString($item)];
         });
@@ -53,50 +52,55 @@ class ujianController extends Controller
 
     public function index_uts(Request $request, $id)
     {
-      
+        if (Auth::user()->utype == 'ADM') {
 
-        // masi ada yg masalah
-        try {
-            // Dekripsi $id dan memecahnya ke dalam array
-            $pecah = explode(',', Crypt::decryptString($id));
-       
-        } catch (\Exception $e) {
-            // Tangani error dekripsi
-            return redirect()->back()->withErrors('Gagal mendekripsi ID.');
-        }
-        // dd($pecah);
-        // Periksa apakah nilai yang didekripsi menunjukkan 'latihan'
-        if ($pecah[0] == 'LATIHAN') {
-            // Query untuk kasus 'latihan'
-            $soals = Mtk_ujian::where('paket', $pecah[0])
-                ->groupBy('kd_mtk')
-                ->get();
-        
-        } else {
-            // Query untuk kasus selain 'latihan'
-            $soals = Mtk_ujian::join('perakit_soals', 'mtk_ujians.kd_mtk', '=', 'perakit_soals.kd_mtk')
-            ->where('mtk_ujians.paket', $pecah[0])
-            ->where('perakit_soals.kd_dosen', Auth::user()->kode)
-            ->select('mtk_ujians.*', 'perakit_soals.kd_dosen')
-            ->groupBy('kd_mtk')
-            ->get();
+            try {
+                $pecah = explode(',', Crypt::decryptString($id));
+            } catch (\Exception $e) {
+                return redirect()->back()->withErrors('Gagal mendekripsi ID.');
+            }
 
-        }
+            // Cek apakah pengguna dengan NIP tersebut memiliki entri di perakit_bahan_ajar
+            $perakit = perakit_bahan_ajar::where('nip', Auth::user()->username)->exists(); // Ganti 'nip' dengan 'username' jika memang itu yang dimaksud
+
+            if ($pecah[0] == 'LATIHAN' && $perakit) {
+                // Ini akan dijalankan jika ada entri di perakit_bahan_ajar yang cocok dengan nip/username
+                $soals = Mtk_ujian::where('paket', $pecah[0])
+                                ->groupBy('kd_mtk')
+                                ->get();
+            } else if ($pecah[0] != 'LATIHAN') {
+                // Ini akan dijalankan jika 'paket' bukan 'LATIHAN', tanpa memperdulikan keberadaan di perakit_bahan_ajar
+                $soals = Mtk_ujian::join('perakit_soals', 'mtk_ujians.kd_mtk', '=', 'perakit_soals.kd_mtk')
+                                ->where('mtk_ujians.paket', $pecah[0])
+                                ->where('perakit_soals.kd_dosen', Auth::user()->kode)
+                                ->select('mtk_ujians.*', 'perakit_soals.kd_dosen')
+                                ->groupBy('kd_mtk')
+                                ->get();
+            } else {
+                // Opsional: Penanganan khusus jika tidak ada entri di perakit_bahan_ajar dan paket adalah 'LATIHAN'
+                $soals = collect(); // Mengembalikan koleksi kosong atau sesuai kebutuhan
+            }
+
 
             $detailsoal = DB::table('ujian_detailsoals')
-            ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-            ->where('status', 'Y')
-            ->groupBy('kd_mtk')
-            ->pluck('jumlah', 'kd_mtk');
+                            ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+                            ->where('status', 'Y')
+                            ->where('jenis', $pecah[0])
+                            ->groupBy('kd_mtk')
+                            ->pluck('jumlah', 'kd_mtk');
             
             $detailsoal_essay = DB::table('ujian_detail_soal_esays')
-            ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-            ->where('status', 'Y')
-            ->groupBy('kd_mtk')
-            ->pluck('jumlah', 'kd_mtk'); 
-    
-        return view('admin.soalujian.uts', compact('soals','detailsoal','detailsoal_essay'));
-    }
+                                ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+                                ->where('status', 'Y')
+                                ->where('jenis', $pecah[0])
+                                ->groupBy('kd_mtk')
+                                ->pluck('jumlah', 'kd_mtk');
+
+            return view('admin.soalujian.uts', compact('soals', 'detailsoal', 'detailsoal_essay'));
+        } else {
+            return redirect('/dashboard');
+        }
+ }
     
 
     /**
@@ -495,7 +499,7 @@ class ujianController extends Controller
             $detailsoal_ujian = Detailsoal_ujian::findOrFail($detailsoal_ujian->id);
             $detailsoal_ujian->update([
                 'kd_mtk'        => $request->input('kd_mtk'),
-                'file' => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
+                'file'          => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
                 'pila'          => $request->input('pila'),

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\ujian\uts;
 
+use App\Imports\UjianSoalEssayImport;
+use App\Imports\UjianSoalpgImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -55,13 +58,21 @@ class MastersoalController extends Controller
             ->get();
 
 
-                $detailsoal = DB::table('ujian_detailsoals')
-                    ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                    ->where('status', 'Y')
-                    ->groupBy('kd_mtk')
-                    ->pluck('jumlah', 'kd_mtk');   
+        $detailsoal = DB::table('ujian_detailsoals')
+                        ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+                        ->where('status', 'Y')
+                        ->where('jenis', $pecah[0])
+                        ->groupBy('kd_mtk')
+                        ->pluck('jumlah', 'kd_mtk');
+        
+        $detailsoal_essay = DB::table('ujian_detail_soal_esays')
+                              ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+                              ->where('status', 'Y')
+                              ->where('jenis', $pecah[0])
+                              ->groupBy('kd_mtk')
+                              ->pluck('jumlah', 'kd_mtk'); 
       
-        return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals','detailsoal'));
+        return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals','detailsoal','detailsoal_essay'));
     }
 
     /**
@@ -96,7 +107,7 @@ class MastersoalController extends Controller
             $this->validate($request, [
 
                 'soal'      => 'required',
-                'file'      => 'file|mimes:jpg,jepg,png|max:2500',
+                'file'      => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
                 'pila'      => 'required',
                 'pilb'      => 'required',
                 'pilc'      => 'required',
@@ -177,7 +188,7 @@ class MastersoalController extends Controller
 
                 'soal'      => 'required',
                 'status'    => 'required',
-                'file'      => 'file|mimes:jpg,jepg,png|max:2500'
+                'file'      => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
             ]);
 
             $file = $request->file('file');
@@ -216,6 +227,74 @@ class MastersoalController extends Controller
             return redirect('/baak/uts-soal-show/' . $gabung)->with(['error' => 'Data Gagal Disimpan!']);
         }
     }
+
+    public function storeData_SoalPg(Request $request)
+    {
+        // Validasi
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+    
+        if ($request->hasFile('file')) {
+            $set = [
+                'kd_mtk'    => $request->input('kd_mtk'),
+                'jenis'     => $request->input('jenis'),
+                'score'     => 1,
+                'id_user'   => Auth::user()->kode,
+                'status'    => 'Y',
+                'sesi'      => $request->input('sesi')
+            ];
+            $file = $request->file('file'); // Mengambil file
+    
+            $import = new UjianSoalpgImport($set); // Membuat instance import dengan konfigurasi
+            Excel::import($import, $file); // Melakukan impor file
+    
+            // Cek jumlah pembaruan dan kirim notifikasi yang sesuai
+            if ($import->getUpdatesCount() > 0) {
+                // Jika ada pembaruan, kirim notifikasi tentang pembaruan
+                $message = 'Upload Soal Pilihan Ganda Berhasil. ' . $import->getUpdatesCount() . ' data diperbarui.';
+                return redirect()->back()->with(['success' => $message]);
+            } else {
+                // Jika tidak ada pembaruan, kirim notifikasi umum
+                return redirect()->back()->with(['success' => 'Upload Soal Pilihan Ganda Berhasil.']);
+            }
+        }
+    
+        // Jika file tidak dipilih
+        return redirect()->back()->with(['error' => 'Mohon pilih file terlebih dahulu.']);
+    }
+    
+    
+    public function storeData_SoalEssay(Request $request)
+        {
+            // Validasi
+            $this->validate($request, [
+                'file' => 'required|mimes:xls,xlsx'
+            ]);
+    
+            if ($request->hasFile('file')) {
+                $set = [
+                    'kd_mtk'  => $request->input('kd_mtk'),
+                    'jenis'   => $request->input('jenis'),
+                    'id_user' => Auth::user()->id, // Sesuaikan sesuai cara Anda mendapatkan ID pengguna
+                    'status'  => 'Y',
+                ];
+    
+                $file = $request->file('file');
+    
+                $import = new UjianSoalEssayImport($set);
+                Excel::import($import, $file);
+    
+                if ($import->getUpdatesCount() > 0) {
+                    $message = 'Upload Soal Esai Berhasil. ' . $import->getUpdatesCount() . ' data diperbarui.';
+                    return redirect()->back()->with(['success' => $message]);
+                } else {
+                    return redirect()->back()->with(['success' => 'Upload Soal Esai Berhasil.']);
+                }
+            }
+    
+            return redirect()->back()->with(['error' => 'Mohon pilih file terlebih dahulu.']);
+        }
 
     /**
      * Display the specified resource.
@@ -329,6 +408,7 @@ class MastersoalController extends Controller
             $detailsoal_ujian = Detailsoal_ujian::findOrFail($detailsoal_ujian->id);
             $detailsoal_ujian->update([
                 'kd_mtk'        => $request->input('kd_mtk'),
+                'file'          => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
                 'pila'          => $request->input('pila'),
@@ -386,8 +466,8 @@ class MastersoalController extends Controller
     {
         $this->validate($request, [
             'soal'      => 'required',
-            'status'    => 'required'
-            // 'file'      => 'file|mimes:jpg,jepg,png|max:2500'
+            'status'    => 'required',
+            'file'      => 'nullable|file|mimes:jpg,jepg,png|max:2500'
         ]);
         if ($request->file('file') == "") {
 

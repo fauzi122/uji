@@ -65,96 +65,129 @@
                        
                         </form>
                         @endcan 
+                </div>
+                </div>
             </div>
-            </div>
+            
         </div>
     </div>
-</div>
-                    <div class="card-body">
-  <form action="/pertemuan1" method="post" enctype="multipart/form-data">
-                            @csrf
-                
-                            @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                            @endif
-                
-                            @if (session('error'))
+                    
+
+                <div class="table-container">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card-body">
+                            <form action="/pertemuan1" method="post" enctype="multipart/form-data">
+                                @csrf
+                    
+                                @if (session('success'))
                                 <div class="alert alert-success">
-                                    {{ session('error') }}
+                                    {{ session('success') }}
                                 </div>
-                            @endif
-                            @can('temu_baak.upload') 
-                            <div class="form-group">
-                                <label for="">File (.xls, .xlsx) <a href="{{ Storage::url('public/formatfile/pertemuan1.xlsx') }}"
-                                    class="btn btn-info btn-sm">
-                                    Unduh Format File<a></label>
-                                <p class="text-danger">{{ $errors->first('file') }}</p>
-
-                                <input type="file" class="btn btn-primary" name="file">
-                           
-                                <button class="btn btn-info btn-lg">
-                                    <i class="icon-upload"></i> Upload </button>
+                                @endif
+                    
+                                @if (session('error'))
+                                    <div class="alert alert-success">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                                @can('temu_baak.upload') 
+                                <div class="form-group">
+                                    <label for="">File (.xls, .xlsx) <a href="{{ Storage::url('public/formatfile/pertemuan1.xlsx') }}"
+                                        class="btn btn-info btn-sm">
+                                        Unduh Format File<a></label>
+                                    <p class="text-danger">{{ $errors->first('file') }}</p>
+    
+                                    <input type="file" class="btn btn-primary" name="file">
+                               
+                                    <button class="btn btn-info btn-lg">
+                                        <i class="icon-upload"></i> Upload </button>
+                                </div>
+                                @endcan 
+                            </form>
+                            <div class="table-responsive">
+    
                             </div>
-                            @endcan 
-                        </form>
-                        <div class="table-responsive">
-                            <table id="tbl_list" class="table custom-table">
-
-                                <thead>
-                                    <tr>
-                                     
-                                   
-                                      <th>Kode Dosen</th>
-                                      <th>Kode MTK</th>
-                                      <th>Jam</th>
-                                      <th>Hari</th>
-                                      <th>Ruang</th>
-                                      <th>Kelas</th>
-                                      <th>SKS</th>
-                                      <th>Kode Gabung</th>
-                                   
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        </div>
+                    </div>
+                        <div class="alert-notify-body">
+                            <div class="alert-notify-title">
+                                <h4>Data Pertemuan</h4>
+                            </div>
+                            <br>
+                            <h5>
+                                *Catatan: Pencarian bisa hanya kode matakuliah saja
+                            </h5>
+                            <p>
+                                <form action="/cari-rekap-teori" method="GET">
+                                    <table class="table custom-table">
+                                        <tr>
+                                            <td>Kode Dosen</td>
+                                            <td><input type="text" name="kd_dosen" placeholder="Masukkan Kode Dosen" class="nilai form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kode Mtk</td>
+                                            <td>
+                                                <input type="text" name="kd_mtk" placeholder="Masukkan Kode mtk" class="nilai form-control">
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td colspan="2" style="text-align: right;">
+                                                <button type="submit" class="btn btn-info">Cari Data </button><br>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="card-body">
+                               
+                                <div class="table-responsive">
+                                    <table class="table custom-table">
+                                        <thead>
+                                            <tr>
+                                         
+                                                <th scope="col">no</th>
+                                                <th scope="col">Akronim</th>
+                                                <th scope="col">KELAS</th>
+                                                <th scope="col">SKS</th>
+                                                <th scope="col">MTK</th>
+                                                
+                                                <th scope="col">NO RUANG</th>
+                                                <th scope="col">sts_ajar</th>
+                                                <th scope="col">HARI</th>
+                                                <th scope="col">kd_gabung</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($temu as $no => $role)
+                                            <tr>
+                                           
+                                                <td>{{ ++$no }}</td>
+                                                <td>{{ $role->kd_dosen }}</td>
+                                                <td>{{ $role->kd_lokal }}</td>
+                                                <td>{{ $role->sksajar }}</td>
+                                                <td>{{ $role->kd_mtk }}</b></td>
+                                                <td>{{ $role->no_ruang }}</td>
+                                                <td>{{ $role->jam_t }}</td>
+                                                <td>{{ $role->hari_t }}</td>
+                                                <td>{{ $role->kd_gabung }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div style="text-align: center">
+                                        {{$temu->links("vendor.pagination.bootstrap-4")}}
+                                    </div>
                                     
-                                </tbody>
-                        </table>
+                                </div>
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <p>a</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
            
  
     @endsection
-    @push('scripts')
-<script type="text/javascript">
- $(document).ready(function () {
-    $('#tbl_list').DataTable({
-     dom: 'Blfrtip',
-                 lengthMenu: [
-                     [ 10, 25, 50, 10000 ],
-                     [ '10', '25', '50', 'Show All' ]
-                 ],
-                 buttons: [
-                     'copy', 'csv', 'excel', 'pdf', 'print',
-                   
-                 ],    
-         paging: true,
-         processing: true,
-         serverSide: true,
-         ajax: '{{ url('/pertemuan/json') }}',
-         columns: [
-            { data: 'kd_dosen', name: 'kode_dosen' },
-			{ data: 'kd_mtk', name: 'kd_mtk' },
-			{ data: 'jam_t', name: 'jam_t' },
-			{ data: 'hari_t', name: 'hari_t' },
-			{ data: 'no_ruang', name: 'no_ruang' },
-			{ data: 'kd_lokal', name: 'kd_lokal' },
-			{ data: 'sksajar', name: 'sksajar' },
-			{ data: 'kd_gabung', name: 'kd_gabung' }
-         ]
-     });
-  });
-</script>
-@endpush
+    

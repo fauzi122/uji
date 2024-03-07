@@ -67,6 +67,8 @@ Route::controller(MastersoalController::class)->group(function () {
     Route::patch('/baak/uts-pilih/update/{detailsoal_ujian}','update_soalpilih_uts');
     Route::patch('/baak/uts-essay/update/{detailSoalEssay_ujian}','update_essay_uts');
     Route::post('/baak/singkron-mtkuji','singmtkuji');
+    Route::post('/baak/upload-soalpg-ujian','storeData_SoalPg');
+    Route::post('/baak/upload-soalessay-ujian','storeData_SoalEssay');
     
 });
 

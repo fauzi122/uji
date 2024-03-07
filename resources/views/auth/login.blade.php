@@ -61,9 +61,8 @@
 
         
     </form>
-    <center>
-    <div class="intro-x mt-10 xl:mt-24 text-gray-700 text-center xl:text-left">
-        {{-- Copyright © 2020 - 2022 MyBest  --}}
+  <center>
+
         <br>
         <a class="text-theme-1" href="https://www.bsi.ac.id"><b>Universitas Bina Sarana Informatika </b><br>
                @php 
@@ -74,7 +73,7 @@
    
      @endphp
         </a>
-    </div>
+  
 </center>
 </x-guest-layout>
 @push('script')

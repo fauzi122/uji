@@ -12,7 +12,7 @@ trait LogTrait
 
 {
 
-/**
+    /**
 
      * Handle model event
 
@@ -35,19 +35,15 @@ trait LogTrait
             if ($model->wasRecentlyCreated) {
 
                 static::storeLog($model, static::class, 'CREATED');
-
             } else {
 
                 if (!$model->getChanges()) {
 
                     return;
-
                 }
 
                 static::storeLog($model, static::class, 'UPDATED');
-
             }
-
         });
 
 
@@ -61,9 +57,7 @@ trait LogTrait
         static::deleted(function ($model) {
 
             static::storeLog($model, static::class, 'DELETED');
-
         });
-
     }
 
 
@@ -83,7 +77,6 @@ trait LogTrait
     {
 
         return !empty($model->tagName) ? $model->tagName : Str::title(Str::snake(class_basename($model), ' '));
-
     }
 
 
@@ -104,7 +97,7 @@ trait LogTrait
 
     {
 
-        
+
 
         $newValues = null;
 
@@ -113,26 +106,24 @@ trait LogTrait
         if ($action === 'CREATED') {
 
             $newValues = $model->getAttributes();
-
         } elseif ($action === 'UPDATED') {
 
             $oldValues = $model->getOriginal();
 
             $newValues = $model->getChanges();
-
         }
 
 
 
         $subject = static::getTagName($model);
 
-        $description = 'Data '. $subject. ' ['.$action.']'; 
+        $description = 'Data ' . $subject . ' [' . $action . ']';
 
 
 
         $systemLog = new Log();
 
-        $systemLog->subject = $subject. ':'. $action;
+        $systemLog->subject = $subject . ':' . $action;
 
         $systemLog->action = $action;
         $systemLog->username = Auth::user()->username;
@@ -154,9 +145,5 @@ trait LogTrait
         $systemLog->ip_address = request()->ip();
         // dd($systemLog);
         $systemLog->save();
-
     }
-
-    
-
 }

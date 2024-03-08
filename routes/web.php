@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Dosen;
 
 use App\Http\Controllers\ProfileController;
@@ -59,6 +60,9 @@ use App\Http\Controllers\Api\{
     ApipertemuanController,
     ApiPenilaianController
 };
+use App\Http\Controllers\Api\Mhs\{
+    LoginmhsController
+};
 use App\Jobs\JobapiPenilaian;
 
 Route::get('/', function () {
@@ -76,18 +80,18 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => 'cekadmin'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 
-            include __DIR__.'/ujian/ujian.php';
-            include __DIR__.'/ujian/toefl.php';
-                 
+            include __DIR__ . '/ujian/ujian.php';
+            include __DIR__ . '/ujian/toefl.php';
+
             // mengawas ujian di dosen
             Route::controller(MengawasController::class)->group(function () {
-                Route::get('/mengawas-ujian','index');
-                Route::get('/mengawas-uts','m_uts');
-                Route::post('/store/mengawas-uts/','store');
-                Route::get('/show/mengawas-uts/{id}','show_uts');
-                Route::get('/mengawas-uas','m_uas');
-                Route::post('/update-attendance','UpdateAbsenUjian')->name('update_attendance');
-                Route::post('/update-ket-ujian','updateKeterangan')->name('update.ket-ujian-uts');
+                Route::get('/mengawas-ujian', 'index');
+                Route::get('/mengawas-uts', 'm_uts');
+                Route::post('/store/mengawas-uts/', 'store');
+                Route::get('/show/mengawas-uts/{id}', 'show_uts');
+                Route::get('/mengawas-uas', 'm_uas');
+                Route::post('/update-attendance', 'UpdateAbsenUjian')->name('update_attendance');
+                Route::post('/update-ket-ujian', 'updateKeterangan')->name('update.ket-ujian-uts');
             });
             //  Api sisfo
             Route::get('/meeting', [ApipertemuanController::class, 'index']);
@@ -504,7 +508,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/rekap/teori-all', [RekapdosenController::class, 'teori_all']);
             Route::get('/cari-rekap-teori', [RekapdosenController::class, 'cariDataRekapt']);
             Route::get('/cari-rekap-praktek', [RekapdosenController::class, 'cariDataRekapp']);
-            
+
             Route::controller(LogController::class)->group(function () {
                 Route::get('/log', 'index');
             });
@@ -535,12 +539,15 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => 'cekopd'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 
-            Route::get('/user/dashboard', function () {return view('mhs.dashboard');})->name('dashboard');
+            Route::get('/user/dashboard', function () {
+                return view('mhs.dashboard');
+            })->name('dashboard');
             Route::controller(KuisonerpmdController::class)->group(function () {
                 Route::get('/kuisoner-mpd', 'index');
                 Route::post('/store/kuisoner-mpd', 'store');
-
             });
+            Route::get('/halaman-ujian', [LoginmhsController::class, 'redirectToUjian'])->name('Ujian.redirect');
+
             //materi dan tugas
             Route::get('/sch', [JadwalmhsController::class, 'index']);
             Route::get('/learning/{id}', [MaterimhsController::class, 'index'])->name('mhs.materi.index');
@@ -591,9 +598,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/toefl-cetak-ujian-pdf/{id}', [ToeflUjianmhsController::class, 'cetak_pdf']);
             Route::post('/download-file-toef', [ToeflUjianmhsController::class, 'download_file_toef']);
         });
-    }); 
+    });
 });
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

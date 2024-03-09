@@ -41,14 +41,14 @@ return [
             'provider' => 'users',
         ],
 
-        'api_admin' => [			// <-- atur menjadi "api_admin"
-            'driver' => 'jwt',		// <-- atur menjadi "jwt"
+        'api_admin' => [            // <-- atur menjadi "api_admin"
+            'driver' => 'jwt',        // <-- atur menjadi "jwt"
             'provider' => 'users',
             'hash' => false,
         ],
 
-        'api_mhs' => [         	// <-- atur menjadi "api_mhs"
-            'driver' => 'jwt',      	// <-- atur menjadi "jwt"
+        'api_mhs' => [             // <-- atur menjadi "api_mhs"
+            'driver' => 'jwt',          // <-- atur menjadi "jwt"
             'provider' => 'users',
             'hash' => false,
         ],

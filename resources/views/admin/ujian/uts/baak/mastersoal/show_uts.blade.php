@@ -216,7 +216,7 @@
 								<div class="card-header badge-primary">
                         <h4 class="m-b-0 text-white">Informasi
                           <a href="/soal/master-baak" class="btn btn-sm btn-success">
-                            <i class="icon-refresh"></i> Kembali
+                            <i class="icon-refresh"></i> Kembali.
                         </a>
                         
                         </h4>

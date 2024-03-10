@@ -322,8 +322,16 @@
 								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-4">
 								<div class="card-header badge-primary">
                         <h4 class="m-b-0 text-white">Informasi
-                        <a href="/uts-soal" class="btn btn-sm btn-success">
-                       <i class="icon-refresh"></i> Kembal</a>
+                          <a onclick="goBack()" class="btn btn-sm btn-success">
+                            <i class="icon-refresh"></i> Kembali
+                          </a>
+                          
+                          <script>
+                          function goBack() {
+                            window.history.back();
+                          }
+                          </script>
+                          
                         </h4>
                     </div>
                     <div class="table-responsive">

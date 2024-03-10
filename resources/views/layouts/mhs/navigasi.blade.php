@@ -11,7 +11,7 @@
                 </a>
                 
         	
-                <a href="{{ url('/user/profile') }}">
+                <a href="{{ url('/profile') }}">
                     <i class="icon-account_circle"></i>
                     <span class="menu-text">Profil</span>
                 </a>

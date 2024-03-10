@@ -9,13 +9,23 @@
                     <i class="icon-home"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
+<<<<<<< HEAD
                 
         	
                 <a href="{{ url('/profile') }}">
+=======
+
+
+                <a href="{{ url('/user/profile') }}">
+>>>>>>> origin/main
                     <i class="icon-account_circle"></i>
                     <span class="menu-text">Profil</span>
                 </a>
-              
+                <a href="{{ route('Ujian.redirect') }}">
+                    <i class="icon-account_circle"></i>
+                    <span class="menu-text">Ujian</span>
+                </a>
+
             </li>
 
             <li class="sidebar-dropdown">
@@ -34,8 +44,8 @@
                         </li-->
                     </ul>
                 </div>
-            </li>  
-         
+            </li>
+
             <li class="sidebar-dropdown">
                 <a href="#">
                     <i class="icon-calendar"></i>
@@ -43,7 +53,7 @@
                 </a>
                 <div class="sidebar-submenu">
                     <ul>
-                       
+
                         <li>
                             <a href="{{url('/sch')}}">Jadwal Kuliah</a>
                         </li>
@@ -53,9 +63,9 @@
                         <li>
                             <a href="/exercise">Kuis</a>
                         </li>
-                      
-                       
-                    
+
+
+
                     </ul>
                 </div>
             </li>
@@ -68,16 +78,15 @@
             <li class="sidebar">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <x-dropdown-link :href="route('logout')"
-                                     onclick="event.preventDefault();
+                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
                                               this.closest('form').submit();">
                         <i class="icon-log-out1"></i> <!-- Ikon logout ditambahkan di sini -->
-                        
+
                         <span class="menu-text">{{ __('Log Out') }}</span>
                     </x-dropdown-link>
                 </form>
             </li>
-            
+
         </ul>
     </div>
     <!-- sidebar menu end -->

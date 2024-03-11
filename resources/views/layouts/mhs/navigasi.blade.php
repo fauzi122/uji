@@ -9,15 +9,9 @@
                     <i class="icon-home"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
-<<<<<<< HEAD
                 
         	
                 <a href="{{ url('/profile') }}">
-=======
-
-
-                <a href="{{ url('/user/profile') }}">
->>>>>>> origin/main
                     <i class="icon-account_circle"></i>
                     <span class="menu-text">Profil</span>
                 </a>

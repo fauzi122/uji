@@ -230,12 +230,12 @@
                                                                 <div class="avatar sm">
                                                                    
                                                                     {{-- <img src="http://api.bsi.ac.id/v2/index.php/mahasiswa/foto/{{$nim}}" class="circle" alt="No Image"/> --}}
-                                                                    @if (!isset($mhs_foto[$nim]->foto))
+                                                                    {{-- @if (!isset($mhs_foto[$nim]->foto)) --}}
                                                         <img src="{{ Storage::url('public/foto_mhs/default.png') }}" class="circle" alt="Kosong"/>                                                            
-                                                        @else
+                                                        {{-- @else
                                                         <img src="{{ Storage::url('public/'.$mhs_foto[$nim]->foto.'') }}" class="circle" alt="Kosong"/>
                                                             
-                                                        @endif
+                                                        @endif --}}
                                                             </div>
                                                                 <div class="project-info">
                                                                     <p>{{$mhs->nm_mhs}}</p>

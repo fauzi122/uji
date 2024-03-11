@@ -94,8 +94,8 @@
             @if ($absen->count() > 0)
             {{-- Cek apakah ada data absen --}}
             @if ($durasi > 0)
-                {{-- Cek apakah durasi masih berlangsung --}}
-                @if ($kuisionerExists)
+                {{-- Cek apakah durasi masih berlangsung ini nanti buka aja --}}
+                {{-- @if ($kuisionerExists) --}}
                     {{-- Cek apakah mahasiswa sudah mengisi kuesioner --}}
                     @if ($absen_mhs > 0)
                         {{-- Cek apakah mahasiswa sudah melakukan absensi --}}
@@ -143,14 +143,16 @@
                             </center>
                         </form>
                     @endif
-                @else
-                    {{-- Jika kuesioner belum diisi, tampilkan link untuk mengisi kuesioner --}}
+
+                    {{-- nanti buka ini aja --}}
+                {{-- @else
+                    Jika kuesioner belum diisi, tampilkan link untuk mengisi kuesioner
                     <p>Anda harus mengisi kuisioner terlebih dahulu.sebelum melakukan absen</p>
                     <br>
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalLarge">
                         isi kuisioner
                       </button>
-                @endif
+                @endif --}}
             @else
                 {{-- Jika durasi sudah habis, tampilkan tombol sudah selesai --}}
                 <center><button type="submit" class="btn btn-warning btn-rounded left mt-4">Sudah Selesai</button></center>

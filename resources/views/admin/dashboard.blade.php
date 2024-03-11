@@ -17,18 +17,15 @@
                                     
                 {{-- <img src="http://api.bsi.ac.id/v2/index.php/manage/foto-dosen/{{ Auth::user()->username }}"> --}}
 
-                  @if (Auth::user()->profile_photo_path!=null)
-                <img src="{{ Storage::url('public/'.Auth::user()->profile_photo_path.'') }}" class="img-thumbnail" alt="{{ Auth::user()->name }}"/>
+                  {{-- @if (Auth::user()->profile_photo_path!=null) --}}
+                {{-- <img src="{{ Storage::url('public/'.Auth::user()->profile_photo_path.'') }}" class="img-thumbnail" alt="{{ Auth::user()->name }}"/> --}}
                 {{-- <img src="{{ Storage::url('public/icon/profile.png') }}" class="circle"  alt="4215"/> --}}
                 
-                @else
+                {{-- @else --}}
 
                 <img src="{{ Storage::url('public/icon/profile.png') }}" class="img-thumbnail" >
-                @endif
-                
+                {{-- @endif --}}
 
-                
-                               
                                 </div>
                                 <h5 class="user-name"></h5>
                                 <h6 class="user-email"></h6>

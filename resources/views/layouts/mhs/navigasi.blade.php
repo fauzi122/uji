@@ -10,7 +10,7 @@
                     <span class="menu-text">Dashboard</span>
                 </a>
                 
-        	
+        	 
                 <a href="{{ url('/profile') }}">
                     <i class="icon-account_circle"></i>
                     <span class="menu-text">Profil</span>

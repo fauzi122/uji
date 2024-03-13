@@ -22,7 +22,7 @@ class User extends Authenticatable implements JWTSubject
     // use HasProfilePhoto;
     use Notifiable, HasRoles;
     // use TwoFactorAuthenticatable;
-    
+
 
     /**
      * The attributes that are mass assignable.

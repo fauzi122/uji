@@ -126,7 +126,7 @@ trait LogTrait
         $systemLog->subject = $subject . ':' . $action;
 
         $systemLog->action = $action;
-        if (Auth::user()->username) {
+        if (isset(Auth::user()->username)) {
             $systemLog->username = Auth::user()->username;
             $systemLog->kode = Auth::user()->kode;
             $systemLog->utype = Auth::user()->utype;

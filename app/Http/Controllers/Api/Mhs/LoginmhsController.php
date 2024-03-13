@@ -31,7 +31,7 @@ class LoginmhsController extends Controller
         }
 
         // URL sistem ujian online
-        $examSystemUrl = 'https://devujian.bsi.ac.id/authenticate';
+        $examSystemUrl = 'http://127.0.0.1:8000/authenticate';
 
         // Redirect ke sistem ujian online dengan token sebagai parameter
         return redirect()->away("{$examSystemUrl}?token={$token}");

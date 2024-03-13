@@ -11,14 +11,14 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-// use App\Traits\LogTrait;
+use App\Traits\LogTrait;
 // use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens;
-    use  HasFactory;
+    use LogTrait, HasFactory;
     // use HasProfilePhoto;
     use Notifiable, HasRoles;
     // use TwoFactorAuthenticatable;

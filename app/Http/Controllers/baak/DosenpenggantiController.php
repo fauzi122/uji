@@ -35,7 +35,9 @@ class DosenpenggantiController extends Controller
         $data = [];
         if ($request->has('q')) {
             $search = $request->q;
-            $data = User::select("username", "kode")
+
+            $data = DB::table('users')
+                ->select("username", "kode")
                 ->where('utype', '=', "ADM")
                 ->where('kode', 'LIKE', "%$search%")
                 ->get();

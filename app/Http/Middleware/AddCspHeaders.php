@@ -31,6 +31,7 @@ class AddCspHeaders
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.ionicframework.com https://cdnjs.cloudflare.com http://localhost:5173;" . // Tambahkan localhost:5173
                 "img-src 'self' https://ytimg.com http://localhost:5173;" . // Tambahkan localhost:5173
                 "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net;" .
+                "frame-src 'self' https://www.youtube.com https://youtube.com;" . // Added for YouTube iframes
                 "connect-src 'self' ws://localhost:5173;"
         );
 

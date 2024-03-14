@@ -24,26 +24,16 @@ class AddCspHeaders
 
         $response = $next($request);
 
-        // Set the CSP header with nonce
-        // $response->headers->set(
-        //     'Content-Security-Policy',
-        //     "default-src 'self';" .
-        //         "script-src 'self' 'unsafe-inline' 'unsafe-eval' example.com https://code.jquery.com https://cdnjs.cloudflare.com;" .  // 'unsafe-eval' added here
-        //         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.ionicframework.com https://cdnjs.cloudflare.com;" .
-        //         "font-src 'self' https://fonts.gstatic.com;" .
-        //         "connect-src 'self';"
-        // );
-
         $response->headers->set(
             'Content-Security-Policy',
             "default-src 'self';" .
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' example.com https://code.jquery.com https://cdnjs.cloudflare.com;" . // 'unsafe-eval' added here
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.ionicframework.com https://cdnjs.cloudflare.com;" . // cdnjs.cloudflare.com already included
-                "font-src 'self' https://fonts.gstatic.com;" .
-                "img-src 'self' https://ytimg.com;" . // Added for YouTube images
-                "frame-src 'self' https://www.youtube.com https://youtube.com;" . // Added for YouTube iframes
-                "connect-src 'self';"
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com https://cdnjs.cloudflare.com http://localhost:5173;" . // Tambahkan localhost:5173
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.ionicframework.com https://cdnjs.cloudflare.com http://localhost:5173;" . // Tambahkan localhost:5173
+                "img-src 'self' https://ytimg.com http://localhost:5173;" . // Tambahkan localhost:5173
+                "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net;" .
+                "connect-src 'self' ws://localhost:5173;"
         );
+
 
 
 

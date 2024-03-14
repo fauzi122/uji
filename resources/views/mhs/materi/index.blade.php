@@ -236,7 +236,7 @@
 
               <img src="{{ Storage::url('public/zip.svg') }}" "alt=" Doc Icon" />
             </div>
-            <div class="doc-title">Slidea</div>
+            <div class="doc-title">Slide</div>
             <a href="http://students.bsi.ac.id/mahasiswa/silabus/zip/{{ $slidemhs->kd_mtk }}.zip" class="btn btn-primary btn-lg">Download</a>
 
           </div>

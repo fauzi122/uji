@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Carbon\Carbon;
+use App;
 
 class LoginmhsController extends Controller
 {
@@ -30,9 +31,13 @@ class LoginmhsController extends Controller
             // Handle case where the token couldn't be created
             return response()->json(['error' => 'Could not generate token'], 500);
         }
-
+        // dd(App::environment('production'));
+        if (app()->environment('production')) {
+            $examSystemUrl = 'https://devujian.bsi.ac.id/authenticate';
+        } else {
+            $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
+        }
         // URL sistem ujian online
-        $examSystemUrl = 'https://devujian.bsi.ac.id/authenticate';
 
         // Redirect ke sistem ujian online dengan token sebagai parameter
         return redirect()->away("{$examSystemUrl}?token={$token}");

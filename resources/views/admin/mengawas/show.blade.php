@@ -1,8 +1,9 @@
 @extends('layouts.dosen.main')
-<div class="flash-tambah" data-flashdata="{{ session('status') }}"></div>
-<div class="flash-error" data-flasherror="{{ session('error') }}"></div>
+
 
 @section('content')
+<div class="flash-tambah" data-flashdata="{{ session('status') }}"></div>
+<div class="flash-error" data-flasherror="{{ session('error') }}"></div>
 	<div class="main-container">
 
 
@@ -136,13 +137,16 @@
 																					<td>{{ $item->nm_mhs }}</td>
 																					<td>
 
-																						
+																						{{-- {{ $item->id }} --}}
 																						<select name="ket" class="custom-select ket-dropdown" data-id="{{ $item->id }}">
 																							<option value="">-- Pilih Status --</option>
 																							<option value="ujian_bermasalah" {{ $item->ket == 'ujian_bermasalah' ? 'selected' : '' }}>Ujian Bermasalah</option>
 																							<option value="nyontek" {{ $item->ket == 'nyontek' ? 'selected' : '' }}>Nyontek</option>
-																							<!-- Add more options as needed -->
+																							<!-- Tambahkan lebih banyak opsi sesuai kebutuhan -->
 																						</select>
+																						
+																						
+																						
 																					
 																					</td> <!-- Assuming each item has an 'id' -->
 																					<td>
@@ -276,32 +280,34 @@
 				</div>
 			</div>
 
-			<script>
-				$(document).ready(function() {
-					$('.ket-dropdown').change(function() {
-						var selectedValue = $(this).val();
-						var itemId = $(this).data('id');
 			
-						$.ajax({
-							url: '{{ route("update.ket-ujian-uts") }}',
-							type: 'POST',
-							data: {
-								ket: selectedValue,
-								id: itemId,
-								_token: '{{ csrf_token() }}'
-							},
-							success: function(response) {
-								console.log('Update berhasil');
-							},
-							error: function() {
-							
-								console.error('Error pada update');
-							}
-						});
-					});
-				});
-			</script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+		$('.custom-select.ket-dropdown').change(function() {
+			var itemId = $(this).data('id');
+			var selectedValue = $(this).val();
+
+			$.ajax({
+				url: '{{ route("update.ket-ujian-uts") }}',
+				type: 'POST',
+				data: {
+					id: itemId,
+					ket: selectedValue,
+					_token: '{{ csrf_token() }}'
+				},
+				success: function(response) {
+					console.log('Update berhasil');
+				},
+				error: function(xhr, status, error) {
+					console.error('Error pada update:', xhr.responseText);
+				}
+			});
+		});
+	});
+	
+
+	</script>
 	<script>
 		$(document).ready(function () {
 			$('.status-checkbox').on('change', function () {

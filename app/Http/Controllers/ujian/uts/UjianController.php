@@ -604,8 +604,23 @@ class ujianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy($id)
+    // {
+    //     //
+    // }
+
+    public function destroy(Request $request)
     {
-        //
+        $idsToDelete = $request->input('deleteIds');
+        if (!empty($idsToDelete)) {
+            // Menggunakan Materi::destroy() untuk menghapus berdasarkan ID
+            Detailsoal_ujian::destroy($idsToDelete);
+        
+    
+            return back()->with('success', 'Materi terpilih berhasil dihapus.');
+        }
+        return back()->with('error', 'Tidak ada materi yang dipilih untuk dihapus.');
     }
+    
+
 }

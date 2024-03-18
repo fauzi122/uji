@@ -41,6 +41,8 @@ Route::controller(UjianController::class)->group(function () {
     Route::get('/edit-detail/soal-uts/{id}','edit_detalsoal_uts');
     Route::get('/edit-essay/soal-uts/{id}','edit_detalessay_uts');
     Route::get('/essay/soal-show-uts/{id}','show_detalessay_uts');
+    Route::delete('/delete-soal-uts','destroy');
+
     
     Route::get('/kirim-soal-uts/{kirim}','kirimSoalUts')->name('kirim.soal.uts');
     Route::get('/kirim-soalessay-uts/{kirim}','kirimSoalEssayUts')->name('kirim.soalessay.uts');
@@ -49,6 +51,10 @@ Route::controller(UjianController::class)->group(function () {
     Route::patch('/uts-essay/update/{detailSoalEssay_ujian}','update_essay_uts');
     Route::post('/upload-soalpg-ujian','storeData_SoalPg');
     Route::post('/upload-soalessay-ujian','storeData_SoalEssay');
+
+    Route::post('/hapus-soal','hapus')->name('soal.hapus');
+
+
     
 });
         // master ujian baak

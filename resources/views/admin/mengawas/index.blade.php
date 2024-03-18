@@ -1,6 +1,5 @@
 @extends('layouts.dosen.main')
-<div class="flash-tambah" data-flashdata="{{ session('status') }}"></div>
-<div class="flash-error" data-flasherror="{{ session('error') }}"></div>
+
 
 @section('content')
 <div class="row gutte">

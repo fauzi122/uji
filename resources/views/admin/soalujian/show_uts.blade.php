@@ -93,75 +93,52 @@
                                   <h4>List Soal Pilihan Ganda</h4>	
                                   <hr>
                                   </p>
+                                  <form action="{{ url('/delete-soal-uts') }}" method="POST">
+                                    @csrf <!-- Token CSRF untuk keamanan -->
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" onclick="return confirmDeletion();">Hapus Soal Terpilih</button>
+                              
                                     <table id="myTable2" class="table custom-table">
-                                      <thead>
-                                        <tr>
-                                          <th>NO</th>                               
-                                          <th>Soal</th>                               
-                                          <th style="text-align: center;">Kunci</th>
-                                         
-                                          <th style="text-align: center;">Gambar</th>
-                                          <th style="text-align: center;">Updated</th>
-                                          <th style="text-align: center; width: 100px">Aksi</th>
-                                        </tr>
-                                       </thead>
-                                      <tbody>
-                                       
-                                        @foreach ($soals  as $no => $soals)
-                                            
-                                       
-                                     <tr>
-                                     <td>{{ ++$no }}</td>
-                                     <td>{{strip_tags($soals->soal) }}</td>
-                                     <td><center>{{ $soals->kunci }}</center></td>
-                                    
-                                     <td>
-                                         @php
-                                      $detail=Crypt::encryptString($soals->id);                                    
-                                      @endphp
-                                       {{--  @if ($soals->status == 'Y')
-                                        <center><span class='badge badge-pill badge-light'>Tampil</span></center>
-                                           
-                                       @else
-                                        <center><span class='badge badge-pill badge-secondary'>Tidak tampil</span></center>
-                                           
-                                       @endif  --}}
-                                     
-                                     <p></p>
-                                       @if ($soals->file == '')
-                                        {{--  <center><span class='badge badge-pill badge-light'></span></center>  --}}
-                                           
-                                       @else
-                                        <center>
-                                        <a href="/edit-detail/soal-uts/{{$detail}}"> <span class='badge badge-pill badge-info'>cek gambar</span>
-                                        </a>
-                                        </center>
-                                           
-                                       @endif
-                                     </td>
-                                     <td><center>{{ $soals->updated_at }}</center></td>
-
-                                     <td>
-                                  <center>
-                                          @if ($soals->sts_kirim == 1 || $soals->sts_kirim == 2)
-                                         
-                                           @else
-                                       <a href="/edit-detail/soal-uts/{{$detail}}" class="btn btn-sm btn-success">edit</a>
-
-                                           @endif
-                                       <a href="/detail/soal-show-uts/{{$detail}}" class="btn btn-sm btn-info">show</a>
-                                      </center>
-
-                                     </td>
-                                     </tr>
-                                  
-                                     @endforeach     
-                                          
-                                      </tbody>
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="selectAll"></th>
+                                                <th>NO</th>
+                                                <th>Soal</th>
+                                                <th style="text-align: center;">Kunci</th>
+                                                <th style="text-align: center;">Gambar</th>
+                                                <th style="text-align: center;">Diperbarui</th>
+                                                <th style="text-align: center;">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($soals as $no => $soal)
+                                            <tr>
+                                                <td><input type="checkbox" name="deleteIds[]" value="{{ $soal->id }}"></td>
+                                                <td>{{ ++$no }}</td>
+                                                <td>{{ strip_tags($soal->soal) }}</td>
+                                                <td style="text-align: center;">{{ $soal->kunci }}</td>
+                                                <td style="text-align: center;">
+                                                    @if ($soal->file != '')
+                                                        <a href="/edit-detail/soal-uts/{{ Crypt::encryptString($soal->id) }}"><span class='badge badge-pill badge-info'>gambar</span></a>
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: center;">{{ $soal->updated_at }}</td>
+                                                <td style="text-align: center;">
+                                                    <a href="/edit-detail/soal-uts/{{ Crypt::encryptString($soal->id) }}" class="btn btn-sm btn-success">edit</a>
+                                                    <a href="/detail/soal-show-uts/{{ Crypt::encryptString($soal->id) }}" class="btn btn-sm btn-info">show</a>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
                                     </table>
+                                
+                                </form>
+                                
                                 </div>
 												</div>
 											</div>
+
+                    
 											<!-- Row end -->
 
                       	<!-- Row start -->
@@ -396,6 +373,44 @@
 @endsection
 
 @push('scripts')
+<script>
+  function confirmDeletion() {
+      var checkboxes = document.querySelectorAll('input[type="checkbox"][name="deleteIds[]"]:checked');
+      if (checkboxes.length === 0) {
+          alert('Silakan pilih minimal satu soal untuk dihapus.');
+          return false;
+      }
+
+      return confirm('Apakah Anda yakin ingin menghapus soal terpilih?');
+  }
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Fungsi untuk 'Pilih Semua' ceklis
+      document.getElementById('selectAll').addEventListener('click', function() {
+          var checkboxes = document.querySelectorAll('input[type="checkbox"][name="deleteIds[]"]');
+          checkboxes.forEach(function(checkbox) {
+              checkbox.checked = this.checked;
+          }, this);
+      });
+  
+      // Fungsi untuk konfirmasi penghapusan
+      document.querySelector('form').addEventListener('submit', function(event) {
+          var checkboxes = document.querySelectorAll('input[type="checkbox"][name="deleteIds[]"]:checked');
+          if (checkboxes.length === 0) {
+              alert('Silakan pilih minimal satu soal untuk dihapus.');
+              event.preventDefault();
+              return;
+          }
+  
+          if (!confirm('Apakah Anda yakin ingin menghapus soal terpilih?')) {
+              event.preventDefault();
+          }
+      });
+  });
+  </script>
+  
+
 <script>
 $(document).ready(function () {
      $('#myTable2').DataTable({

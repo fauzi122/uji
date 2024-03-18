@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/show/mengawas-uts/{id}', 'show_uts');
                 Route::get('/mengawas-uas', 'm_uas');
                 Route::post('/update-attendance', 'UpdateAbsenUjian')->name('update_attendance');
-                Route::post('/update-ket-ujian', 'updateKeterangan')->name('update.ket-ujian-uts');
+                Route::post('/update-ket-ujian','updateKeterangan')->name('update.ket-ujian-uts');
             });
             //  Api sisfo
             Route::get('/meeting', [ApipertemuanController::class, 'index']);

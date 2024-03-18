@@ -168,14 +168,19 @@ class MengawasController extends Controller
         }
     }
 
-        public function updateKeterangan(Request $request)
-        {
-            $item = Absen_ujian::findOrFail($request->id);
-            $item->ket = $request->ket;
-            $item->save();
-        
-            // return response()->json(['message' => 'Keterangan berhasil diperbarui']);
-        }
+    public function updateKeterangan(Request $request)
+    {
+        // dd($request->all()); // Ini akan menampilkan semua data request di browser
+    
+        // Sisa kode untuk memproses data
+        $item = Absen_ujian::findOrFail($request->id);
+        $item->ket = $request->ket;
+        $item->save();
+    
+        return response()->json(['message' => 'Keterangan berhasil diperbarui']);
+    }
+    
+
         
 
     

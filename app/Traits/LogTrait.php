@@ -58,6 +58,10 @@ trait LogTrait
 
             static::storeLog($model, static::class, 'DELETED');
         });
+
+        static::deleting(function ($model) {
+            static::storeLog($model, static::class, 'DELETED');
+        });
     }
 
 
@@ -104,13 +108,12 @@ trait LogTrait
         $oldValues = null;
 
         if ($action === 'CREATED') {
-
             $newValues = $model->getAttributes();
         } elseif ($action === 'UPDATED') {
-
             $oldValues = $model->getOriginal();
-
             $newValues = $model->getChanges();
+        } elseif ($action === 'DELETED') {
+            $oldValues = $model->getAttributes(); // Simpan nilai sebelum dihapus
         }
 
 

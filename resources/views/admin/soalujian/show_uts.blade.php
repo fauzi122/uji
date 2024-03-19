@@ -113,9 +113,13 @@
                                         <tbody>
                                             @foreach ($soals as $no => $soal)
                                             <tr>
-                                                <td><input type="checkbox" name="deleteIds[]" value="{{ $soal->id }}"></td>
+                                                <td>
+
+                                                  <input type="checkbox" name="deleteIds[]" value="{{ $soal->id }}">
+                                                
+                                                </td>
                                                 <td>{{ ++$no }}</td>
-                                                <td>{{ strip_tags($soal->soal) }}</td>
+                                                <td>{!! ($soal->soal) !!}</td>
                                                 <td style="text-align: center;">{{ $soal->kunci }}</td>
                                                 <td style="text-align: center;">
                                                     @if ($soal->file != '')

@@ -35,9 +35,6 @@ class AddCspHeaders
                 "connect-src 'self' ws://localhost:5173;"
         );
 
-
-
-
         return $response;
     }
 }

@@ -20,13 +20,16 @@
 									 <input type="hidden" name="kd_mtk" value="{{$soal->kd_mtk}}">
 									 <input type="hidden" name="jenis" value="{{$soal->paket}}">
                                     <input type="hidden" name="sesi" value="{{ md5(rand(0000000000, mt_getrandmax())) }}">
-                                   		<textarea class="form-control content @error('soal') is-invalid @enderror" 
-                            			name="soal" placeholder="Masukkan soal " rows="5">{!! old('soal') !!}</textarea>
-                              			@error('soal')
-                              			<div class="invalid-feedback" style="display: block">
-                                  		{{  $message }}
-                              			</div>
-                              			@enderror
+									<textarea id="summernote2" class="form-control content @error('soal') is-invalid @enderror" name="soal" placeholder="Masukkan Konten / Isi Berita" required
+										oninvalid="this.setCustomValidity('Silahkan isi artikel')"
+										oninput="setCustomValidity('')">
+										{!! old('soal') !!}
+									</textarea>
+									@error('soal')
+									<div class="invalid-feedback" style="display: block">
+										{{  $message }}
+									</div>
+									@enderror
                                     <p></p>
                                    <input type="file" name="file" class="form-control @error('file') is-invalid @enderror">
 								<br>
@@ -151,7 +154,8 @@
 	                </div>
                 </div>
        
-                
-
+				
+				
 
 @endsection
+

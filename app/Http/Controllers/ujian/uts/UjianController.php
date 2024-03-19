@@ -69,6 +69,8 @@ class ujianController extends Controller
                                 ->groupBy('kd_mtk')
                                 ->get();
             } else if ($pecah[0] != 'LATIHAN') {
+
+                // dd($pecah[0] );
                 // Ini akan dijalankan jika 'paket' bukan 'LATIHAN', tanpa memperdulikan keberadaan di perakit_bahan_ajar
                 $soals = Mtk_ujian::join('perakit_soals', 'mtk_ujians.kd_mtk', '=', 'perakit_soals.kd_mtk')
                                 ->where('mtk_ujians.paket', $pecah[0])
@@ -76,6 +78,7 @@ class ujianController extends Controller
                                 ->select('mtk_ujians.*', 'perakit_soals.kd_dosen')
                                 ->groupBy('kd_mtk')
                                 ->get();
+                    // dd($soals);
             } else {
                 // Opsional: Penanganan khusus jika tidak ada entri di perakit_bahan_ajar dan paket adalah 'LATIHAN'
                 $soals = collect(); // Mengembalikan koleksi kosong atau sesuai kebutuhan
@@ -481,78 +484,52 @@ class ujianController extends Controller
      }
      
     
-    public function update_soalpilih_uts(Request $request, Detailsoal_ujian $detailsoal_ujian)
-    {
-        $this->validate($request, [
-            'soal'      => 'required',
-            'pila'      => 'required',
-            'pilb'      => 'required',
-            'pilc'      => 'required',
-            'pild'      => 'required',
-            'pile'      => 'required',
-            'kunci'     => 'required',
-            // 'score'     => 'required'
-        ]);
-
-        if ($request->file('file') == "") {
-
-            $detailsoal_ujian = Detailsoal_ujian::findOrFail($detailsoal_ujian->id);
-            $detailsoal_ujian->update([
-                'kd_mtk'        => $request->input('kd_mtk'),
-                'file'          => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
-                'jenis'         => $request->input('jenis'),
-                'soal'          => $request->input('soal'),
-                'pila'          => $request->input('pila'),
-                'pilb'          => $request->input('pilb'),
-                'pilc'          => $request->input('pilc'),
-                'pild'          => $request->input('pild'),
-                'pile'          => $request->input('pile'),
-                'kunci'         => $request->input('kunci'),
-                // 'score'         => $request->input('score'),
-                'id_user'       => $request->input('id_user'),
-                // 'status'        => $request->input('status'),
-                'sesi'          => $request->input('sesi')
-
-            ]);
-        } else {
-
-            //remove old image
-            Storage::disk('local')->delete('public/soal/' . $detailsoal_ujian->file);
-
-            //upload new image
-            $image = $request->file('file');
-            $image->storeAs('public/soal', $image->hashName());
-
-            $detailsoal_ujian = Detailsoal_ujian::findOrFail($detailsoal_ujian->id);
-            $detailsoal_ujian->update([
-                'kd_mtk'        => $request->input('kd_mtk'),
-                'jenis'         => $request->input('jenis'),
-                'soal'          => $request->input('soal'),
-                'file'          => $image->hashName(),
-                'pila'          => $request->input('pila'),
-                'pilb'          => $request->input('pilb'),
-                'pilc'          => $request->input('pilc'),
-                'pild'          => $request->input('pild'),
-                'pile'          => $request->input('pile'),
-                'kunci'         => $request->input('kunci'),
-                // 'score'         => $request->input('score'),
-                'id_user'       => $request->input('id_user'),
-                // 'status'        => $request->input('status'),
-                'sesi'          => $request->input('sesi')
-
-            ]);
-        }
-
-        $gabung = Crypt::encryptString($request->input('kd_mtk') . ',' .$request->input('jenis'));  
-
-        if ($detailsoal_ujian) {
-            //redirect dengan pesan sukses
-            return redirect('/uts-soal-show/' . $gabung)->with('status', 'Data Diupdate');
-        } else {
-            return redirect('/uts-soal-show/' . $gabung)->with(['error' => 'Data Gagal Diupdate!']);
-        }
-    }
-
+     public function update_soalpilih_uts(Request $request, Detailsoal_ujian $detailsoal_ujian)
+     {
+         $this->validate($request, [
+             'soal'  => 'required',
+             'pila'  => 'required',
+             'pilb'  => 'required',
+             'pilc'  => 'required',
+             'pild'  => 'required',
+             'pile'  => 'required',
+             'kunci' => 'required',
+             'file'  => 'nullable|file|mimes:jpg,jpeg,png|max:2500', // Validation for file
+         ]);
+     
+         if ($request->hasFile('file')) {
+             // Remove old image
+             Storage::disk('local')->delete('public/soal/' . $detailsoal_ujian->file);
+     
+             // Upload new image and get the filename
+             $file = $request->file('file');
+             $filename = $file->hashName();
+             $file->storeAs('public/soal', $filename);
+             
+             $detailsoal_ujian->file = $filename; // Update the file name in the model
+         }
+     
+         // Update other fields
+         $detailsoal_ujian->update([
+             'kd_mtk' => $request->input('kd_mtk'),
+             'jenis'  => $request->input('jenis'),
+             'soal'   => $request->input('soal'),
+             'pila'   => $request->input('pila'),
+             'pilb'   => $request->input('pilb'),
+             'pilc'   => $request->input('pilc'),
+             'pild'   => $request->input('pild'),
+             'pile'   => $request->input('pile'),
+             'kunci'  => $request->input('kunci'),
+             'id_user'=> $request->input('id_user'),
+             'sesi'   => $request->input('sesi')
+         ]);
+     
+         $gabung = Crypt::encryptString($request->input('kd_mtk') . ',' . $request->input('jenis'));
+     
+         return redirect('/uts-soal-show/' . $gabung)->with('status', 'Data Diupdate');
+     }
+     
+     
     public function update_essay_uts(Request $request, DetailSoalEssay_ujian $detailSoalEssay_ujian)
     {
         $this->validate($request, [

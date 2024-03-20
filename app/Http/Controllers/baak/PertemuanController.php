@@ -61,7 +61,9 @@ class PertemuanController extends Controller
     }
     public function singkrontemu()
     {
-        $response = Http::get('https://elearning.bsi.ac.id/hapus-jadwal');
+        $response = Http::get('https://elearning.bsi.ac.id/hapus-jadwal', [
+            'verify' => false,
+        ]);
         $temu = DB::select('call insert_jadwal');
         $temu1 = DB::select('call jadwal_agama');
         return redirect()->back()->with(['success' => 'success di singkron']);

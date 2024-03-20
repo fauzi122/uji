@@ -14,7 +14,7 @@ class JadwalController extends Controller
     public function index()
     {
         $jadwals = Cache::remember('jadwals', now()->addMinutes(60), function () {
-            return Jadwal::all();
+            // return Jadwal::all();
         });
 
         return response()->json(['status' => 'success', 'data' => $jadwals]);

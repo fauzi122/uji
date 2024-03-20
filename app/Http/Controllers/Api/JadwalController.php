@@ -14,7 +14,7 @@ class JadwalController extends Controller
     public function index()
     {
         $jadwals = Cache::remember('jadwals', now()->addMinutes(60), function () {
-            // return Jadwal::all();
+            return Jadwal::all();
         });
 
         return response()->json(['status' => 'success', 'data' => $jadwals]);
@@ -42,12 +42,12 @@ class JadwalController extends Controller
         $cacheKey = 'jadwal_ip_' . $alamatIP;
 
         $data = Cache::remember($cacheKey, now()->addMinutes(60), function () use ($alamatIP) {
-            // return Jadwal::join('ip_absen', function ($join) {
-            //     $join->on(DB::raw('SUBSTRING_INDEX(jadwal.no_ruang, "-", -1)'), '=', 'ip_absen.kd_cabang');
-            // })
-            //     ->where('ip_absen.ip', '=', $alamatIP) // Filter berdasarkan alamat IP yang diberikan
-            //     ->select('jadwal.*', 'ip_absen.*') // Pilih kolom yang ingin ditampilkan
-            //     ->get();
+            return Jadwal::join('ip_absen', function ($join) {
+                $join->on(DB::raw('SUBSTRING_INDEX(jadwal.no_ruang, "-", -1)'), '=', 'ip_absen.kd_cabang');
+            })
+                ->where('ip_absen.ip', '=', $alamatIP) // Filter berdasarkan alamat IP yang diberikan
+                ->select('jadwal.*', 'ip_absen.*') // Pilih kolom yang ingin ditampilkan
+                ->get();
         });
 
         return response()->json($data);

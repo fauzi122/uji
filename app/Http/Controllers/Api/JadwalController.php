@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request; // Perhatikan import kelas Request yang diperlukan
+use Illuminate\Support\Facades\Artisan;
 use App\Models\Jadwal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -23,17 +23,10 @@ class JadwalController extends Controller
     {
         Cache::forget('jadwals');
 
-        $pattern = storage_path('framework/cache/data/jadwal_ip_*');
+        $exitCode = Artisan::call('clear:JadwalCache');
 
-        $files = glob($pattern);
-
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
-
-        return response()->json(['message' => 'Cache jadwal_ip_* sudah kosong.']);
+        // Anda bisa memeriksa $exitCode jika perlu, akan bernilai 0 jika berhasil
+        return response()->json(['message' => 'Cache cleared successfully']);
     }
     public function jadwalKampus()
     {

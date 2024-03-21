@@ -23,17 +23,17 @@ class JadwalController extends Controller
     {
         Cache::forget('jadwals');
 
-        // Menghapus semua cache keys yang dimulai dengan 'jadwal_ip_'
-        $cachePrefix = 'jadwal_ip_';
-        $cacheKeys = Cache::getStore()->getPrefix() . $cachePrefix . '*';
-        Cache::forget($cacheKeys);
+        $pattern = storage_path('framework/cache/data/jadwal_ip_*');
 
-        // Memeriksa apakah cache 'jadwals' sudah kosong
-        if (Cache::missing('jadwals')) {
-            return response()->json(['message' => 'Cache jadwals sudah kosong.']);
-        } else {
-            return response()->json(['message' => 'Gagal menghapus cache jadwals.']);
+        $files = glob($pattern);
+
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
         }
+
+        return response()->json(['message' => 'Cache jadwal_ip_* sudah kosong.']);
     }
     public function jadwalKampus()
     {

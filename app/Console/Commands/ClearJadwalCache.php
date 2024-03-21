@@ -28,13 +28,13 @@ class ClearJadwalCache extends Command
         $pattern = storage_path('framework/cache/data/jadwal_ip_*');
 
         $files = glob($pattern);
+        $this->info('Files found: ' . count($files));
 
         foreach ($files as $file) {
+            $this->info('Deleting file: ' . $file);
             if (is_file($file)) {
                 unlink($file);
             }
         }
-
-        $this->info('Cache jadwal_ip_* sudah kosong.');
     }
 }

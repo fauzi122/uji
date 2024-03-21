@@ -21,11 +21,7 @@ class JadwalController extends Controller
     }
     public function hapusJadwal()
     {
-        Cache::forget('jadwals');
-
-        $exitCode = Artisan::call('clear:JadwalCache');
-
-        // Anda bisa memeriksa $exitCode jika perlu, akan bernilai 0 jika berhasil
+        Artisan::call('cache:clear');
         return response()->json(['message' => 'Cache cleared successfully']);
     }
     public function jadwalKampus()

@@ -74,7 +74,7 @@ class JadwalpenggantiController extends Controller
             } else {
                 $pertemuan = $absen_cek->first()->pertemuan;
             }
-            $durasi     = Jadwal::where($w_cek)
+            $durasi     = Kuliah_pengganti::where($w_cek)
                 ->where('selesai', '>=', $jam)->count();
             $absen_mhs  = Absen_mhs::Where(['kel_praktek' => $exp[4], 'kd_mtk' => $exp[0], 'pertemuan' => $pertemuan, 'nim' => Auth::user()->username])->count();
             // $sapaan = Sapa::where(['kd_dosen'=>$exp[2],'kd_lokal'=>Auth::user()->username,'kd_mtk'=>$exp[0],'pertemuan'=>$pertemuan])->first();
@@ -95,7 +95,7 @@ class JadwalpenggantiController extends Controller
             }
 
             if ($cek_teori > 0) {
-                $durasi     = Jadwal::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0]])
+                $durasi     = Kuliah_pengganti::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0]])
                     ->where('selesai', '>=', $jam)->count();
                 $absen_mhs  = Absen_mhs::Where(['kd_lokal' => Auth::user()->kode, 'kd_mtk' => $exp[0], 'pertemuan' => $pertemuan, 'nim' => Auth::user()->username])->count();
                 $sapaan = DB::table('sapaans as a')
@@ -104,7 +104,7 @@ class JadwalpenggantiController extends Controller
                     ->select('a.*', 'b.name', 'b.email', 'b.profile_photo_path')->first();
             } else {
                 // dd($pertemuan);
-                $durasi     = Jadwal::where(['kd_gabung' => $exp[4], 'kd_mtk' => $exp[0]])
+                $durasi     = Kuliah_pengganti::where(['kd_gabung' => $exp[4], 'kd_mtk' => $exp[0]])
                     ->where('selesai', '>=', $jam)->count();
                 $absen_mhs  = Absen_mhs::Where(['kd_gabung' => $exp[4], 'kd_mtk' => $exp[0], 'pertemuan' => $pertemuan, 'nim' => Auth::user()->username])->count();
                 $sapaan = DB::table('sapaans as a')

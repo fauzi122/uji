@@ -25,6 +25,7 @@
 
 		<!-- Main css -->
 		<link rel="stylesheet" href="{{asset('assets/uji/css/main.css')}}">
+		<link rel="stylesheet" href="{{ asset('assets/summernote/summernote-bs4.min.css') }}">
 
 
 		<!-- *************
@@ -200,6 +201,95 @@
 
 		<!-- Main Js Required -->
 		<script src="{{asset('assets/uji/js/main.js')}}"></script>
+		<script src="{{asset('assets/summernote/summernote-bs4.min.js')}}"></script>
+
+		<script>
+			$(function() {
+			  $('#summernote').summernote({
+				  toolbar: [
+					  ['style', ['bold', 'italic', 'underline', 'clear']],
+					  ['font', ['strikethrough', 'superscript', 'subscript']],
+					  ['fontsize', ['fontsize']],
+					  ['color', ['color']],
+					  ['para', ['ul', 'ol', 'paragraph']],
+					  ['height', ['height']],
+					  // Hapus baris di bawah ini jika Anda ingin menonaktifkan fungsi insertLink
+				  ],
+				  callbacks: {
+					  onKeyup: function(e) {
+						  var t = $(this).summernote('code').replace(/(<([^>]+)>)/ig, "").length;  // Mengambil teks tanpa HTML tags
+						  $('#charCount').text(t + "/4000 karakter");
+		  
+						  if (t > 4000) {
+							  $('#charCount').css('color', 'red');
+							  // Memotong isi summernote jika lebih dari 2500 karakter
+							  var trimmedContent = $(this).summernote('code').substring(0, 2500);
+							  $(this).summernote('code', trimmedContent);
+						  } else {
+							  $('#charCount').css('color', 'black');
+						  }
+					  }
+				  }
+			  });
+		  
+			  CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+				  mode: "htmlmixed",
+				  theme: "monokai"
+			  });
+		  });
+		  
+		  
+		  </script>
+
+		  <script>
+		  
+		  $(function() {
+			$('#summernote2').summernote({
+				toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+					['font', ['strikethrough', 'superscript', 'subscript']],
+					['fontsize', ['fontsize']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['height', ['height']],
+					// Tambahkan lebih banyak item toolbar jika diperlukan
+				],
+				placeholder: 'Masukkan Konten',
+				height: 60, // Tinggi editor dalam pixel
+				callbacks: {
+					onKeyup: function(e) {
+						var t = $(this).summernote('code').replace(/(<([^>]+)>)/ig, "").length;
+						$('#charCount').text(t + "/40000 karakter");
+		
+						if (t > 40000) {
+							$('#charCount').css('color', 'red');
+							var trimmedContent = $(this).summernote('code').substring(0, 2500);
+							$(this).summernote('code', trimmedContent);
+						} else {
+							$('#charCount').css('color', 'black');
+						}
+					}
+				}
+			});
+		});
+		
+		  
+		  </script>
+		  
+		  <style>
+			/* Stilisasi area toolbar Summernote */
+			.note-toolbar {
+				background-color: #d6c5c5; /* Warna latar untuk toolbar */
+				border-bottom: 2px solid #f0e4e4; /* Garis pemisah */
+			}
+		
+			/* Stilisasi area penulisan konten */
+			.note-editable {
+				background-color: #ffffff; /* Warna latar untuk area penulisan */
+				padding: 15px; /* Padding untuk area teks */
+				border: 1px solid #ddd; /* Batas area teks */
+			}
+		</style>
 		@push('scripts')
 		<script type="text/javascript">
 		$('.tombol-hapus').on('click',function(e){

@@ -52,6 +52,10 @@
 												<td>{{ $soal->nm_kampus }}</td>
 											</tr>
 											<tr>
+												<td>Ruangan</td>
+												<td>{{ $soal->no_ruang }}</td>
+											</tr>
+											<tr>
 												<td>Berita Acara</td>
 												<td>
                                                    
@@ -62,6 +66,9 @@
 											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#beritaAcaraModal">
 												Lihat Berita Acara
 											</button>
+											
+											<button onclick="window.location.reload();" class="btn btn-danger">Refresh Data</button>
+
 
 											<!-- Modal Structure -->
 											<div class="modal fade" id="beritaAcaraModal" tabindex="-1" role="dialog" aria-labelledby="beritaAcaraModalLabel" aria-hidden="true">
@@ -126,7 +133,8 @@
 																				<th>NIM</th>
 																				<th>Nama</th>
 																				<th>Komentar</th>
-																				<th>Status</th>
+																				<th>Status Hadir</th>
+																				<th>Status Mulai Ujian</th>
 																			</tr>
 																		</thead>
 																		<tbody>
@@ -159,6 +167,13 @@
 																																											
 																						
 																					</td>
+																					<td> 
+																						@if($item->isInHasilUjian)
+																						<span class="badge badge-info">Sudah Mulai Ujian</span>
+																					@else
+																						<span class="badge badge-danger">Belum Mulai Ujian</span>
+																					@endif
+																				</td>
 																				</tr>
 																			@empty
 																				<tr>
@@ -186,6 +201,7 @@
 																<th>No</th>
 																<th>NIM</th>
 																<th>Nama</th>
+																<th>Status</th>
 																<th>Aksi</th>
 															
 															</tr>
@@ -197,11 +213,26 @@
 																	<td>{{ $item->nim }}</td>
 																	<td>{{ $item->nm_mhs }}</td>
 																	<td>
-																		<center>
-																		<a href="" class="btn btn-info" data-toggle="modal" data-target="#basicModal">
+																		@if($item->status==1)
+
+																		<b>Hadir</b>
+																	@else
+																		<b>Tidak Hdir</b>
+																	@endif
+																	</td>
+																	<td>
+																		@php
+																			$id=Crypt::encryptString($item->nim.','.$item->no_kel_ujn.','.$item->kd_mtk.','.$item->paket);                                    
+																			@endphp
+
+																		@if($item->isInHasilUjian)
+																		<a href="/show/log-mhs/mengawas-uts/{{ $id }}}" class="btn btn-info" >
 																			Log Aktivitas
 																		</a>
-																	</center>
+																		{{-- <span class="badge badge-info">Sudah Mulai Ujian</span> --}}
+																	@else
+																		<span class="badge badge-danger">Belum Mulai Ujian</span>
+																	@endif
 																		 
 																	
 																	</td> <!-- Assuming each item has an 'id' -->
@@ -331,6 +362,8 @@
 				});
 			});
 		});
+
+		
 	</script>
 
 					

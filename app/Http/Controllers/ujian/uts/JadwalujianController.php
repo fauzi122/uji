@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Crypt;
 use App\Models\Ujian_berita_acara;
 use App\Models\Soal_ujian;
 use App\Models\Absen_ujian;
+use App\Models\Paket_ujian;
+use App\Models\Mtk_ujian;
 use Carbon\Carbon;
 
 class JadwalujianController extends Controller
@@ -20,12 +22,19 @@ class JadwalujianController extends Controller
             return redirect('/login');
         }
     }
-
     public function index()
     {
-        return view('admin.ujian.uts.baak.jadwal.index');
+        $examTypes = Paket_ujian::distinct()->pluck('paket');
 
+        $encryptedExamTypes = $examTypes->mapWithKeys(function ($item) {
+            return [$item => Crypt::encryptString($item)];
+        });
+    
+        $paketUjian = Paket_ujian::all();
+        return view('admin.ujian.uts.baak.jadwal.index', compact('encryptedExamTypes', 'paketUjian'));
+       
     }
+
     public function jadwal($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));

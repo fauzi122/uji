@@ -23,7 +23,7 @@
 										<i class="icon icon-plus"></i>
 
 									</a>
-									List Panitia Ujian</h4>
+									List Panitia Ujian.</h4>
 							</div>
 
 							<div class="table-container">

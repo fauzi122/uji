@@ -102,7 +102,7 @@
                                         <thead>
                                             <tr>
                                                 <th><input type="checkbox" id="selectAll"></th>
-                                                <th>NO</th>
+                                                {{-- <th>NO</th> --}}
                                                 <th>Soal</th>
                                                 <th style="text-align: center;">Kunci</th>
                                                 <th style="text-align: center;">Gambar</th>
@@ -118,7 +118,7 @@
                                                   <input type="checkbox" name="deleteIds[]" value="{{ $soal->id }}">
                                                 
                                                 </td>
-                                                <td>{{ ++$no }}</td>
+                                                {{-- <td>{{ ++$no }}</td> --}}
                                                 <td>{!! ($soal->soal) !!}</td>
                                                 <td style="text-align: center;">{{ $soal->kunci }}</td>
                                                 <td style="text-align: center;">
@@ -216,7 +216,7 @@
                                    <table id="copy-print-csv" class="table custom-table">
                                       <thead>
                                         <tr>
-                                          <th>No</th>
+                                          {{-- <th>No</th> --}}
                                           <th>Soal</th>
                                           <th style="text-align: center;">Gambar</th>
                                           <th style="text-align: center;">Updated</th>
@@ -227,8 +227,8 @@
                                         @foreach ($essay as $no => $essay)
                                      <tr>
                                      
-                                     <td>{{ ++$no }}</td>
-                                     <td>{{ strip_tags($essay->soal) }}</td>
+                                     {{-- <td>{{ ++$no }}</td> --}}
+                                     <td> {!! ($essay->soal) !!}</td>
                                      <td>
                                      
                                        @php

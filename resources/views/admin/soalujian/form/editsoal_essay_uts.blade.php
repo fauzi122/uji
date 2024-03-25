@@ -24,8 +24,12 @@
 									 <input type="hidden" name="kd_mtk" value="{{$editsoal->kd_mtk}}">
 									 <input type="hidden" name="jenis" value="{{$editsoal->jenis}}">
                                     <input type="hidden" name="sesi" value="{{ md5(rand(0000000000, mt_getrandmax())) }}">
-                                   		<textarea class="form-control content @error('soal') is-invalid @enderror" 
-                            			name="soal" placeholder="Masukkan soal " rows="5">{!! old('soal',$editsoal->soal) !!}</textarea>
+                                    <textarea id="summernote2" class="form-control content @error('soal') is-invalid @enderror" name="soal" placeholder="Masukkan Konten / Isi Berita" required
+									oninvalid="this.setCustomValidity('Silahkan isi artikel')"
+									oninput="setCustomValidity('')">
+									{!! old('soal',$editsoal->soal) !!}
+								</textarea>
+                                        
                               			@error('soal')
                               			<div class="invalid-feedback" style="display: block">
                                   		{{  $message }}

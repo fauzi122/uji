@@ -23,6 +23,10 @@
                   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal">
 										Import Excel Soal Pilihan Ganda
 									</button>
+
+                  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#basicModal">
+										Persetujuan Kaprodi
+									</button>
                             </div>
                             <div class="invoice-body">
                               <!-- Row start -->
@@ -124,6 +128,9 @@
                         	<a href="/baak/uts-create-essay/{{$id}}" class="btn btn-success">Input Soal Essay</a>
                           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal1">
                             Import Excel Soal Essay
+                          </button>
+                          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#basicModal">
+                            Persetujuan Kaprodi
                           </button>
                         <br>
                         <br>
@@ -324,6 +331,7 @@
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
+                                  
                                 </div>
                                 <div class="modal-body">
                                  <form action="/baak/upload-soalessay-ujian" method="post" enctype="multipart/form-data">

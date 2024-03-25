@@ -59,8 +59,8 @@ class PanitiaujianController extends Controller
                 ->whereIn('dept', ['BSI2', 'BSI3'])
                 ->where('status_kry', '1')
                 ->get();
-
-        return view('admin.ujian.uts.adm.panitia.create', compact('user'));
+                $kampus = DB::table('kampus')->get();
+        return view('admin.ujian.uts.adm.panitia.create', compact('user','kampus'));
     }
 
     public function store_adm(Request $request)

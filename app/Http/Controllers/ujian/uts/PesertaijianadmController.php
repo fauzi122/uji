@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Imports\PesertaujianImport;
 use App\Models\Distribusisoal_ujian_tmp;
 use App\Models\Distribusisoal_ujian;
+use App\Models\Paket_ujian;
 
 class PesertaijianadmController extends Controller
 {
@@ -24,19 +25,31 @@ class PesertaijianadmController extends Controller
 
     public function index()
     {
-        return view('admin.ujian.uts.adm.peserta.index');
+        $examTypes = Paket_ujian::distinct()->pluck('paket');
+
+        $encryptedExamTypes = $examTypes->mapWithKeys(function ($item) {
+            return [$item => Crypt::encryptString($item)];
+        });
+    
+        $paketUjian = Paket_ujian::all();
+        return view('admin.ujian.uts.adm.peserta.index', compact('encryptedExamTypes', 'paketUjian'));
+       
     }
 
-    public function uts()
-    {
+        public function uts($id)
+        {
+            $pecah = explode(',', Crypt::decryptString($id));
+    
+    
+            $peserta = DB::table('ujian_distribusisoals')
+                ->when(request()->q, function ($query) {
+                    return $query->where('nim', 'like', '%' . request()->q . '%');
+                })
+                ->where('paket', $pecah[0])
+                ->paginate(10);
 
-        $peserta = DB::table('ujian_distribusisoals')
-            ->when(request()->q, function ($peserta) {
-                $peserta = $peserta->where('nim', 'like', '%' . request()->q . '%');
-            })->where('paket', 'UTS')->paginate(10);
+            $kampus = DB::table('kampus')->get();
 
-        // $peserta_upload = Distribusisoal_ujian_tmp::where('paket', 'UTS')->get();
-        $kampus = DB::table('kampus')->get();
         return view('admin.ujian.uts.adm.peserta.uts', compact('peserta','kampus'));
     }
 

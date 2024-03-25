@@ -18,8 +18,8 @@
 							
 							 <div class="card-header badge-success">
 							
-                                <h4 class="m-b-0 text-white"> <a href='' class="icon-add"data-toggle="modal" data-target="#basicModal"></a> 
-								List Peserta UAS </h4>
+                                <h4 class="m-b-0 text-white">
+								List Peserta Ujian </h4>
                             </div>
   					@if (session('success'))
                             <div class="alert alert-info">
@@ -152,6 +152,7 @@
 											  <th>Kode MTK</th>
 											  <th>Kelas</th>
 											  <th>Kel-Ujian</th>
+											  <th>paket</th>
 											  <th>Kondisi</th>
 											
 											</tr>
@@ -166,6 +167,7 @@
 											 <td>{{ $p->kd_mtk }}</td>
 											 <td>{{ $p->id_kelas }}</td>
 											 <td>{{ $p->no_kel_ujn }}</td>
+											 <td>{{ $p->paket }}</td>
 											 <td>{{ $p->kondisi }}</td>
 											
 											</tr>

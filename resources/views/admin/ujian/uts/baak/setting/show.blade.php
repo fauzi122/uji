@@ -20,6 +20,8 @@
 							
                                 <h4 class="m-b-0 text-white">Setting Waktu Ujian </h4>
                             </div>
+							<br>
+							<br>
   					@if (session('success'))
                             <div class="alert alert-info">
                                 {{ session('success') }}
@@ -39,58 +41,47 @@
 											<tr>
 											  
 											  <th>No</th>
-											  <th>Tanggal Mulai</th>
-											  <th>Tanggal Selesai</th>
-											  <th>Paket Ujian</th>
-											  <th> <center>Kondisi </center></th>
-											  <th>Petugas</th>
+											  <th>kelompok</th>
+											  <th>Tanggal </th>
+											  <th>Hari</th>
+											  <th>paket</th>
+											  <th>status</th>
+											  <th>petugas</th>
 											  <th>Aksi</th>
 											
 											</tr>
 										</thead>
 										<tbody>
-											@foreach ($setting as $no => $p)
+											@foreach ($tgluji as $no => $p)
 											<tr>
 											
 											
 											 <td>{{ ++$no }}</td>
-											 <td>{{ $p->mulai }}</td>
-											 <td>{{ $p->selsai }}</td>
+											 <td>{{ $p->kel_ujian }}</td>
+											 <td>{{ $p->tgl_ujian }}</td>
+											 <td>{{ $p->hari_ujian }}</td>
 											 <td>{{ $p->paket }}</td>
-											 <td>
-                                                @if ( $p->kondisi == 1)
-                                        <center><span class='badge badge-pill badge-info'>Aktif</span></center>
-                                                    
-                                                @else
-                                        <center><span class='badge badge-pill badge-secondary'>Tidak Aktif</span></center>
-                                                    
-                                                @endif
-                                             </td>
+											 <td>{{ $p->status }}</td>
 											 <td>{{ $p->petugas }}</td>
 											 <td>
-                                       <a href="" class="btn btn-primary">edit</a>
-									   
-									   @php
-										$id = Crypt::encryptString($p->paket);
+									@php
+									$id = Crypt::encryptString($p->kel_ujian.','.$p->tgl_ujian.','.$p->hari_ujian.','.$p->paket);
 									@endphp
-
-									   @if ($p->paket == 'UTS' || $p->paket == 'UAS'|| $p->paket == 'LATIHAN')
-									   <a href="/detail-time-setting/{{$id}}" class="btn btn-info">detail</a>
-								   @else
-									   <!-- Code for the else condition goes here, if needed -->
-								   @endif
-								   
-                                       
-
-                                             </td>
+												<a href="/edit-time-setting/{{$id}}" class="btn btn-sm btn-info">edit</a>
+												{{-- <a href="" class="btn btn-secondary">hapus</a> --}}
+												{{-- <form action="{{ url('/delete-time-setting/'.$id) }}" method="POST">
+													@csrf
+													@method('DELETE')
+													<button type="submit" class="btn btn-sm btn-secondary">Delete</button>
+												</form>  --}}
+											</td>
+											 
 											
 											</tr>
 											@endforeach
 										</tbody>
 						    	</table>
-                                    {{--  <div style="text-align: center">
-                                    {{$peserta->links("vendor.pagination.bootstrap-4")}}
-                                </div>  --}}
+
 								</div>
 							</div>
 

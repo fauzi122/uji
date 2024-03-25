@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Paket_ujian;
 use App\Imports\PesertaujianImport;
 use App\Models\Distribusisoal_ujian_tmp;
 
@@ -21,23 +22,36 @@ class PesertaujianController extends Controller
         }
     }
 
-
     public function index()
     {
-        return view('admin.ujian.uts.baak.peserta.index');
+        $examTypes = Paket_ujian::distinct()->pluck('paket');
+
+        $encryptedExamTypes = $examTypes->mapWithKeys(function ($item) {
+            return [$item => Crypt::encryptString($item)];
+        });
+    
+        $paketUjian = Paket_ujian::all();
+        return view('admin.ujian.uts.baak.peserta.index', compact('encryptedExamTypes', 'paketUjian'));
+       
     }
-    public function uts()
+
+    public function uts($id)
     {
+        $pecah = explode(',', Crypt::decryptString($id));
+
 
         $peserta = DB::table('ujian_distribusisoals')
-            ->when(request()->q, function ($peserta) {
-                $peserta = $peserta->where('nim', 'like', '%' . request()->q . '%');
-            })->where('paket', 'UTS')->paginate(10);
+            ->when(request()->q, function ($query) {
+                return $query->where('nim', 'like', '%' . request()->q . '%');
+            })
+            ->where('paket', $pecah[0])
+            ->paginate(10);
 
-        $peserta_upload = Distribusisoal_ujian_tmp::where('paket', 'UTS')->get();
+        $peserta_upload = Distribusisoal_ujian_tmp::where('paket', $pecah[0])->get();
 
         return view('admin.ujian.uts.baak.peserta.uts', compact('peserta', 'peserta_upload'));
     }
+    
 
     public function uas()
     {

@@ -16,8 +16,6 @@ use App\Http\Controllers\ujian\uts\{
     
 };
 
-
-
 Route::controller(DasboardujianController::class)->group(function () {
     Route::get('/dashboard-ujian','index');
     
@@ -25,6 +23,10 @@ Route::controller(DasboardujianController::class)->group(function () {
 
 Route::controller(SettingtimeUjianController::class)->group(function () {
     Route::get('/time-setting','index')->name('time-setting');
+    Route::get('/detail-time-setting/{id}','show');
+    Route::get('/edit-time-setting/{id}','edit');
+    Route::put('/update-time-setting/{id}','update');
+    Route::delete('/delete-time-setting/{id}','destroy');
     
 });
 
@@ -101,8 +103,7 @@ Route::controller(MtkujianController::class)->group(function () {
         // peserta Ujian
 Route::controller(PesertaujianController::class)->group(function () {
     Route::get('/peserta-ujian','index');
-    Route::get('/peserta-ujian-uts','uts');
-    Route::get('/peserta-ujian-uas','uas');
+    Route::get('/peserta-ujian-uts/{id}','uts');
     Route::get('/baak/cari-peserta-ujian','cari');
     Route::post('/upload-peserta-ujian','storeData_Pesertaujian');
     Route::post('/baak/pesertauji','singpesertauji');
@@ -135,8 +136,7 @@ Route::controller(PerakitSoalController::class)->group(function () {
         // rekap mengawas administrasi
 Route::controller(AdmRekapMengawasController::class)->group(function () {
     Route::get('/adm-rekap-mengawas','index');
-    Route::get('/adm/rekap-mengawas-uts','uts');
-    Route::get('/adm/rekap-mengawas-uas','uas');
+    Route::get('/adm/rekap-mengawas/{id}','uts');
     Route::get('/adm/show-rekap-mengawas/{id}','show');
     Route::get('/adm/jadwal-ujian/{id}','jadwal');
 
@@ -146,8 +146,7 @@ Route::controller(AdmRekapMengawasController::class)->group(function () {
 Route::controller(PesertaijianadmController::class)->group(function () {
     Route::get('/adm-peserta-uji', 'index');
     Route::get('/adm/kampus', 'kampus');
-    Route::get('/adm/peserta-ujian-uts', 'uts');
-    Route::get('/adm/peserta-ujian-uas', 'uas');
+    Route::get('/adm/peserta-ujian/{id}', 'uts');
     Route::get('/adm/lihat-peserta-ujian/{kd_cabang}', 'show_cabang');
     Route::get('/adm/lihat-kls-peserta-ujian/{id_kelas}', 'show_kelas');
     Route::get('/adm/cari-peserta-ujian-uts', 'cari');

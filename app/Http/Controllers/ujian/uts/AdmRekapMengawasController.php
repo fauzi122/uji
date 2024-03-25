@@ -11,6 +11,8 @@ use App\Models\Ujian_berita_acara;
 use App\Models\Soal_ujian;
 use App\Models\Absen_ujian;
 use Carbon\Carbon;
+use App\Models\Paket_ujian;
+
 class AdmRekapMengawasController extends Controller
 {
     public function __construct()
@@ -19,38 +21,50 @@ class AdmRekapMengawasController extends Controller
             return redirect('/login');
         }
     }
-    
+
     public function index()
     {
-        return view('admin.ujian.uts.adm.rekap.index');
+        $examTypes = Paket_ujian::distinct()->pluck('paket');
 
-    }
+        $encryptedExamTypes = $examTypes->mapWithKeys(function ($item) {
+            return [$item => Crypt::encryptString($item)];
+        });
+    
+        $paketUjian = Paket_ujian::all();
+        return view('admin.ujian.uts.adm.rekap.index', compact('encryptedExamTypes', 'paketUjian'));
+       
+    } 
 
-    public function uts()
+    public function uts($id)
     {
-        $uts=Ujian_berita_acara::join('mtk', 'ujian_berita_acaras.kd_mtk', '=', 'mtk.kd_mtk')
-        ->join('users', 'ujian_berita_acaras.kd_dosen', '=', 'users.kode')
-        ->select('ujian_berita_acaras.*', 'mtk.nm_mtk','users.name')
-        ->where('ujian_berita_acaras.paket','UTS')->get();
+        $pecah = explode(',', Crypt::decryptString($id));
 
-        return view('admin.ujian.uts.adm.rekap.uts',compact('uts'));
+        $jadwal = Soal_ujian::where([
+            'paket'    => $pecah[0]
+            ])->get();
 
-    }
+        $result = DB::table('uts_soals')
+                ->join('ujian_berita_acaras', function($join) {
+                    $join->on('uts_soals.kel_ujian', '=', 'ujian_berita_acaras.kel_ujian')
+                    ->on('uts_soals.kd_mtk', '=', 'ujian_berita_acaras.kd_mtk');
+                    })
+                ->select('ujian_berita_acaras.*', 'uts_soals.kd_dosen', 'uts_soals.kel_ujian', 'uts_soals.kd_mtk')
+                ->where(['uts_soals.paket'    => $pecah[0]])->get();
+    
+        // Membuat array untuk pencocokan data
+        $resultArray = $result->mapWithKeys(function ($item) {
+            return [$item->kd_dosen . '_' . $item->kel_ujian . '_' . $item->kd_mtk => $item];
+        })->toArray();
 
-    public function uas()
-    {
-        $uts=Ujian_berita_acara::join('mtk', 'ujian_berita_acaras.kd_mtk', '=', 'mtk.kd_mtk')
-        ->join('users', 'ujian_berita_acaras.kd_dosen', '=', 'users.kode')
-        ->select('ujian_berita_acaras.*', 'mtk.nm_mtk','users.name')
-        ->where('ujian_berita_acaras.paket','UAS')->get();
-
-        return view('admin.ujian.uts.adm.rekap.uas',compact('uas'));
+        return view('admin.ujian.uts.adm.rekap.uts',compact('jadwal', 'resultArray'));
 
     }
 
     public function show($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
+
+        dd($pecah[2]);
 
         $soal = Soal_ujian::where([
             'kd_dosen'    => $pecah[0],

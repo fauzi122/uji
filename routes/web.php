@@ -89,6 +89,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/mengawas-uts', 'm_uts');
                 Route::post('/store/mengawas-uts/', 'store');
                 Route::get('/show/mengawas-uts/{id}', 'show_uts');
+                Route::get('/show/log-mhs/mengawas-uts/{id}', 'show_log');
                 Route::get('/mengawas-uas', 'm_uas');
                 Route::post('/update-attendance', 'UpdateAbsenUjian')->name('update_attendance');
                 Route::post('/update-ket-ujian','updateKeterangan')->name('update.ket-ujian-uts');

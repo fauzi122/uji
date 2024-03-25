@@ -25,51 +25,22 @@
                             <div class="table-container">
                                 <!-- Placeholder for additional content, if any -->
 
+                               
                                 <div class="row gutters">
+                                    @foreach ($encryptedExamTypes as $examType => $encryptedValue)
                                     <div class="col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
                                         <div class="info-tiles">
                                             <div class="info-icon">
                                                 <i class="icon-activity"></i>
                                             </div>
                                             <div class="stats-detail">
-                                                <h3><a href="/peserta-ujian-uts">Peserta Ujian UTS</a></h3>
+                                                <h3><a href="/peserta-ujian-uts/{{ $encryptedValue }}">Peserta Ujian {{ ucwords(strtolower($examType)) }}</a></h3>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
-                                        <div class="info-tiles">
-                                            <div class="info-icon">
-                                                <i class="icon-filter_frames"></i>
-                                            </div>
-                                            <div class="stats-detail">
-                                                <h3><a href="/peserta-ujian-uas">Peserta Ujian UAS</a></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
 
-                                <div class="row gutters">
-                                    <div class="col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
-                                        <div class="info-tiles">
-                                            <div class="info-icon">
-                                                <i class="icon-activity"></i>
-                                            </div>
-                                            <div class="stats-detail">
-                                                <h3><a href="">Peserta Ujian Pengganti</a></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
-                                        <div class="info-tiles">
-                                            <div class="info-icon">
-                                                <i class="icon-filter_frames"></i>
-                                            </div>
-                                            <div class="stats-detail">
-                                                <h3><a href="">Peserta Ujian HER</a></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
 
                                 <hr>
                             </div>
@@ -87,4 +58,5 @@
     <!-- Content wrapper end -->
 
 </div>
+
 @endsection

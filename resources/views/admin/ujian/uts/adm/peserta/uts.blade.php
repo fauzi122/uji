@@ -19,7 +19,7 @@
 							 <div class="card-header badge-success">
 							
                                 <h4 class="m-b-0 text-white"> 
-								Administrasi - List Peserta UTS </h4>
+								Administrasi - List Peserta Ujian </h4>
                             </div>
 
 						</div>
@@ -100,6 +100,7 @@
 											  <th>Kelas</th>
 											  <th>Kel-Ujian</th>
 											  <th>Kondisi</th>
+											  <th>Jenis Ujian</th>
 											
 											</tr>
 										</thead>
@@ -114,6 +115,7 @@
 											 <td>{{ $p->id_kelas }}</td>
 											 <td>{{ $p->no_kel_ujn }}</td>
 											 <td>{{ $p->kondisi }}</td>
+											 <td>{{ $p->paket }}</td>
 											
 											</tr>
 											@endforeach

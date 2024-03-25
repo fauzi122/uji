@@ -49,31 +49,86 @@ class MastersoalController extends Controller
     }
     
 
-    public function index_uts($id)
-    {
-        $pecah = explode(',', Crypt::decryptString($id));
+    // public function index_uts($id)
+    // {
+    //     $pecah = explode(',', Crypt::decryptString($id));
 
-        $soals = Mtk_ujian::where(['paket'    => $pecah[0]])
-            ->groupBy('kd_mtk')
-            ->get();
+    //     $soals = Mtk_ujian::where(['paket'    => $pecah[0]])
+    //         ->groupBy('kd_mtk')
+    //         ->get();
 
 
-        $detailsoal = DB::table('ujian_detailsoals')
-                        ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                        ->where('status', 'Y')
-                        ->where('jenis', $pecah[0])
-                        ->groupBy('kd_mtk')
-                        ->pluck('jumlah', 'kd_mtk');
+    //     $detailsoal = DB::table('ujian_detailsoals')
+    //                     ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+    //                     ->where('status', 'Y')
+    //                     ->where('jenis', $pecah[0])
+    //                     ->groupBy('kd_mtk')
+    //                     ->pluck('jumlah', 'kd_mtk');
         
-        $detailsoal_essay = DB::table('ujian_detail_soal_esays')
-                              ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                              ->where('status', 'Y')
-                              ->where('jenis', $pecah[0])
-                              ->groupBy('kd_mtk')
-                              ->pluck('jumlah', 'kd_mtk'); 
+    //     $detailsoal_essay = DB::table('ujian_detail_soal_esays')
+    //                           ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+    //                           ->where('status', 'Y')
+    //                           ->where('jenis', $pecah[0])
+    //                           ->groupBy('kd_mtk')
+    //                           ->pluck('jumlah', 'kd_mtk'); 
       
-        return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals','detailsoal','detailsoal_essay'));
-    }
+    //     return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals','detailsoal','detailsoal_essay'));
+    // }
+
+    public function index_uts(Request $request, $id)
+    {
+        if (Auth::user()->utype == 'ADM') {
+
+            try {
+                $pecah = explode(',', Crypt::decryptString($id));
+            } catch (\Exception $e) {
+                return redirect()->back()->withErrors('Gagal mendekripsi ID.');
+            }
+
+            // Cek apakah pengguna dengan NIP tersebut memiliki entri di perakit_bahan_ajar
+            $perakit = perakit_bahan_ajar::where('nip', Auth::user()->username)->exists(); // Ganti 'nip' dengan 'username' jika memang itu yang dimaksud
+
+            if ($pecah[0] == 'LATIHAN' && $perakit) {
+                // Ini akan dijalankan jika ada entri di perakit_bahan_ajar yang cocok dengan nip/username
+                $soals = Mtk_ujian::where('paket', $pecah[0])
+                                ->groupBy('kd_mtk')
+                                ->get();
+            } else if ($pecah[0] != 'LATIHAN') {
+
+                // dd($pecah[0] );
+                // Ini akan dijalankan jika 'paket' bukan 'LATIHAN', tanpa memperdulikan keberadaan di perakit_bahan_ajar
+                $soals = Mtk_ujian::join('perakit_soals', 'mtk_ujians.kd_mtk', '=', 'perakit_soals.kd_mtk')
+                                ->where('mtk_ujians.paket', $pecah[0])
+                                ->where('perakit_soals.kd_dosen', Auth::user()->kode)
+                                ->select('mtk_ujians.*', 'perakit_soals.kd_dosen')
+                                ->groupBy('kd_mtk')
+                                ->get();
+                    // dd($soals);
+            } else {
+                // Opsional: Penanganan khusus jika tidak ada entri di perakit_bahan_ajar dan paket adalah 'LATIHAN'
+                $soals = collect(); // Mengembalikan koleksi kosong atau sesuai kebutuhan
+            }
+
+
+            $detailsoal = DB::table('ujian_detailsoals')
+                            ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+                            ->where('status', 'Y')
+                            ->where('jenis', $pecah[0])
+                            ->groupBy('kd_mtk')
+                            ->pluck('jumlah', 'kd_mtk');
+            
+            $detailsoal_essay = DB::table('ujian_detail_soal_esays')
+                                ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+                                ->where('status', 'Y')
+                                ->where('jenis', $pecah[0])
+                                ->groupBy('kd_mtk')
+                                ->pluck('jumlah', 'kd_mtk');
+
+            return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals', 'detailsoal', 'detailsoal_essay'));
+        } else {
+            return redirect('/dashboard');
+        }
+ }
 
     /**
      * Show the form for creating a new resource.

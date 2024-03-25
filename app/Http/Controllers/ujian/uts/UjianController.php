@@ -115,14 +115,22 @@ class ujianController extends Controller
     {
         $pecah = explode(',', Crypt::decryptString($id));
         // dd($pecah);
-        $soal = Mtk_ujian::where(['kd_mtk'      => $pecah[0]])->first();
+        $soal = Mtk_ujian::where([
+            'kd_mtk'      => $pecah[0],
+            'paket'       => $pecah[1]
+
+            ])->first();
         return view('admin.soalujian.createpilih_uts', compact('id', 'soal'));
     }
 
     public function create_essay_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-        $soal = Mtk_ujian::where(['kd_mtk'      => $pecah[0]])->first();
+        // dd($pecah);
+        $soal = Mtk_ujian::where([
+            'kd_mtk'      => $pecah[0],
+            'paket'       => $pecah[1]
+            ])->first();
         return view('admin.soalujian.createessay_uts', compact('id', 'soal'));
     }
     /**

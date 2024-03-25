@@ -16,7 +16,9 @@
 									<div class="invoice-container">
 										<div class="invoice-header">
                     @php
-                    $id=Crypt::encryptString($soal->kd_mtk);                                    
+                    $id=Crypt::encryptString($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode);
+                    $kirim =Crypt::encryptString ($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode);                                    
+                                  
                     @endphp
 									<a href="/baak/uts-create-pilih/{{$id}}" class="btn btn-success">Input Soal Pilihan Ganda</a>
 									
@@ -120,7 +122,8 @@
 												<div class="col-lg-12 col-md-12 col-sm-12">
 
                         @php
-                        $id=Crypt::encryptString($soal->kd_mtk);                                    
+                        $id=Crypt::encryptString($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode);
+                                    
                         @endphp
 
                         <br>

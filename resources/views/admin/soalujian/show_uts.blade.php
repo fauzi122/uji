@@ -11,7 +11,7 @@
 									<div class="invoice-container">
 										<div class="invoice-header">
                     @php
-                    $id=Crypt::encryptString($soal->kd_mtk);
+                    $id=Crypt::encryptString($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode);
                     $kirim =Crypt::encryptString ($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode);                                    
                     @endphp
 									<a href="/uts-create-pilih/{{$id}}" class="btn btn-success">Input Soal Pilihan Ganda</a>
@@ -151,7 +151,7 @@
 												<div class="col-lg-12 col-md-12 col-sm-12">
 
                         @php
-                        $id=Crypt::encryptString($soal->kd_mtk);                                    
+                        $id=Crypt::encryptString($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode);                                    
                         @endphp
 
                         	<a href="/uts-create-essay/{{$id}}" class="btn btn-success">Input Soal Essay</a>
@@ -232,7 +232,7 @@
                                      <td>
                                      
                                        @php
-                                      $detail_essay=Crypt::encryptString($essay->id);                                    
+                                      $detail_essay=Crypt::encryptString($essay->kd_mtk.','.$essay->paket.','.Auth::user()->kode);                                    
                                       @endphp
 
                                       {{--  @if ($essay->status == 'Y')

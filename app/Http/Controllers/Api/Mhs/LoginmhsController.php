@@ -33,9 +33,10 @@ class LoginmhsController extends Controller
         }
         // dd(App::environment('production'));
         if (app()->environment('production')) {
-            $examSystemUrl = 'https://devujian.bsi.ac.id/authenticate';
+            $examSystemUrl = 'https://ujiankampus.bsi.ac.id/authenticate';
+            
         } else {
-            $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
+            $examSystemUrl = 'https://devujian.bsi.ac.id/authenticate'; 
         }
         // URL sistem ujian online
 

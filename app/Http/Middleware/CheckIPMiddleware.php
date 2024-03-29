@@ -15,15 +15,17 @@ class CheckIPMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $IP = $request->ip();
+        $ipFull = ambilIP();
+        $ipParts = explode('.', $ipFull);
+        $ipThreeOctets = implode('.', array_slice($ipParts, 0, 3));
         $cekip = DB::table('ip_absen')
-            ->where('ip', $IP)
+            ->where('ip', $ipThreeOctets)
             ->exists();
 
         if ($cekip) {
             return $next($request);
         } else {
-            return response('Forbidden - Your IP is not allowed. (' . $request->ip() . ')', 403);
+            return response('Forbidden - Your IP is not allowed. (' . $ipThreeOctets . ')', 403);
         }
     }
 }

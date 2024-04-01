@@ -1,5 +1,5 @@
 <?php
-
+use Carbon\Carbon;
 function hari_ini()
 {
     $hari = date("D");
@@ -142,4 +142,11 @@ function ambilIP()
     $ip = $ambil['ip'];
     // $ip = '172.16.204';
     return $ip;
+}
+
+
+
+function formatDate($date)
+{
+    return Carbon::parse($date)->format('d M Y H:i:s');
 }

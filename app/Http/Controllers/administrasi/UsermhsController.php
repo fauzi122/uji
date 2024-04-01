@@ -40,6 +40,32 @@ class UsermhsController extends Controller
         return view('baak.mhs.index_mhs', compact('usermhs'));
     }
 
+    public function search(Request $request)
+    {
+        $username = $request->input('username');
+        $kode = $request->input('kode');
+    
+        $users = User::where('utype', 'MHS');
+    
+        if ($username) {
+            $users->where('username', $username);
+        }
+    
+        if ($kode) {
+            if ($username) {
+                $users->orWhere('kode', $kode);
+            } else {
+                $users->where('kode', $kode);
+            }
+        }
+    
+        $users = $users->get();
+    
+        return view('baak.mhs.cari', compact('users'));
+    }
+    
+
+
     /**
      * Show the form for creating a new resource.
      *

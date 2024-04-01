@@ -66,33 +66,34 @@ class MengawasController extends Controller
             'kel_ujian' => 'required',
             'hari'      => 'required',
             'paket'     => 'required',
-            'isi'       => 'required',
+           
         ]);
     
         // Define the unique keys for searching. Example: 'kd_mtk' and 'kel_ujian'
         $uniqueKeys = [
-            'kd_mtk' => $request->input('kd_mtk'),
+            'kd_mtk'    => $request->input('kd_mtk'),
             'kel_ujian' => $request->input('kel_ujian'),
+            'paket'     => $request->input('paket'),
         ];
     
         // Data to be updated or created
         $data = [
-            'kd_dosen' => Auth::user()->kode,
-            'hari'     => $request->input('hari'),
-            'paket'    => $request->input('paket'),
-            'isi'      => $request->input('isi'),
+            'kd_dosen'      => Auth::user()->kode,
+            'hari'          => $request->input('hari'),
+            'tgl_ujian'     => $request->input('tgl_ujian'),
+           
         ];
     
         // Update or create
         $berita = Ujian_berita_acara::updateOrCreate($uniqueKeys, $data);
     
         if ($berita) {
-            return back()->with(['status' => 'Berhasil Di Kirim!']);
+            return back()->with(['status' => 'Berhasil Masuk Mengawas']);
         } else {
-            return back()->with(['error' => 'Gagal Berhasil Di Kirim!']);
+            return back()->with(['error' => 'Gagal Berhasil Masuk Mengawas']);
         }
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -114,7 +115,7 @@ class MengawasController extends Controller
                 'paket'     => $pecah[3],
                 'hari_t'    => $pecah[4]
             ])->first();
-            
+    
             // Mengambil data berita acara ujian
             $beritaAcara = Ujian_berita_acara::where([
                 'kd_dosen'  => $pecah[0],
@@ -122,7 +123,7 @@ class MengawasController extends Controller
                 'kel_ujian' => $pecah[2],
                 'paket'     => $pecah[3]
             ])->first();
-    
+    // dd($beritaAcara);
             // Mengambil dan memproses data absen ujian
             $mhsujian = Absen_ujian::where([
                 'kd_mtk'    => $pecah[1],
@@ -137,15 +138,14 @@ class MengawasController extends Controller
                     ->exists();
                 return $item;
             });
-    
-            // Mengirim data ke view
+
             return view('admin.mengawas.show', compact('soal', 'id', 'beritaAcara', 'mhsujian'));
         } catch (\Exception $e) {
             // Tangani kesalahan yang mungkin terjadi saat proses dekripsi atau query
             return back()->with('error', 'Terjadi kesalahan saat memproses data: ' . $e->getMessage());
         }
     }
-
+    
 
     public function show_log($id)
     {
@@ -188,27 +188,42 @@ class MengawasController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+
+    public function updateBeritaAcara(Request $request)
+{
+    $this->validate($request, [
+        'kd_mtk'    => 'required',
+        'kel_ujian' => 'required',
+        'paket'     => 'required',
+        'isi'       => 'required', // misalkan Anda memperbarui field 'isi' dari berita acara
+    ]);
+
+    // Mencari record yang sesuai
+    $beritaAcara = Ujian_berita_acara::where([
+        'kd_mtk'    => $request->kd_mtk,
+        'kel_ujian' => $request->kel_ujian,
+        'paket'     => $request->paket
+    ])->first();
+
+    if ($beritaAcara) {
+        // Memperbarui record yang ditemukan
+        $beritaAcara->isi = $request->isi; // asumsikan 'isi' adalah kolom yang ingin Anda perbarui
+        if ($beritaAcara->save()) {
+            return back()->with('status', 'Berita acara berhasil diperbarui.');
+        } else {
+            return back()->with('error', 'Gagal memperbarui berita acara.');
+        }
+    } else {
+        return back()->with('error', 'Berita acara tidak ditemukan.');
     }
+}
+
 
     public function UpdateAbsenUjian(Request $request)
     {
@@ -239,18 +254,4 @@ class MengawasController extends Controller
         return response()->json(['message' => 'Keterangan berhasil diperbarui']);
     }
     
-
-        
-
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

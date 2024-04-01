@@ -41,7 +41,7 @@
                         <tbody>
                           @forelse ($soals as $soal)
                               @php
-                                  $id = Crypt::encryptString($soal->kd_mtk.','.$soal->paket);
+                                  $id = Crypt::encryptString($soal->kd_mtk.','.$soal->paket.','.$soal->nm_mtk);
                               @endphp
                               <tr>
                                   <td>{{ $loop->iteration }}</td>

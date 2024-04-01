@@ -87,7 +87,8 @@ Route::middleware('auth')->group(function () {
             Route::controller(MengawasController::class)->group(function () {
                 Route::get('/mengawas-ujian', 'index');
                 Route::get('/mengawas-uts', 'm_uts');
-                Route::post('/store/mengawas-uts/', 'store');
+                Route::post('/store/mengawas-uts/', 'store')->name('store-mengawas-ujian');
+                Route::post('/store/berita-mengawas-uts/', 'updateBeritaAcara')->name('store-berita-mengaws-ujian');
                 Route::get('/show/mengawas-uts/{id}', 'show_uts');
                 Route::get('/show/log-mhs/mengawas-uts/{id}', 'show_log');
                 Route::get('/mengawas-uas', 'm_uas');
@@ -252,6 +253,8 @@ Route::middleware('auth')->group(function () {
             //BAAK Mahasiswa
             Route::get('/std/users/baak', [UsermhsController::class, 'index_baak']);
             Route::post('/std/users/baak', [UsermhsController::class, 'password_res']);
+            Route::get('/search/users-mhs', [UsermhsController::class, 'search']);
+
             Route::get('/std/edit/baak/{user}', [UsermhsController::class, 'edit_baak']);
             Route::patch('/std/update/baak/{user}', [UsermhsController::class, 'update_baak']);
             //MBKM

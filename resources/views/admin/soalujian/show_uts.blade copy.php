@@ -117,27 +117,27 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($soals as $no => $soals)
+                                            @foreach ($soals as $no => $soal)
                                             <tr>
                                                 <td>
 
-                                                  <input type="checkbox" name="deleteIds[]" value="{{ $soals->id }}">
+                                                  <input type="checkbox" name="deleteIds[]" value="{{ $soal->id }}">
                                                 
                                                 </td>
                                                 {{-- <td>{{ ++$no }}</td> --}}
-                                                <td>{!! ($soals->soal) !!}</td>
-                                                <td style="text-align: center;">{{ $soals->kunci }}</td>
+                                                <td>{!! ($soal->soal) !!}</td>
+                                                <td style="text-align: center;">{{ $soal->kunci }}</td>
                                                 <td style="text-align: center;">
-                                                    @if ($soals->file != '')
-                                                        <a href="/edit-detail/soal-uts/{{ Crypt::encryptString($soals->id) }}"><span class='badge badge-pill badge-info'>gambar</span></a>
+                                                    @if ($soal->file != '')
+                                                        <a href="/edit-detail/soal-uts/{{ Crypt::encryptString($soal->id) }}"><span class='badge badge-pill badge-info'>gambar</span></a>
                                                     @endif
                                                 </td>
-                                                <td style="text-align: center;">{{ $soals->updated_at }}</td>
+                                                <td style="text-align: center;">{{ $soal->updated_at }}</td>
                                                 <td style="text-align: center;">
                                                   @if (!$aprov)
-                                                    <a href="/edit-detail/soal-uts/{{ Crypt::encryptString($soals->id) }}" class="btn btn-sm btn-success">edit</a>
+                                                    <a href="/edit-detail/soal-uts/{{ Crypt::encryptString($soal->id) }}" class="btn btn-sm btn-success">edit</a>
                                                   @endif  
-                                                    <a href="/detail/soal-show-uts/{{ Crypt::encryptString($soals->id) }}" class="btn btn-sm btn-info">show</a>
+                                                    <a href="/detail/soal-show-uts/{{ Crypt::encryptString($soal->id) }}" class="btn btn-sm btn-info">show</a>
                                                 </td>
                                             </tr>
                                             @endforeach

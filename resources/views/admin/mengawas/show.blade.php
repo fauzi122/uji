@@ -44,61 +44,70 @@
 											</tr>
 
 											<tr>
-												<td>Waktu Ujian</td>
+												<td>Jam Ujian</td>
 												<td><b>{{ $soal->mulai }}-{{ $soal->selesai }}</b></td>
 											</tr>
 											<tr>
-												<td>Kampus</td>
-												<td>{{ $soal->nm_kampus }}</td>
+												<td>Tanggal</td>
+												<td>{{ $soal->hari_t }} - {{ $soal->tgl_ujian }}</td>
 											</tr>
 											<tr>
-												<td>Ruangan</td>
-												<td>{{ $soal->no_ruang }}</td>
+												<td>Kampus & Ruangan</td>
+												<td>{{ $soal->nm_kampus }} - {{ $soal->no_ruang }}</td>
 											</tr>
+
 											<tr>
 												<td>Berita Acara</td>
 												<td>
-                                                   
-													<button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal">
-														isi berita acara
-													</button> 
-												<!-- Modal Trigger Button -->
-											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#beritaAcaraModal">
-												Lihat Berita Acara
-											</button>
+													@php
+													$tanggalSekarang = \Carbon\Carbon::now()->startOfDay();
+													$tanggalUjian = \Carbon\Carbon::createFromFormat('Y-m-d', $soal->tgl_ujian)->startOfDay();
+													$isTanggalSesuai = $tanggalSekarang->eq($tanggalUjian);
+													$isBeritaAcaraTersedia = $beritaAcara != null;
+												@endphp
+
+												@if($isTanggalSesuai && !$isBeritaAcaraTersedia)
+													<!-- Jika sudah waktunya ujian dan belum ada berita acara, tampilkan tombol mengawas ujian -->
+													<form method="POST" action="{{ route('store-mengawas-ujian') }}">
+														@csrf
+														<input type="hidden" name="kd_mtk" value="{{ $soal->kd_mtk }}">
+														<input type="hidden" name="kel_ujian" value="{{ $soal->kel_ujian }}">
+														<input type="hidden" name="hari" value="{{ $soal->hari_t }}">
+														<input type="hidden" name="tgl_ujian" value="{{ $soal->tgl_ujian }}">
+														<input type="hidden" name="paket" value="{{ $soal->paket }}">
+
+														<button type="submit" class="btn btn-info">
+															Mengawas Ujian
+														</button>
+													</form>
+												@elseif($isBeritaAcaraTersedia)
+													<!-- Jika berita acara sudah ada, beri informasi bahwa pengawasan sudah terdaftar -->
+													<button class="btn btn-secondary" disabled>
+														Anda sudah absen mengawas, {{ formatDate($soal->created_at) }}
+
+													</button>
+												@else
+													<!-- Jika belum waktunya, tidak menampilkan tombol mengawas -->
+													<button class="btn btn-danger" disabled>
+														Belum waktunya mengawas ujian
+													</button>
+												@endif
+
+
+													@if($beritaAcara && is_null($beritaAcara->field_yang_diperiksa))
+														<!-- Tombol isi berita acara ditampilkan jika $beritaAcara ada dan field tertentu null -->
+														<button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal">
+															berita acara
+														</button>
+													@endif
+												
+
+												
 											
-											<button onclick="window.location.reload();" class="btn btn-danger">Refresh Data</button>
-
-
-											<!-- Modal Structure -->
-											<div class="modal fade" id="beritaAcaraModal" tabindex="-1" role="dialog" aria-labelledby="beritaAcaraModalLabel" aria-hidden="true">
-												<div class="modal-dialog" role="document" style="max-width: 70%;"> <!-- Inline CSS for wider modal -->
-													<div class="modal-content">
-														<div class="modal-header">
-															<h5 class="modal-title" id="beritaAcaraModalLabel">Berita Acara</h5>
-															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																<span aria-hidden="true">&times;</span>
-															</button>
-														</div>
-														<div class="modal-body">
-															@if($beritaAcara)
-																{{-- Escaping the content to display as plain text --}}
-																<pre>{{ htmlspecialchars($beritaAcara->isi) }}</pre>
-																{{-- Display other fields from berita acara as needed --}}
-															@else
-																<p>No berita acara found.</p>
-															@endif
-														</div>
-														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-														</div>
-													</div>
-												</div>
-											</div>
-
-
 
 												</td>
+											<button onclick="window.location.reload();" class="btn btn-danger">Refresh Data</button>
+
 											</tr>
 										</tbody>
 									</table>
@@ -133,7 +142,9 @@
 																				<th>NIM</th>
 																				<th>Nama</th>
 																				<th>Komentar</th>
+																				@if($beritaAcara && is_null($beritaAcara->field_yang_diperiksa))
 																				<th>Status Hadir</th>
+																				@endif	
 																				<th>Status Mulai Ujian</th>
 																			</tr>
 																		</thead>
@@ -157,16 +168,18 @@
 																						
 																					
 																					</td> <!-- Assuming each item has an 'id' -->
+																					@if($beritaAcara && is_null($beritaAcara->field_yang_diperiksa))
 																					<td>
 
-																					
+																						
 																					<label class="switch">
 																						<input type="checkbox" class="status-checkbox" id="switch{{ $item->id }}" data-id="{{ $item->id }}" {{ $item->status ? 'checked' : '' }}>
 																						<span class="slider round"></span>
 																					</label>
-																																											
+																																										
 																						
 																					</td>
+																					@endif	
 																					<td> 
 																						@if($item->isInHasilUjian)
 																						<span class="badge badge-info">Sudah Mulai Ujian</span>
@@ -269,48 +282,7 @@
 
 			</div>
 
-			<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg" role="document"> <!-- Large modal -->
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="basicModalLabel">Form Berita Acara Ujian</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form action="/store/mengawas-uts/" method="post" enctype="multipart/form-data">
-								@csrf
-								
-								<input type="text" hidden readonly name="kd_mtk" value="{{ $soal->kd_mtk }}">
-								<input type="text" hidden readonly name="kel_ujian" value="{{ $soal->kel_ujian }}">
-								<input type="text" hidden readonly name="hari" value="{{ $soal->hari_t }}">
-								<input type="text" hidden readonly name="paket" value="{{ $soal->paket }}">
-
-								<!-- Text area added here -->
-								<div class="form-group">
-									<label for="additionalNotes">Berita Acara:</label>
-									<textarea class="form-control" id="isi" name="isi" rows="7"></textarea>
-								</div>
-								<button type="submit" class="btn btn-primary">
-									Kirim Data
-								</button> 
-							</form>
-							<hr>
-							{{-- <label>
-								<h5>*Catatan :</h5> 
-								<br>
-								<h6> 
-									1. Upload soal harus sesuai format excel yang tersedia.  
-									<br>
-									<br>
-								</h6> 
-							</label> --}}
-						</div>
-					</div>
-				</div>
-			</div>
-
+	@include('admin.mengawas.modal_acara')
 			
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>

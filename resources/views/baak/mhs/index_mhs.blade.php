@@ -16,7 +16,35 @@
                     </div>
                 
                     <div class="card-body">
-                        <form action="/std/users/baak" method="GET">
+                        <br>
+                <h5>
+                    *Catatan: Pencarian dapat di lakukan salah satu saja contoh *hanya NIM/KELAS
+                </h5>
+                <p>
+                    <form action="/search/users-mhs" method="GET">
+                        <table class="table custom-table">
+                            <tr>
+                                <td>NIM</td>
+                                <td>
+                                    <input type="number" name="username" placeholder="Masukkan Nim" class="nilai form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Kelas</td>
+                                <td>
+                                    <input type="text" name="kode" placeholder="Masukkan Kelas" class="nilai form-control"></td>
+
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="2" style="text-align: right;">
+                                    <button type="submit" class="btn btn-info">Cari Data User</button><br>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                        {{-- <form action="/std/users/baak" method="GET">
                             <div class="form-group">
                                 <div class="input-group mb-3">
                                     
@@ -28,7 +56,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </form> --}}
                         <div class="table-responsive">
                             <table class="table custom-table">
                                 <thead>

@@ -11,15 +11,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-use App\Models\DetailSoalEssay_ujian;
-use App\Models\Detailsoal_ujian;
-use App\Models\Distribusisoal;
+use Carbon\Carbon;
+use App\Models\Mtk_ujian;
 use App\Models\Soal_ujian;
 use App\Models\Perakit_soal;
 use App\Models\Paket_ujian;
-use App\Models\Mtk_ujian;
+use App\Models\ujian_aprov;
+use App\Models\Distribusisoal;
+use App\Models\Detailsoal_ujian;
+use App\Models\ujian_aprov_essay;
 use App\Models\perakit_bahan_ajar;
+use App\Models\DetailSoalEssay_ujian;
 
 
 
@@ -174,7 +178,7 @@ class ujianController extends Controller
                 'kunci'         => $request->input('kunci'),
                 'score'         => 1,
                 'id_user'       => $request->input('id_user'),
-                'status'        => ('Y'),
+                'status'        => ('T'),
                 'sesi'          => $request->input('sesi')
 
             ]);
@@ -206,7 +210,7 @@ class ujianController extends Controller
                 'kunci'         => $request->input('kunci'),
                 'score'         => 1,
                 'id_user'       => $request->input('id_user'),
-                'status'        => ('Y'),
+                'status'        => ('T'),
                 'sesi'          => $request->input('sesi')
 
             ]);
@@ -234,7 +238,7 @@ class ujianController extends Controller
             'jenis'     => $request->input('jenis'),
             'score'     => 1,
             'id_user'   => Auth::user()->kode,
-            'status'    => 'Y',
+            'status'    => 'T',
             'sesi'      => $request->input('sesi')
         ];
         $file = $request->file('file'); // Mengambil file
@@ -270,7 +274,7 @@ class ujianController extends Controller
                 'kd_mtk'  => $request->input('kd_mtk'),
                 'jenis'   => $request->input('jenis'),
                 'id_user' => Auth::user()->id, // Sesuaikan sesuai cara Anda mendapatkan ID pengguna
-                'status'  => 'Y',
+                'status'  => 'T',
             ];
 
             $file = $request->file('file');
@@ -304,7 +308,7 @@ class ujianController extends Controller
             'kd_mtk'  => $request->input('kd_mtk'),
             'jenis'   => $request->input('jenis'),
             'soal'    => $request->input('soal'),
-            'status'  => 'Y', // You can also use $request->input('status') if it's dynamic
+            'status'  => 'T', // You can also use $request->input('status') if it's dynamic
             'id_user' => $request->input('id_user'),
         ];
     
@@ -333,12 +337,6 @@ class ujianController extends Controller
     }
     
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id, Request $request)
     {
 
@@ -365,12 +363,28 @@ class ujianController extends Controller
             // Detail
             $soal = Mtk_ujian::where([
                 'kd_mtk' => $pecah[0],
-                'paket' => $pecah[1]
+                'paket' => $pecah[1],
+                'nm_mtk' => $pecah[2]
                 
                 ])->select('kd_mtk','paket','nm_mtk')
                 ->first();
                 // dd($soal);
-            return view('admin.soalujian.show_uts', compact('soals', 'essay', 'soal'));
+
+                $aprov = ujian_aprov::where([
+                    'kd_mtk' => $pecah[0], // pastikan $pecah sudah didefinisikan sebelumnya
+                    'paket' => $pecah[1],
+                    'kd_dosen_perakit' => Auth::user()->kode
+                ])->first();
+                
+                $aprov_essay = ujian_aprov_essay::where([
+                    'kd_mtk' => $pecah[0], // pastikan $pecah sudah didefinisikan sebelumnya
+                    'paket' => $pecah[1],
+                    'kd_dosen_perakit' => Auth::user()->kode
+                ])->first();
+
+                //   dd($aprov_essay);
+
+            return view('admin.soalujian.show_uts', compact('soals', 'essay', 'soal','aprov','aprov_essay'));
         } else {
             return redirect('/dashboard');
         }
@@ -393,12 +407,6 @@ class ujianController extends Controller
         return view('admin.soalujian.detailsoal_essay_uts', compact('detailsoal', 'id'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit_detalsoal_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
@@ -417,81 +425,93 @@ class ujianController extends Controller
         return view('admin.soalujian.form.editsoal_essay_uts', compact('editsoal', 'id'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
-     public function kirimSoalUts($kirim)
-     {
-     
-         try {
-             $decrypted = Crypt::decryptString($kirim);
-
-             
-             [$kd_mtk, $paket, $kd_dosen] = explode(',', $decrypted);
-           
-             // Lakukan update pada database untuk semua record yang cocok
-             $affectedRows = Detailsoal_ujian::where('kd_mtk', $kd_mtk)
-                                              ->where('jenis', $paket)
-                                              ->where('id_user', $kd_dosen)
-                                              ->update([
-                                                  'sts_kirim' => 1,
-                                                  'petugas' => Auth::user()->kode
-                                              ]);
-                                              
-     
-             if ($affectedRows > 0) {
-                 // Redirect atau tampilkan pesan sukses jika ada record yang terupdate
-                 return redirect()->back()->with('status', 'Soal berhasil dikirim.');
-             } else {
-                 // Redirect atau tampilkan pesan error jika tidak ada record yang terupdate
-                 return redirect()->back()->with('error', 'Tidak ada soal yang ditemukan untuk dikirim.');
-             }
-     
-         } catch (\Exception $e) {
-             // Tangani jika ada error dalam proses dekripsi atau update
-             return redirect()->back()->with('error', 'Terjadi kesalahan.');
-         }
-     }
-
-     public function kirimSoalEssayUts($kirim)
-     {
-        
-         try {
-             $decrypted = Crypt::decryptString($kirim);
-
-             
-             [$kd_mtk, $paket, $kd_dosen] = explode(',', $decrypted);
-             
-             // Lakukan update pada database untuk semua record yang cocok
-             $affectedRows = DetailSoalEssay_ujian::where('kd_mtk', $kd_mtk)
-                                              ->where('jenis', $paket)
-                                              ->where('id_user', $kd_dosen)
-                                              ->update([
-                                                  'sts_kirim' => 1,
-                                                  'petugas' => Auth::user()->kode
-                                              ]);
-                                              
-     
-             if ($affectedRows > 0) {
-                 // Redirect atau tampilkan pesan sukses jika ada record yang terupdate
-                 return redirect()->back()->with('status', 'Soal berhasil dikirim.');
-             } else {
-                 // Redirect atau tampilkan pesan error jika tidak ada record yang terupdate
-                 return redirect()->back()->with('error', 'Tidak ada soal yang ditemukan untuk dikirim.');
-             }
-     
-         } catch (\Exception $e) {
-             // Tangani jika ada error dalam proses dekripsi atau update
-             return redirect()->back()->with('error', 'Terjadi kesalahan.');
-         }
-     }
-     
+    public function kirimSoalUts($kirim)
+    {
+        try {
+            $decrypted = Crypt::decryptString($kirim);
+            
     
+            [$kd_mtk, $paket, $kd_dosen] = explode(',', $decrypted);
+           
+    
+            $affectedRows = Detailsoal_ujian::where('kd_mtk', $kd_mtk)
+                                             ->where('jenis', $paket)
+                                             ->where('id_user', $kd_dosen)
+                                             ->update([
+                                                 'sts_kirim' => 1,
+                                                 'petugas' => Auth::user()->kode
+                                             ]);
+    
+            Log::debug("Affected rows: $affectedRows");
+    
+            // Menggunakan DB::table untuk memasukkan data ke dalam tabel ujian_aprov
+            DB::table('ujian_aprovs')->insert([
+                'kd_mtk' => $kd_mtk,
+                'paket' => $paket,
+                'kd_dosen_perakit' => Auth::user()->kode,
+                'perakit_kirim' => 1,
+                'tgl_perakit' => now(), 
+                'created_at' => now(), 
+                'updated_at' => now()
+            ]);
+    
+            if ($affectedRows > 0) {
+                return redirect()->back()->with('status', 'Soal berhasil dikirim.');
+            } else {
+                return redirect()->back()->with('error', 'Tidak ada soal yang ditemukan untuk dikirim.');
+            }
+        } catch (\Exception $e) {
+            Log::error("Error: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan.');
+        }
+    }
+
+    public function kirimSoalEssayUts($kirim)
+    {
+        try {
+            // Dekripsi string
+            $decrypted = Crypt::decryptString($kirim);
+            [$kd_mtk, $paket, $kd_dosen] = explode(',', $decrypted);
+    
+            // Update status kirim pada soal essay
+            $affectedRows = DetailSoalEssay_ujian::where([
+                    'kd_mtk' => $kd_mtk,
+                    'jenis' => $paket,
+                    'id_user' => $kd_dosen
+                ])->update([
+                    'sts_kirim' => 1,
+                    'petugas' => Auth::user()->kode
+                ]);
+    
+            // Tambahkan log untuk memonitor baris yang terpengaruh
+            Log::debug("Affected rows: $affectedRows");
+    
+            // Insert ke tabel ujian_aprovs
+            DB::table('ujian_aprov_essays')->insert([
+                'kd_mtk' => $kd_mtk,
+                'paket' => $paket,
+                'kd_dosen_perakit' => Auth::user()->kode,
+                'perakit_kirim' => 1,
+                'tgl_perakit' => now(),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+    
+            // Cek jika ada record yang terupdate
+            if ($affectedRows > 0) {
+                return redirect()->back()->with('status', 'Soal berhasil dikirim.');
+            } else {
+                return redirect()->back()->with('error', 'Tidak ada soal yang ditemukan untuk dikirim.');
+            }
+    
+        } catch (\Exception $e) {
+            Log::error("Error: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengirim soal.');
+        }
+    }
+    
+     
      public function update_soalpilih_uts(Request $request, Detailsoal_ujian $detailsoal_ujian)
      {
          $this->validate($request, [
@@ -536,8 +556,7 @@ class ujianController extends Controller
      
          return redirect('/uts-soal-show/' . $gabung)->with('status', 'Data Diupdate');
      }
-     
-     
+      
     public function update_essay_uts(Request $request, DetailSoalEssay_ujian $detailSoalEssay_ujian)
     {
         $this->validate($request, [
@@ -582,17 +601,6 @@ class ujianController extends Controller
             return redirect('/uts-soal-show/' . $gabung)->with(['error' => 'Data Gagal Disimpan!']);
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    // public function destroy($id)
-    // {
-    //     //
-    // }
 
     public function destroy(Request $request)
     {

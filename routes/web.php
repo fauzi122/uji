@@ -93,7 +93,7 @@ Route::middleware('auth')->group(function () {
                 Route::post('/store/mengawas-uts/', 'store')->name('store-mengawas-ujian');
                 Route::post('/store/berita-mengawas-uts/', 'updateBeritaAcara')->name('store-berita-mengaws-ujian');
                 Route::post('/update-attendance', 'UpdateAbsenUjian')->name('update_attendance');
-                Route::post('/update-ket-ujian','updateKeterangan')->name('update.ket-ujian-uts');
+                Route::post('/update-ket-ujian', 'updateKeterangan')->name('update.ket-ujian-uts');
             });
             //  Api sisfo
             Route::get('/meeting', [ApipertemuanController::class, 'index']);

@@ -65,9 +65,28 @@ class JadwalpenggantiController extends Controller
         $w_cek = ['kel_praktek' => $exp[4], 'kd_mtk' => $exp[0]];
         $jam = date("H:i");
         $cek = Absen_ajar_praktek::where($w_cek)->count();
+        $userIpAddress = ambilIP();
 
         if ($cek > 0) {
-            $absen      = Absen_ajar_praktek::where(['kel_praktek' => $exp[4], 'kd_mtk' => $exp[0], 'tgl_ajar_masuk' => date('Y-m-d'), 'jam_t' => $exp[6]]);
+            // $absen      = Absen_ajar_praktek::where(['kel_praktek' => $exp[4], 'kd_mtk' => $exp[0], 'tgl_ajar_masuk' => date('Y-m-d'), 'jam_t' => $exp[6]]);
+            $absen = Absen_ajar_praktek::where([
+                'kel_praktek' => $exp[4],
+                'kd_mtk' => $exp[0],
+                'tgl_ajar_masuk' => $tgl,
+                'jam_t' => $exp[6]
+            ])
+                ->leftJoin(
+                    DB::raw('(
+                SELECT kd_cabang, ip_address, ruangan 
+                FROM ip_kelas 
+                GROUP BY kd_cabang, ip_address, ruangan
+            ) as ip_kelas_unique'),
+                    function ($join) use ($userIpAddress) {
+                        $join->on(DB::raw("SUBSTRING_INDEX(absen_ajar_prakteks.no_ruang, '-', -1)"), '=', 'ip_kelas_unique.kd_cabang')
+                            ->whereRaw("SUBSTRING_INDEX(ip_kelas_unique.ip_address, '.', 2) = SUBSTRING_INDEX('" . $userIpAddress . "', '.', 2)");
+                    }
+                )
+                ->select('absen_ajar_prakteks.*', 'ip_kelas_unique.ip_address', 'ip_kelas_unique.ruangan');
             $absen_cek      = Absen_ajar_praktek::where(['kel_praktek' => $exp[4], 'kd_mtk' => $exp[0]])->orderByDesc('pertemuan');
             if ($absen_cek->count() < 1) {
                 $pertemuan = '0';
@@ -86,7 +105,25 @@ class JadwalpenggantiController extends Controller
         } else {
             // dd($exp[4]);
             $cek_teori  = Jadwal::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0]])->count();
-            $absen      = Absen_ajar::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0], 'tgl_ajar_masuk' => date('Y-m-d'), 'jam_t' => $exp[6]]);
+            // $absen      = Absen_ajar::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0], 'tgl_ajar_masuk' => date('Y-m-d'), 'jam_t' => $exp[6]]);
+            $absen = Absen_ajar::where([
+                'kd_lokal' => $exp[4],
+                'kd_mtk' => $exp[0],
+                'tgl_ajar_masuk' => $tgl,
+                'jam_t' => $exp[6]
+            ])
+                ->leftJoin(
+                    DB::raw('(
+                SELECT kd_cabang, ip_address, ruangan 
+                FROM ip_kelas 
+                GROUP BY kd_cabang, ip_address, ruangan
+            ) as ip_kelas_unique'),
+                    function ($join) use ($userIpAddress) {
+                        $join->on(DB::raw("SUBSTRING_INDEX(absen_ajars.no_ruang, '-', -1)"), '=', 'ip_kelas_unique.kd_cabang')
+                            ->whereRaw("SUBSTRING_INDEX(ip_kelas_unique.ip_address, '.', 2) = SUBSTRING_INDEX('" . $userIpAddress . "', '.', 2)");
+                    }
+                )
+                ->select('absen_ajars.*', 'ip_kelas_unique.ip_address', 'ip_kelas_unique.ruangan');
             $absen_cek  = Absen_ajar::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0]])->orderByDesc('pertemuan');
             if ($absen_cek->count() == 0) {
                 $pertemuan = '0';
@@ -136,8 +173,8 @@ class JadwalpenggantiController extends Controller
             ->where('nip_dosen', $nip_dosen)
             ->where('mtk', $kd_mtk)
             ->exists();
-
-        return view('mhs.jadwal.absen_mhs', compact('id', 'absen', 'exp', 'durasi', 'absen_mhs', 'komentar', 'sapaan', 'result', 'kuisionerExists'));
+        $pengganti = '1';
+        return view('mhs.jadwal.absen_mhs', compact('id', 'absen', 'exp', 'durasi', 'absen_mhs', 'komentar', 'sapaan', 'result', 'kuisionerExists', 'pengganti'));
     }
 
     public function rekap_side($id)

@@ -363,8 +363,7 @@ class ujianController extends Controller
             // Detail
             $soal = Mtk_ujian::where([
                 'kd_mtk' => $pecah[0],
-                'paket' => $pecah[1],
-                'nm_mtk' => $pecah[2]
+                'paket' => $pecah[1]
                 
                 ])->select('kd_mtk','paket','nm_mtk')
                 ->first();

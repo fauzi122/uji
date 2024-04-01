@@ -87,11 +87,11 @@ Route::middleware('auth')->group(function () {
             Route::controller(MengawasController::class)->group(function () {
                 Route::get('/mengawas-ujian', 'index');
                 Route::get('/mengawas-uts', 'm_uts');
-                Route::post('/store/mengawas-uts/', 'store')->name('store-mengawas-ujian');
-                Route::post('/store/berita-mengawas-uts/', 'updateBeritaAcara')->name('store-berita-mengaws-ujian');
                 Route::get('/show/mengawas-uts/{id}', 'show_uts');
                 Route::get('/show/log-mhs/mengawas-uts/{id}', 'show_log');
                 Route::get('/mengawas-uas', 'm_uas');
+                Route::post('/store/mengawas-uts/', 'store')->name('store-mengawas-ujian');
+                Route::post('/store/berita-mengawas-uts/', 'updateBeritaAcara')->name('store-berita-mengaws-ujian');
                 Route::post('/update-attendance', 'UpdateAbsenUjian')->name('update_attendance');
                 Route::post('/update-ket-ujian','updateKeterangan')->name('update.ket-ujian-uts');
             });

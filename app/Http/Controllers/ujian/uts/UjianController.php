@@ -91,14 +91,16 @@ class ujianController extends Controller
 
             $detailsoal = DB::table('ujian_detailsoals')
                             ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                            ->where('status', 'Y')
+                            // ->where('status')
+                            ->where('id_user',Auth::user()->kode)
                             ->where('jenis', $pecah[0])
                             ->groupBy('kd_mtk')
                             ->pluck('jumlah', 'kd_mtk');
             
             $detailsoal_essay = DB::table('ujian_detail_soal_esays')
                                 ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                                ->where('status', 'Y')
+                                // ->where('status')
+                                ->where('id_user',Auth::user()->kode)
                                 ->where('jenis', $pecah[0])
                                 ->groupBy('kd_mtk')
                                 ->pluck('jumlah', 'kd_mtk');
@@ -346,8 +348,9 @@ class ujianController extends Controller
 
             // PG
             $soals = Detailsoal_ujian::where([
-                'kd_mtk' => $pecah[0],
-                'jenis' => $pecah[1]
+                'kd_mtk'  => $pecah[0],
+                'jenis'   => $pecah[1],
+                'id_user' => Auth::user()->kode
                 ])
             ->orderBy('created_at', 'DESC')
                 ->get();
@@ -355,7 +358,8 @@ class ujianController extends Controller
             // essay
             $essay = DetailSoalEssay_ujian::where([
                 'kd_mtk' => $pecah[0],
-                'jenis' => $pecah[1]
+                'jenis' => $pecah[1],
+                'id_user' => Auth::user()->kode
                 ])
                 ->orderBy('created_at', 'DESC')
                 ->get();

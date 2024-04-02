@@ -52,11 +52,17 @@ class MastersoalController extends Controller
     public function index_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-
-        $soals = Mtk_ujian::where(['paket'    => $pecah[0]])
-            ->groupBy('kd_mtk')
-            ->get();
-
+        $soals = Mtk_ujian::leftJoin('ujian_aprovs', 'mtk_ujians.kd_mtk', '=', 'ujian_aprovs.kd_mtk')
+        ->select(
+            'mtk_ujians.*', 
+            'ujian_aprovs.perakit_kirim',
+            'ujian_aprovs.acc_kaprodi',
+            'ujian_aprovs.kd_dosen_kaprodi',
+            'ujian_aprovs.kd_dosen_baak',
+            'ujian_aprovs.acc_baak'
+        )
+        ->where(['mtk_ujians.paket' => $pecah[0]])
+        ->get();
 
         $detailsoal = DB::table('ujian_detailsoals')
                         ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))

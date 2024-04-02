@@ -93,7 +93,7 @@
                         </tr>
                         <tr>
                             <td><h4>2</h4></td>
-                            <td><h4>Koneksi internet boleh menggunakan Kuota Pribadi atau wifi ruang kelas.</h4></td>
+                            <td><h4>Koneksi menggunakan wifi ruang kelas.</h4></td>
                         </tr>
                         <tr>
                             <td><h4>3</h4></td>
@@ -105,7 +105,7 @@
                         </tr>
                         <tr>
                             <td><h4>5</h4></td>
-                            <td><h4>Mahasiswa yang selesai ujian lebih awal, wajib menunjukan bukti tanda selesai ujian sebelum keluar ruangan.</h4></td>
+                            <td><h4>Mahasiswa yang selesai ujian lebih awal tidak di perkenankan keluar ruangan sebelum waktu ujian berakhir.</h4></td>
                         </tr>
                         <tr>
                             <td><h4>6</h4></td>

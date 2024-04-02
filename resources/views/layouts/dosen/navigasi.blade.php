@@ -26,39 +26,15 @@
                             <span class="menu-text">Profil</span>
                         </a>  --}}
 
-                     @can('panitiaujian')
+                     {{-- @can('panitiaujian') --}}
                          <a href="{{ url('/master-soal') }}">
                             <i class="icon-folder"></i>
                             <span class="menu-text">Master Soal</span>
                         </a>
-                        @endcan
+                        {{-- @endcan --}}
                         
 
-                        <?php
-            function enkripsime($kata_en, $chipper_en) {
-                static $karakter = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                $chipper_en = (int)$chipper_en % 26;
-                if (!$chipper_en) return $kata_en;
-                if ($chipper_en == 13) return str_rot13($kata_en);
-                for ($i = 0, $l = strlen($kata_en); $i < $l; $i++) {
-                    $c = $kata_en[$i];
-                    if ($c >= 'a' && $c <= 'z') {
-                        $kata_en[$i] = $karakter[(ord($c) - 71 + $chipper_en) % 26];
-                    } else if ($c >= 'A' && $c <= 'Z') {
-                        $kata_en[$i] = $karakter[(ord($c) - 39 + $chipper_en) % 26 + 26];
-                    }
-                }
-                return $kata_en;
-            }
-			$kode=base64_encode(Auth::user()->kode);
-            $ed_kode=enkripsime($kode, 213091);
-			$nim=base64_encode(Auth::user()->username);
-			$qweas=base64_encode($nim.','.$kode);
-			echo" <a href='http://kampusonline.bsi.ac.id/login-mybest/$qweas' target=_blank>"; 
-		?>
-                            <i class="icon-external-link"></i>
-                            <span class="menu-text">UJIAN</span>
-                        </a>
+                        
               
             </li>
 

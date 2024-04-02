@@ -54,43 +54,42 @@
           <table id="copy-print-csv" class="table custom-table">
             <thead>
               <tr>
-                <th><center>No</center></th>                
+                <th>No</th>                
                 <th>Matakuliah</th>
                 <th>Paket</th>       
                 <th>Soal PG</th>
                 <th>Soal ESSAY</th>
                 <th>Jml PG</th>
                 <th>Jml ESSAY</th>       
-                <th><center>Status</center></th>        
-                 <th><center> Aksi </center></th>
+                <th>Perakit</th>        
+                <th>Kaprodi</th>        
+                <th>Baak</th>        
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
-              
               @php $no = 0; @endphp
               @foreach ($soals as $soal)
-                  @php
-                  $id = Crypt::encryptString($soal->kd_mtk . ',' . $soal->paket);
-                  @endphp
-                  <tr>
-                      <td><center>{{ ++$no }}</center></td>
-                      <td><b>{{ $soal->kd_mtk }}</b> - {{ $soal->nm_mtk }}</td>
-                      <td>{{ $soal->paket }}</td>
-                      <td>{{ $detailsoal[$soal->kd_mtk] ?? '0' }} SOAL PG</td>
-                                  <td>{{ $detailsoal_essay[$soal->kd_mtk] ?? '0' }} SOAL ESSAY</td>
-                                  <td>{{ $soal->jml_soal }} soal</td>
-                                  <td>{{ $soal->jml_essay }} soal</td>
-                      <td></td>
-                      <td><center>
-                          <a href="/baak/uts-soal-show/{{ $id }}" class="btn btn-xs btn-info">SOAL</a>
-                          </center>
-                      </td>
-                  </tr>
+                @php
+                $id = Crypt::encryptString($soal->kd_mtk . ',' . $soal->paket);
+                @endphp
+                <tr>
+                  <td>{{ ++$no }}</td>
+                  <td><b>{{ $soal->kd_mtk }}</b> - {{ $soal->nm_mtk }}</td>
+                  <td>{{ $soal->paket }}</td>
+                  <td><b>{{ $detailsoal[$soal->kd_mtk] ?? '0' }}</b></td>
+                  <td><b>{{ $detailsoal_essay[$soal->kd_mtk] ?? '0' }}</b></td>
+                  <td>{{ $soal->jml_soal }} soal</td>
+                  <td>{{ $soal->jml_essay }} soal</td>
+                  <td class="status-cell {{ $soal->perakit_kirim == 1 ? 'ok' : 'none' }}">{{ $soal->perakit_kirim == 1 ? '✔️' : '' }}</td>
+                  <td class="status-cell {{ $soal->acc_kaprodi == 1 ? 'ok' : 'none' }}">{{ $soal->acc_kaprodi == 1 ? '✔️' : '' }}</td>
+                  <td class="status-cell {{ $soal->acc_baak == 1 ? 'ok' : 'none' }}">{{ $soal->acc_baak == 1 ? '✔️' : '' }}</td>
+                  <td><a href="/baak/uts-soal-show/{{ $id }}" class="btn btn-info">SOAL</a></td>
+                </tr>
               @endforeach
-              
-          
             </tbody>
           </table>
+          
         </div>
       </div>
 
@@ -112,3 +111,60 @@
 </div>
 
 @endsection
+<style>
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .custom-table th, .custom-table td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .custom-table th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .custom-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .custom-table tr:hover {
+    background-color: #e8f4fd;
+  }
+  
+  .custom-table td {
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  .btn-info {
+    background-color: #17a2b8;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  
+  .btn-info:hover {
+    background-color: #1391b5;
+    cursor: pointer;
+  }
+  
+  .status-cell {
+    text-align: center;
+  }
+  
+  .status-cell.ok {
+    background-color: #dff0d8; /* light green for positive status */
+  }
+  
+  .status-cell.none {
+    background-color: #f2f2f2; /* light grey for neutral or no status */
+  }
+  </style>

@@ -234,6 +234,7 @@ class JadwalpenggantiController extends Controller
                 'tgl_hadir' => date('Y-m-d'),
                 'jam_hadir' => date('H:i:s'),
                 'pertemuan' => $request->pertemuan,
+                'ip_address' => ambilIP(),
                 'status_hadir' => $request->status
             ]);
         } else {
@@ -247,6 +248,7 @@ class JadwalpenggantiController extends Controller
                     'tgl_hadir' => date('Y-m-d'),
                     'jam_hadir' => date('H:i:s'),
                     'pertemuan' => $request->pertemuan,
+                    'ip_address' => ambilIP(),
                     'status_hadir' => $request->status
                 ]);
             } else {
@@ -259,6 +261,7 @@ class JadwalpenggantiController extends Controller
                     'jam_hadir' => date('H:i:s'),
                     'pertemuan' => $request->pertemuan,
                     'status_hadir' => $request->status,
+                    'ip_address' => ambilIP(),
                     'kd_gabung' => $exp[4]
                 ]);
             }

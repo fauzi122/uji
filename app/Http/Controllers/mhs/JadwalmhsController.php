@@ -247,6 +247,7 @@ class JadwalmhsController extends Controller
                 'tgl_hadir' => date('Y-m-d'),
                 'jam_hadir' => date('H:i:s'),
                 'pertemuan' => $pert[0],
+                'ip_address' => ambilIP(),
                 'status_hadir' => $pert[1]
             ]);
         } else {
@@ -260,6 +261,7 @@ class JadwalmhsController extends Controller
                     'tgl_hadir' => date('Y-m-d'),
                     'jam_hadir' => date('H:i:s'),
                     'pertemuan' => $pert[0],
+                    'ip_address' => ambilIP(),
                     'status_hadir' => $pert[1]
                 ]);
             } else {
@@ -272,6 +274,7 @@ class JadwalmhsController extends Controller
                     'jam_hadir' => date('H:i:s'),
                     'pertemuan' => $pert[0],
                     'status_hadir' => $pert[1],
+                    'ip_address' => ambilIP(),
                     'kd_gabung' => $exp[4]
                 ]);
             }

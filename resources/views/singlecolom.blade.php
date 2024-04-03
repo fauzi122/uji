@@ -47,7 +47,7 @@
                 <!-- ============================================================== -->
                 <!-- End Logo -->
                 <!-- ============================================================== -->
-                <div class="navbar-collapse">&nbsp;&nbsp; <img src="/storage/img/{{$datasays->logo}}" alt="homepage" class="dark-logo" width="50" />
+                <div class="navbar-collapse">&nbsp;&nbsp; <img src="{{asset('eliteadmin')}}/dist/css/style.min.css/{{$datasays->logo}}" alt="homepage" class="dark-logo" width="50" />
                     <div class="col-md-11 align-self-center m-t-10">
 
 

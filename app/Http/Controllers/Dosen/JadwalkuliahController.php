@@ -16,12 +16,9 @@ class JadwalkuliahController extends Controller
 
   function index($id)
   {
-    dd($id);
+    // dd("asd");
     $sekarang = Carbon::now();
     $namaHari = $sekarang->locale('id')->dayName;
-
-
-
     $datasays = SaysSetting::where('status_setting', 'aktif')->orderBy('updated_at', 'desc')->firstOrFail();
     $ref_cabang = Ref_cabang::where('kd_kampus', $id)->firstOrFail();
     $ref_cabangpilih = Ref_cabang::select('kd_kampus', 'nm_kampus')->whereNotIn('kd_kampus', ['I2', 'I1', 'X1', 'N', 'B5', 'K3', 'B3', 'A7', 'K8', 'A5', 'K2'])->orderby('nm_kampus', 'asc')->get();

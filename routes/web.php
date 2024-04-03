@@ -82,7 +82,9 @@ Route::middleware('auth')->group(function () {
 
             include __DIR__ . '/ujian/ujian.php';
             include __DIR__ . '/ujian/toefl.php';
-
+            Route::controller(JadwalkuliahController::class)->group(function () {
+                Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
+            });
             // mengawas ujian di dosen
             Route::controller(MengawasController::class)->group(function () {
                 Route::get('/mengawas-ujian', 'index');

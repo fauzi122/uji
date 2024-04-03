@@ -16,7 +16,7 @@ class JadwalkuliahController extends Controller
 
   function index($id)
   {
-    // dd($id);
+
     $sekarang = Carbon::now();
     $namaHari = $sekarang->locale('id')->dayName;
 

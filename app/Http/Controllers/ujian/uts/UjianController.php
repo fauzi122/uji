@@ -302,6 +302,7 @@ class ujianController extends Controller
         // Validate the request first
         $this->validate($request, [
             'soal' => 'required',
+            'kunci' => 'required',
             'file' => 'nullable|file|mimes:jpg,jpeg,png|max:2500', // This allows file to be optional
         ]);
     
@@ -310,6 +311,7 @@ class ujianController extends Controller
             'kd_mtk'  => $request->input('kd_mtk'),
             'jenis'   => $request->input('jenis'),
             'soal'    => $request->input('soal'),
+            'kunci'   => $request->input('kunci'),
             'status'  => 'T', // You can also use $request->input('status') if it's dynamic
             'id_user' => $request->input('id_user'),
         ];
@@ -369,7 +371,7 @@ class ujianController extends Controller
                 'kd_mtk' => $pecah[0],
                 'paket' => $pecah[1]
                 
-                ])->select('kd_mtk','paket','nm_mtk')
+                ])->select('kd_mtk','paket','nm_mtk','jenis_mtk')
                 ->first();
                 // dd($soal);
 
@@ -396,6 +398,7 @@ class ujianController extends Controller
     public function show_detailsoal_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
+       
         $detailsoal = Detailsoal_ujian::where([
             'id'   => $pecah[0]
         ])->first();
@@ -422,6 +425,7 @@ class ujianController extends Controller
     public function edit_detalessay_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
+        // dd($pecah);
         $editsoal = DetailSoalEssay_ujian::where([
             'id'   => $pecah[0]
         ])->first();
@@ -478,7 +482,7 @@ class ujianController extends Controller
             [$kd_mtk, $paket, $kd_dosen] = explode(',', $decrypted);
     
             // Update status kirim pada soal essay
-            $affectedRows = DetailSoalEssay_ujian::where([
+            $affectedRows = Detailsoal_ujian::where([
                     'kd_mtk' => $kd_mtk,
                     'jenis' => $paket,
                     'id_user' => $kd_dosen
@@ -491,11 +495,11 @@ class ujianController extends Controller
             Log::debug("Affected rows: $affectedRows");
     
             // Insert ke tabel ujian_aprovs
-            DB::table('ujian_aprov_essays')->insert([
+            DB::table('ujian_aprovs')->insert([
                 'kd_mtk' => $kd_mtk,
                 'paket' => $paket,
                 'kd_dosen_perakit' => Auth::user()->kode,
-                'perakit_kirim' => 1,
+                'perakit_kirim_essay' => 1,
                 'tgl_perakit' => now(),
                 'created_at' => now(),
                 'updated_at' => now()
@@ -564,6 +568,7 @@ class ujianController extends Controller
     {
         $this->validate($request, [
             'soal'      => 'required',
+            'kunci'      => 'required',
             'file'      => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
         ]);
         if ($request->file('file') == "") {
@@ -573,6 +578,7 @@ class ujianController extends Controller
                 'kd_mtk'        => $request->input('kd_mtk'),
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
+                'kunci'         => $request->input('kunci'),
                 // 'status'        => $request->input('status'),
                 'id_user'       => $request->input('id_user')
             ]);
@@ -616,6 +622,17 @@ class ujianController extends Controller
             return back()->with('success', 'Materi terpilih berhasil dihapus.');
         }
         return back()->with('error', 'Tidak ada materi yang dipilih untuk dihapus.');
+    }
+
+    public function destroy_essay(Request $request)
+    {
+        $essayIds = $request->input('essayIds');
+        if (!$essayIds) {
+            return redirect()->back()->with('error', 'No essays selected for deletion.');
+        }
+        DetailSoalEssay_ujian::destroy($essayIds);
+
+        return redirect()->back()->with('success', 'Selected essays have been deleted successfully.');
     }
     
 

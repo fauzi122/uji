@@ -41,11 +41,11 @@
       <div class="table-container " >
        <div class="" > 
         <h4> 
-		  <form action="/baak/singkron-mtkuji" method="POST">
+		  {{-- <form action="/baak/singkron-mtkuji" method="POST">
          @csrf
           <button class="btn btn-info btn-lg" type="submit">
           <i class="icon-loader"></i>  Singkron Matakuliah Ujian </button>
-          </form> 
+          </form>  --}}
       </h4>
       <hr>
       </div>
@@ -81,9 +81,19 @@
                   <td><b>{{ $detailsoal_essay[$soal->kd_mtk] ?? '0' }}</b></td>
                   <td>{{ $soal->jml_soal }} soal</td>
                   <td>{{ $soal->jml_essay }} soal</td>
-                  <td class="status-cell {{ $soal->perakit_kirim == 1 ? 'ok' : 'none' }}">{{ $soal->perakit_kirim == 1 ? '✔️' : '' }}</td>
-                  <td class="status-cell {{ $soal->acc_kaprodi == 1 ? 'ok' : 'none' }}">{{ $soal->acc_kaprodi == 1 ? '✔️' : '' }}</td>
-                  <td class="status-cell {{ $soal->acc_baak == 1 ? 'ok' : 'none' }}">{{ $soal->acc_baak == 1 ? '✔️' : '' }}</td>
+                  <td class="status-cell {{ $soal->perakit_kirim == 1 ? 'ok' : 'none' }}">
+                    <span style="color: {{ $soal->perakit_kirim == 1 ? '#008000' : 'transparent' }};">✔️</span>
+                    <span style="color: {{ $soal->perakit_kirim_essay == 1 ? '#0000FF' : 'transparent' }};">✔️</span>
+                </td>
+                <td class="status-cell {{ $soal->acc_kaprodi == 1 ? 'ok' : 'none' }}">
+                    <span style="color: {{ $soal->acc_kaprodi == 1 ? '#008000' : 'transparent' }};">✔️</span>
+                    <span style="color: {{ $soal->acc_kaprodi_essay == 1 ? '#0000FF' : 'transparent' }};">✔️</span>
+                </td>
+                <td class="status-cell {{ $soal->acc_baak == 1 ? 'ok' : 'none' }}">
+                    <span style="color: {{ $soal->acc_baak == 1 ? '#008000' : 'transparent' }};">✔️</span>
+                    <span style="color: {{ $soal->acc_baak_essay == 1 ? '#0000FF' : 'transparent' }};">✔️</span>
+                </td>
+                
                   <td><a href="/baak/uts-soal-show/{{ $id }}" class="btn btn-info">SOAL</a></td>
                 </tr>
               @endforeach

@@ -8,23 +8,23 @@
                 </button>
             </div>
             <div class="modal-body">
-<form action="/upload-soalpg-ujian" method="post" enctype="multipart/form-data">
-@csrf
+            <form action="/upload-soalpg-ujian" method="post" enctype="multipart/form-data">
+            @csrf
               <label for="">File (.xls, .xlsx) <a href="{{ Storage::url('public/formatfile/soalpg.xlsx') }}"
     class="btn btn-info btn-sm">
     Unduh Format File<a></label>
 
      <div class="form-group">
 
-<input type="text" hidden  name="kd_mtk" value="{{ $soal->kd_mtk }}">
-<input type="text" hidden  name="jenis" value="{{ $soal->paket }}">
+        <input type="text" hidden  name="kd_mtk" value="{{ $soal->kd_mtk }}">
+        <input type="text" hidden  name="jenis" value="{{ $soal->paket }}">
   <br>
-<input type="text" hidden  name="sesi" value="{{ md5(rand(0000000000, mt_getrandmax())) }}">
+        <input type="text" hidden  name="sesi" value="{{ md5(rand(0000000000, mt_getrandmax())) }}">
 
-<p class="text-danger">{{ $errors->first('file') }}</p>
-<input type="file" class="btn btn-primary" name="file">                           
-<button class="btn btn-info btn-lg">
-<i class="icon-upload"></i> Upload </button>
+    <p class="text-danger">{{ $errors->first('file') }}</p>
+    <input type="file" class="btn btn-primary" name="file">                           
+    <button class="btn btn-info btn-lg">
+    <i class="icon-upload"></i> Upload </button>
 
 </div>
 </form>

@@ -282,7 +282,86 @@
 		<script src="{{asset('assets/dist/script.js')}}"></script>
 
 		<script src="{{asset('assets/summernote/summernote-bs4.min.js')}}"></script>
-
+		<script>
+			// Menunggu dokumen selesai dimuat
+			document.addEventListener('DOMContentLoaded', function() {
+				// Fungsi untuk 'Pilih Semua' ceklis soal
+				var selectAllSoal = document.getElementById('selectAll');
+				if (selectAllSoal) {
+					selectAllSoal.addEventListener('click', function() {
+						var checkboxes = document.querySelectorAll('input[type="checkbox"][name="deleteIds[]"]');
+						checkboxes.forEach(function(checkbox) {
+							checkbox.checked = this.checked;
+						}, this);
+					});
+				}
+		  
+				// Fungsi untuk 'Pilih Semua' ceklis esai
+				var selectAllEssay = document.getElementById('selectAll1');
+				if (selectAllEssay) {
+					selectAllEssay.addEventListener('click', function() {
+						var checkboxes = document.querySelectorAll('input[type="checkbox"][name="essayIds[]"]');
+						checkboxes.forEach(function(checkbox) {
+							checkbox.checked = this.checked;
+						}, this);
+					});
+				}
+		  
+				// Fungsi untuk konfirmasi penghapusan pada submit form
+				document.querySelector('form').addEventListener('submit', function(event) {
+					var checkboxesSoal = document.querySelectorAll('input[type="checkbox"][name="deleteIds[]"]:checked');
+					var checkboxesEssay = document.querySelectorAll('input[type="checkbox"][name="essayIds[]"]:checked');
+					if (checkboxesSoal.length === 0 && checkboxesEssay.length === 0) {
+						alert('Silakan pilih minimal satu soal atau esai untuk dihapus.');
+						event.preventDefault();
+						return;
+					}
+		  
+					if (!confirm('Apakah Anda yakin ingin menghapus item terpilih?')) {
+						event.preventDefault();
+					}
+				});
+			});
+		  </script>
+		  
+		  <script>
+		  $(document).ready(function () {
+			   $('#myTable2').DataTable({
+				dom: 'Blfrtip',
+							lengthMenu: [
+								[ 10, 25, 50, 10000 ],
+								[ '10', '25', '50', 'Show All' ]
+							],
+							buttons: [
+								'copy', 'csv', 'excel', 'pdf', 'print'
+							],
+			  responsive: true
+				});
+		  
+			 });
+			 $(function() { 
+					$.ajaxSetup({
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					}
+				  });
+					 $('.toggle-class').change(function() { 
+					 var status = $(this).prop('checked') == true ? 1 : 0;
+					 var id_soal = $(this).data('id');  
+					 var nm_kelas = $(this).data('nama');  
+					 $.ajax({ 
+			  
+						 type: "POST", 
+						 dataType: "json", 
+						 url: '/terbit-soal', 
+						 data: {'status': status, 'id_soal': id_soal, 'nm_kelas': nm_kelas}, 
+						 success: function(data){ 
+						 console.log(data.success) 
+					  } 
+				   }); 
+				}) 
+			 }); 
+		  </script>
 		<script>
 			$(function() {
 			  $('#summernote').summernote({
@@ -355,6 +434,40 @@
 		
 		  
 		  </script>
+			  <script>
+		  
+				$(function() {
+				  $('#summernote3').summernote({
+					  toolbar: [
+						  ['style', ['bold', 'italic', 'underline', 'clear']],
+						  ['font', ['strikethrough', 'superscript', 'subscript']],
+						  ['fontsize', ['fontsize']],
+						  ['color', ['color']],
+						  ['para', ['ul', 'ol', 'paragraph']],
+						  ['height', ['height']],
+						  // Tambahkan lebih banyak item toolbar jika diperlukan
+					  ],
+					  placeholder: 'Masukkan Konten',
+					  height: 60, // Tinggi editor dalam pixel
+					  callbacks: {
+						  onKeyup: function(e) {
+							  var t = $(this).summernote('code').replace(/(<([^>]+)>)/ig, "").length;
+							  $('#charCount').text(t + "/40000 karakter");
+			  
+							  if (t > 40000) {
+								  $('#charCount').css('color', 'red');
+								  var trimmedContent = $(this).summernote('code').substring(0, 2500);
+								  $(this).summernote('code', trimmedContent);
+							  } else {
+								  $('#charCount').css('color', 'black');
+							  }
+						  }
+					  }
+				  });
+			  });
+			  
+				
+				</script>
 		  
 		  <style>
 			/* Stilisasi area toolbar Summernote */

@@ -230,8 +230,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const data = JSON.parse(@json($datajadwalharianJson));
-
             let currentIndex = 0;
+            let lastCheckedDate = new Date().getDate(); // Menyimpan tanggal saat halaman pertama kali dimuat
 
             function modifyPrefix(text) {
                 const prefixes = ['EN', 'EL', 'ET'];
@@ -270,7 +270,6 @@
                         td.classList.add('text-left');
                         td.style.fontWeight = 'bold';
                         tr.appendChild(td);
-
                         displayTextCharByChar(text, td, 0, 'default');
                     });
                 });
@@ -290,15 +289,12 @@
                 const xhr = new XMLHttpRequest();
                 xhr.open('GET', window.location.href, true);
                 xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) { // 4 means request is done
-                        if (xhr.status === 200) { // 200 is a successful return
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
                             window.location.reload();
                         } else {
-                            // Tampilkan pesan kesalahan di dalam div dengan id tbody3
                             const errorDiv = document.getElementById('tbody3');
                             errorDiv.textContent = 'Gagal Reload Halaman: ' + xhr.status + '. Mencoba kembali...';
-
-                            // Jadwalkan pengecekan ulang setelah 5 detik
                             setTimeout(checkPageBeforeReload, 5000);
                         }
                     }
@@ -306,17 +302,15 @@
                 xhr.send();
             }
 
-
-            const hariSelector = document.getElementById('hariSelector');
-            if (hariSelector) {
-                hariSelector.addEventListener('change', function() {
-                    // Menunda pemanggilan fungsi checkPageBeforeReload selama 5 detik
-                    setTimeout(checkPageBeforeReload, 5000);
-                });
+            function checkDateAndReload() {
+                const currentDate = new Date().getDate();
+                if (currentDate !== lastCheckedDate) {
+                    window.location.reload();
+                }
             }
 
-
             setInterval(showData, 20000);
+            setInterval(checkDateAndReload, 60000);
             showData();
         });
     </script>

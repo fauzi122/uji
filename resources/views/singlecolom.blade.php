@@ -114,7 +114,6 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title text-center"><b>Jadwal Perkuliahan {{$namaHari}}, {{ formattanggal2(date('Y-m-d'))}}</b> </h4>
-                                <div id="jadwalTanggal" style="display:none;">{{ formattanggal2(date('Y-m-d')) }}</div>
 
                                 <div class="table-responsive">
                                     <table class="table color-bordered-table primary-bordered-table">
@@ -319,32 +318,6 @@
 
             setInterval(showData, 20000);
             showData();
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fungsi untuk melakukan reload jika berganti hari
-            function reloadIfDateChanges() {
-                var jadwalTanggalElem = document.getElementById('jadwalTanggal');
-                if (!jadwalTanggalElem) return; // Pastikan elemen ada
-
-                var jadwalTanggal = jadwalTanggalElem.textContent.trim();
-
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); // Januari adalah 0!
-                var yyyy = today.getFullYear();
-                var todayString = yyyy + '-' + mm + '-' + dd;
-
-                // Membandingkan dan melakukan reload jika tanggal berbeda
-                if (jadwalTanggal !== todayString) {
-                    window.location.reload();
-                }
-            }
-
-            // Memanggil fungsi tersebut untuk melakukan pengecekan
-            reloadIfDateChanges();
-
-            // Mengatur interval untuk memeriksa secara berkala setiap jam
-            setInterval(reloadIfDateChanges, 3600000); // Pengecekan setiap jam
         });
     </script>
 

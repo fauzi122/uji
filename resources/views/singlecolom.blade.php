@@ -114,6 +114,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title text-center"><b>Jadwal Perkuliahan {{$namaHari}}, {{ formattanggal2(date('Y-m-d'))}}</b> </h4>
+                                <div id="jadwalTanggal" style="display:none;">{{ formattanggal2(date('Y-m-d')) }}</div>
 
                                 <div class="table-responsive">
                                     <table class="table color-bordered-table primary-bordered-table">
@@ -307,17 +308,42 @@
             }
 
 
-            const hariSelector = document.getElementById('hariSelector');
-            if (hariSelector) {
-                hariSelector.addEventListener('change', function() {
-                    // Menunda pemanggilan fungsi checkPageBeforeReload selama 5 detik
-                    setTimeout(checkPageBeforeReload, 5000);
-                });
-            }
+            // const hariSelector = document.getElementById('hariSelector');
+            // if (hariSelector) {
+            //     hariSelector.addEventListener('change', function() {
+            //         // Menunda pemanggilan fungsi checkPageBeforeReload selama 5 detik
+            //         setTimeout(checkPageBeforeReload, 5000);
+            //     });
+            // }
 
 
             setInterval(showData, 20000);
             showData();
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fungsi untuk melakukan reload jika tanggal berbeda
+            function reloadIfDateChanges() {
+                // Mendapatkan tanggal dari elemen
+                var jadwalTanggal = document.getElementById('jadwalTanggal').textContent;
+
+                // Mendapatkan tanggal hari ini dalam format yang sama
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); // Januari adalah 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
+
+                // Membandingkan dan melakukan reload jika tanggal berbeda
+                if (jadwalTanggal !== today) {
+                    window.location.reload();
+                }
+            }
+
+            // Memanggil fungsi tersebut untuk melakukan pengecekan
+            reloadIfDateChanges();
+
+            // Opsional: Anda bisa mengatur interval untuk memeriksa secara berkala
+            setInterval(reloadIfDateChanges, 3600000); // Pengecekan setiap menit
         });
     </script>
 

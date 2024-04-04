@@ -11,7 +11,7 @@
 							 <div class="card">
                     <div class="card-header bg-primary">
 							
-                        <h4 class="m-b-0 text-white">Form Input Soal Pilihan Ganda</h4>
+                        <h4 class="m-b-0 text-white">Form Input Soal Pilihan Essay</h4>
                     </div>
 						
 								<div class="card-body">

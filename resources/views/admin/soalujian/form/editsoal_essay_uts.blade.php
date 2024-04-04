@@ -53,7 +53,22 @@
                                     @endif
 										</div>
 									</div>
-                  
+                                    <div class="form-group row">
+										<label for="staticEmail" class="col-sm-2 col-form-label">Jawaban</label>
+										<div class="col-sm-10">
+									
+                                    <textarea id="summernote3" class="form-control content @error('kunci') is-invalid @enderror" name="kunci" placeholder="Masukkan Konten / Isi Berita" required
+									oninvalid="this.setCustomValidity('Silahkan isi artikel')"
+									oninput="setCustomValidity('')">
+									{!! old('kunci',$editsoal->kunci) !!}
+								</textarea>
+                                        
+                              			@error('kunci')
+                              			<div class="invalid-feedback" style="display: block">
+                                  		{{  $message }}
+                              			</div>
+                              			@enderror
+                                    <p></p>
                                         {{--  <div class="form-group row">
 										<label for="inputPassword" class="col-sm-2 col-form-label">Status</label>
 										<div class="col-sm-10">

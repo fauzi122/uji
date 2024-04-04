@@ -44,6 +44,9 @@
                                                   ?>
                                                   <p>Status soal {!! $status_soal !!}</p>
                                                   <hr>
+                                                  <b>Jawaban :</b>
+                                                  <br>
+                                                  <dev>{!! $detailsoal->kunci !!}</dev>
                                                   @php
                                                   $detail_essay=Crypt::encryptString($detailsoal->id);                                    
                                                   @endphp          

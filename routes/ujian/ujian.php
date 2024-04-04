@@ -44,10 +44,12 @@ Route::controller(UjianController::class)->group(function () {
     Route::get('/edit-essay/soal-uts/{id}','edit_detalessay_uts');
     Route::get('/essay/soal-show-uts/{id}','show_detalessay_uts');
     Route::delete('/delete-soal-uts','destroy');
+    Route::delete('/delete-soal-essay-uts','destroy_essay');
 
     
     Route::get('/kirim-soal-uts/{kirim}','kirimSoalUts')->name('kirim.soal.uts');
     Route::get('/kirim-soalessay-uts/{kirim}','kirimSoalEssayUts')->name('kirim.soalessay.uts');
+    
                 
     Route::patch('/uts-pilih/update/{detailsoal_ujian}','update_soalpilih_uts');
     Route::patch('/uts-essay/update/{detailSoalEssay_ujian}','update_essay_uts');
@@ -72,8 +74,10 @@ Route::controller(MastersoalController::class)->group(function () {
     Route::get('/baak/edit-detail/soal-uts/{id}','edit_detalsoal_uts');
     Route::get('/baak/edit-essay/soal-uts/{id}','edit_detalessay_uts');
     Route::get('/baak/essay/soal-show-uts/{id}','show_detalessay_uts');
+    Route::post('/prodi/aprov-soal','approveKaprodi')->name('kaprodi.approve');
     Route::patch('/baak/uts-pilih/update/{detailsoal_ujian}','update_soalpilih_uts');
     Route::patch('/baak/uts-essay/update/{detailSoalEssay_ujian}','update_essay_uts');
+    
     Route::post('/baak/singkron-mtkuji','singmtkuji');
     Route::post('/baak/upload-soalpg-ujian','storeData_SoalPg');
     Route::post('/baak/upload-soalessay-ujian','storeData_SoalEssay');

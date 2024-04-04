@@ -7,7 +7,7 @@
 							 <div class="card">
                     <div class="card-header bg-primary">
 							
-                        <h4 class="m-b-0 text-white">Form Input Soal Pilihan Ganda</h4>
+                        <h4 class="m-b-0 text-white">Form Input Soal Pilihan Essay</h4>
                     </div>
 						
 								<div class="card-body">
@@ -41,7 +41,21 @@
 
 										</div>
 									</div>
+                                    <div class="form-group row">
+										<label for="staticEmail" class="col-sm-2 col-form-label">Jawaban</label>
+										<div class="col-sm-10">
 								
+                                    <textarea id="summernote3" class="form-control content @error('kunci') is-invalid @enderror" name="kunci" placeholder="Masukkan Konten / Isi Berita" required
+                                    oninvalid="this.setCustomValidity('Silahkan isi artikel')"
+                                    oninput="setCustomValidity('')">
+                                    {!! old('kunci') !!}
+                                </textarea>
+                              			@error('kunci')
+                              			<div class="invalid-feedback" style="display: block">
+                                  		{{  $message }}
+                              			</div>
+                              			@enderror
+                                    <p></p>
                   
                                         {{--  <div class="form-group row">
 										<label for="inputPassword" class="col-sm-2 col-form-label">Status</label>
@@ -57,7 +71,7 @@
                                     <img src="{{ url('/assets/images/facebook.gif') }}" style="display: none;" id="loading-soal">
                                     <div id="wrap-btn">
                                      <button type="submit" class="btn btn-info">Simpan Soal </button>
-                                     <button type="reset" class="btn btn-secondary">Batal </button>
+                                     {{-- <button type="reset" class="btn btn-secondary">Batal </button> --}}
                                     </div>
                                 </div>
                             </div>

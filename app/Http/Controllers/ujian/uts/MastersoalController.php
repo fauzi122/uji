@@ -48,32 +48,35 @@ class MastersoalController extends Controller
         return view('admin.ujian.uts.baak.mastersoal.index', compact('encryptedExamTypes', 'paketUjian'));
     }
     
-
     public function index_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
         $soals = Mtk_ujian::leftJoin('ujian_aprovs', 'mtk_ujians.kd_mtk', '=', 'ujian_aprovs.kd_mtk')
         ->select(
             'mtk_ujians.*', 
+            'ujian_aprovs.kd_dosen_perakit',
             'ujian_aprovs.perakit_kirim',
+            'ujian_aprovs.perakit_kirim_essay',
             'ujian_aprovs.acc_kaprodi',
+            'ujian_aprovs.acc_kaprodi_essay',
             'ujian_aprovs.kd_dosen_kaprodi',
             'ujian_aprovs.kd_dosen_baak',
-            'ujian_aprovs.acc_baak'
+            'ujian_aprovs.acc_baak',
+            'ujian_aprovs.acc_baak_essay'
         )
         ->where(['mtk_ujians.paket' => $pecah[0]])
         ->get();
 
         $detailsoal = DB::table('ujian_detailsoals')
                         ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                        ->where('status', 'Y')
+                        // ->where('status', 'Y')
                         ->where('jenis', $pecah[0])
                         ->groupBy('kd_mtk')
                         ->pluck('jumlah', 'kd_mtk');
         
         $detailsoal_essay = DB::table('ujian_detail_soal_esays')
                               ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                              ->where('status', 'Y')
+                            //   ->where('status', 'Y')
                               ->where('jenis', $pecah[0])
                               ->groupBy('kd_mtk')
                               ->pluck('jumlah', 'kd_mtk'); 
@@ -81,66 +84,7 @@ class MastersoalController extends Controller
         return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals','detailsoal','detailsoal_essay'));
     }
 
-//     public function index_uts(Request $request, $id)
-//     {
-//         if (Auth::user()->utype == 'ADM') {
 
-//             try {
-//                 $pecah = explode(',', Crypt::decryptString($id));
-//             } catch (\Exception $e) {
-//                 return redirect()->back()->withErrors('Gagal mendekripsi ID.');
-//             }
-
-//             // Cek apakah pengguna dengan NIP tersebut memiliki entri di perakit_bahan_ajar
-//             $perakit = perakit_bahan_ajar::where('nip', Auth::user()->username)->exists(); // Ganti 'nip' dengan 'username' jika memang itu yang dimaksud
-
-//             if ($pecah[0] == 'LATIHAN' && $perakit) {
-//                 // Ini akan dijalankan jika ada entri di perakit_bahan_ajar yang cocok dengan nip/username
-//                 $soals = Mtk_ujian::where('paket', $pecah[0])
-//                                 ->groupBy('kd_mtk')
-//                                 ->get();
-//             } else if ($pecah[0] != 'LATIHAN') {
-
-//                 // dd($pecah[0] );
-//                 // Ini akan dijalankan jika 'paket' bukan 'LATIHAN', tanpa memperdulikan keberadaan di perakit_bahan_ajar
-//                 $soals = Mtk_ujian::join('perakit_soals', 'mtk_ujians.kd_mtk', '=', 'perakit_soals.kd_mtk')
-//                                 ->where('mtk_ujians.paket', $pecah[0])
-//                                 ->where('perakit_soals.kd_dosen', Auth::user()->kode)
-//                                 ->select('mtk_ujians.*', 'perakit_soals.kd_dosen')
-//                                 ->groupBy('kd_mtk')
-//                                 ->get();
-//                     // dd($soals);
-//             } else {
-//                 // Opsional: Penanganan khusus jika tidak ada entri di perakit_bahan_ajar dan paket adalah 'LATIHAN'
-//                 $soals = collect(); // Mengembalikan koleksi kosong atau sesuai kebutuhan
-//             }
-
-
-//             $detailsoal = DB::table('ujian_detailsoals')
-//                             ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-//                             ->where('status', 'Y')
-//                             ->where('jenis', $pecah[0])
-//                             ->groupBy('kd_mtk')
-//                             ->pluck('jumlah', 'kd_mtk');
-            
-//             $detailsoal_essay = DB::table('ujian_detail_soal_esays')
-//                                 ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-//                                 ->where('status', 'Y')
-//                                 ->where('jenis', $pecah[0])
-//                                 ->groupBy('kd_mtk')
-//                                 ->pluck('jumlah', 'kd_mtk');
-
-//             return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals', 'detailsoal', 'detailsoal_essay'));
-//         } else {
-//             return redirect('/dashboard');
-//         }
-//  }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create_pilih_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
@@ -162,12 +106,6 @@ class MastersoalController extends Controller
             ])->first();
         return view('admin.ujian.uts.baak.mastersoal.createessay_uts', compact('id', 'soal'));
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
 
     public function store_pilihan_uts(Request $request)
     {
@@ -365,12 +303,7 @@ class MastersoalController extends Controller
             return redirect()->back()->with(['error' => 'Mohon pilih file terlebih dahulu.']);
         }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id, Request $request)
     {
 
@@ -400,7 +333,7 @@ class MastersoalController extends Controller
                 'kd_mtk' => $pecah[0],
                 'paket' => $pecah[1]
                 
-                ])->select('kd_mtk','paket','nm_mtk')
+                ])->select('kd_mtk','paket','nm_mtk','jenis_mtk')
                 ->first();
 
               
@@ -427,12 +360,7 @@ class MastersoalController extends Controller
         return view('admin.ujian.uts.baak.mastersoal.detailsoal_essay_uts', compact('detailsoal', 'id'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit_detalsoal_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
@@ -451,13 +379,6 @@ class MastersoalController extends Controller
         return view('admin.ujian.uts.baak.mastersoal.form.editsoal_essay_uts', compact('editsoal', 'id'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
     public function update_soalpilih_uts(Request $request, Detailsoal_ujian $detailsoal_ujian)
     {
@@ -576,20 +497,50 @@ class MastersoalController extends Controller
             return redirect('/baak/uts-soal-show/' . $gabung)->with(['error' => 'Data Gagal Disimpan!']);
         }
     }
-
+    
+    public function approveKaprodi(Request $request)
+    {
+        dd($request);
+        $soalIds = $request->input('soal_ids', []);
+    
+        
+        // Periksa jika tidak ada soal yang dipilih
+        if (empty($soalIds)) {
+            return redirect()->back()->with('error', 'Tidak ada soal yang dipilih.');
+        }
+    
+        // Update status soal yang dipilih
+        foreach ($soalIds as $soalId) {
+            DB::table('ujian_detailsoals')
+                ->where('id', $soalId)
+                ->update(['status' => 'Y']);
+        }
+    
+        // Kembali ke halaman sebelumnya dengan pesan sukses
+        return redirect()->back()->with('success', 'Status soal telah berhasil diperbarui.');
+    }
+    
+    
     public function singmtkuji()
     {
         $singmtkuji = DB::select('call uts_insert_jadwal');
         return redirect()->back()->with(['success' => 'success di singkron']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request)
+    {
+        $idsToDelete = $request->input('deleteIds');
+        if (!empty($idsToDelete)) {
+            // Menggunakan Materi::destroy() untuk menghapus berdasarkan ID
+            Detailsoal_ujian::destroy($idsToDelete);
+        
+    
+            return back()->with('success', 'Materi terpilih berhasil dihapus.');
+        }
+        return back()->with('error', 'Tidak ada materi yang dipilih untuk dihapus.');
+    }
+
+    public function destroy1($id)
     {
         //
     }

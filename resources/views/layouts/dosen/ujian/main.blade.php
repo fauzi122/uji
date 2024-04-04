@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<!-- Required meta tags -->
@@ -325,6 +325,45 @@
 	  
 		 });
 		  </script>
+
+		<script>
+$(document).ready(function () {
+     $('#myTable2').DataTable({
+      dom: 'Blfrtip',
+                  lengthMenu: [
+                      [ 10, 25, 50, 10000 ],
+                      [ '10', '25', '50', 'Show All' ]
+                  ],
+                  buttons: [
+                      'copy', 'csv', 'excel', 'pdf', 'print'
+                  ],
+    responsive: true
+      });
+
+   });
+   $(function() { 
+          $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+           $('.toggle-class').change(function() { 
+           var status = $(this).prop('checked') == true ? 1 : 0;
+           var id_soal = $(this).data('id');  
+           var nm_kelas = $(this).data('nama');  
+           $.ajax({ 
+    
+               type: "POST", 
+               dataType: "json", 
+               url: '/terbit-soal', 
+               data: {'status': status, 'id_soal': id_soal, 'nm_kelas': nm_kelas}, 
+               success: function(data){ 
+               console.log(data.success) 
+            } 
+         }); 
+      }) 
+   }); 
+</script>
 	  @endpush
 	</body>
 </html>

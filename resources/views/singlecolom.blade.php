@@ -321,20 +321,21 @@
             showData();
         });
         document.addEventListener('DOMContentLoaded', function() {
-            // Fungsi untuk melakukan reload jika tanggal berbeda
+            // Fungsi untuk melakukan reload jika berganti hari
             function reloadIfDateChanges() {
-                // Mendapatkan tanggal dari elemen
-                var jadwalTanggal = document.getElementById('jadwalTanggal').textContent;
+                var jadwalTanggalElem = document.getElementById('jadwalTanggal');
+                if (!jadwalTanggalElem) return; // Pastikan elemen ada
 
-                // Mendapatkan tanggal hari ini dalam format yang sama
+                var jadwalTanggal = jadwalTanggalElem.textContent.trim();
+
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); // Januari adalah 0!
                 var yyyy = today.getFullYear();
-                today = yyyy + '-' + mm + '-' + dd;
+                var todayString = yyyy + '-' + mm + '-' + dd;
 
                 // Membandingkan dan melakukan reload jika tanggal berbeda
-                if (jadwalTanggal !== today) {
+                if (jadwalTanggal !== todayString) {
                     window.location.reload();
                 }
             }
@@ -342,8 +343,8 @@
             // Memanggil fungsi tersebut untuk melakukan pengecekan
             reloadIfDateChanges();
 
-            // Opsional: Anda bisa mengatur interval untuk memeriksa secara berkala
-            setInterval(reloadIfDateChanges, 3600000); // Pengecekan setiap menit
+            // Mengatur interval untuk memeriksa secara berkala setiap jam
+            setInterval(reloadIfDateChanges, 3600000); // Pengecekan setiap jam
         });
     </script>
 

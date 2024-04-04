@@ -308,13 +308,13 @@
             }
 
 
-            // const hariSelector = document.getElementById('hariSelector');
-            // if (hariSelector) {
-            //     hariSelector.addEventListener('change', function() {
-            //         // Menunda pemanggilan fungsi checkPageBeforeReload selama 5 detik
-            //         setTimeout(checkPageBeforeReload, 5000);
-            //     });
-            // }
+            const hariSelector = document.getElementById('hariSelector');
+            if (hariSelector) {
+                hariSelector.addEventListener('change', function() {
+                    // Menunda pemanggilan fungsi checkPageBeforeReload selama 5 detik
+                    setTimeout(checkPageBeforeReload, 5000);
+                });
+            }
 
 
             setInterval(showData, 20000);

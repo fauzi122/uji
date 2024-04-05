@@ -14,7 +14,7 @@
   <hr>
   </p>
                             
-    <table id="myTable2" class="table custom-table">
+    <table id="myTable5" class="table custom-table">
               <thead>
                 <tr>
                   <th>No</th>

@@ -23,7 +23,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger" onclick="return confirmDeletion();">Hapus Soal Terpilih</button>
                                     @endif
-                                    <table id="myTable2" class="table custom-table">
+                                    <table id="myTable5" class="table custom-table">
                                         <thead>
                                             <tr>
                                                 <th><input type="checkbox" id="selectAll"></th>

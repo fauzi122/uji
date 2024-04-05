@@ -31,11 +31,15 @@
                             <i class="icon-folder"></i>
                             <span class="menu-text">Master Soal</span>
                         </a>
-                        {{-- @endcan --}}
-                        
 
-                        
-              
+                        @can('examschedule.index') 
+                        <a href="{{ url('/dashboard-ujian') }}"target="_blank">
+                            <i class="icon-bookmark1"></i>
+                            <span class="menu-text">Panitia Ujian</span>
+                        </a>
+                        @endcan 
+                        {{-- @endcan --}}
+
             </li>
 
             <li class="sidebar-dropdown">
@@ -295,36 +299,7 @@
                 @endcan 
             </li>
 
-            <li class="sidebar-dropdown">
-                @can('panitiaujian') 
-                <a href="#">
-                    <i class="icon-bookmark1"></i>
-                    <span class="menu-text">Exam Management</span>
-                </a>
-               
-                <div class="sidebar-submenu">
-                    <ul>
-                        @can('examschedule.index') 
-                        <li>
-                            <a href="{{ url('/branch') }}">Jadwal Ujian</a>
-                        </li>
-                       
-                        @endcan 
-                      
-                    </ul>
-                </div>
-                 <div class="sidebar-submenu">
-                    <ul>
-                        @can('examschedule.index') 
-                        <li>
-                            <a href="{{ url('/dashboard-ujian') }}" target="_blank">UJIAN</a>
-                        </li>
-                       
-                        @endcan 
-                      
-                    </ul>
-                </div>
-                @endcan 
+            
             </li>
             <li class="sidebar-dropdown">
                 @can('administrasi.index') 

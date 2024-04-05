@@ -326,7 +326,7 @@
 		  
 		  <script>
 		  $(document).ready(function () {
-			   $('#myTable2').DataTable({
+			   $('#myTable5').DataTable({
 				dom: 'Blfrtip',
 							lengthMenu: [
 								[ 10, 25, 50, 10000 ],

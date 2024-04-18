@@ -4,21 +4,22 @@ namespace App\Http\Controllers\Api\Mhs;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Response;
 
 class FileController extends Controller
 {
-    public function getFile($filename)
+    public function getImage($filename)
     {
-        $filePath = storage_path('app/public/soal/' . $filename);
+        $path = storage_path('app/public/soal/' . $filename);
 
-        // Memastikan file ada
-        if (!file_exists($filePath)) {
-            return response()->json(['message' => 'File not found.'], 404);
+
+        if (!file_exists($path)) {
+            return response()->json(['message' => 'Image not found.'], 404);
         }
 
-        // Kembalikan file sebagai response
-        return response()->file($filePath);
+        $file = file_get_contents($path);
+        $type = mime_content_type($path);
+        ob_end_clean();
+        return Response::make($file, 200)->header("Content-Type", $type);
     }
 }

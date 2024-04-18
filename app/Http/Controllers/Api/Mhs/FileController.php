@@ -11,14 +11,14 @@ class FileController extends Controller
 {
     public function getFile($filename)
     {
-        $filePath = 'public/soal/' . $filename;
+        $filePath = storage_path('app/public/soal/' . $filename);
 
         // Memastikan file ada
-        if (!Storage::disk('public')->exists($filePath)) {
+        if (!file_exists($filePath)) {
             return response()->json(['message' => 'File not found.'], 404);
         }
 
-        // Mendapatkan tipe file dan kembalikan sebagai response
-        return Storage::disk('public')->response($filePath);
+        // Kembalikan file sebagai response
+        return response()->file($filePath);
     }
 }

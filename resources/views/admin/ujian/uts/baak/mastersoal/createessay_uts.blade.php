@@ -51,7 +51,7 @@
 										<label for="inputPassword" class="col-sm-2 col-form-label">Status</label>
 										<div class="col-sm-10">
 										<label><input type="radio" name="status" id="y" value="Y"> Tampil</label> &nbsp;&nbsp;&nbsp;
-                                        <label><input type="radio" name="status" id="n" value="N"> Tidak tampil</label>
+                                        <label><input type="radio" name="status" id="n" value="T"> Tidak tampil</label>
 										</div>
 									</div>
                   

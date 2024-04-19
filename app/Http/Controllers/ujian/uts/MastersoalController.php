@@ -16,19 +16,21 @@ use App\Models\Soal;
 use App\Models\Soal_ujian;
 use App\Models\Mtk_ujian;
 use App\Models\Jadwal;
+use App\Models\ujian_aprov;
 use App\Models\Paket_ujian;
 use App\Models\Detailsoal_ujian;
 use App\Models\DetailSoalEssay_ujian;
 use App\Models\perakit_bahan_ajar;
-
+use Carbon\Carbon; 
 
 class MastersoalController extends Controller
 {
     public function __construct()
     {
-        if (!$this->middleware('auth:sanctum')) {
-            return redirect('/login');
-        }
+       $this->middleware(['permission:master_soal_ujian|master_soal_ujian.index|master_soal_ujian.edit']);
+       if(!$this->middleware('auth:sanctum')){
+        return redirect('/login');
+    }
     }
     /**
      * Display a listing of the resource.
@@ -50,41 +52,44 @@ class MastersoalController extends Controller
     
     public function index_uts($id)
     {
+
+    if (Auth::user()->utype == 'ADM') {
+
         $pecah = explode(',', Crypt::decryptString($id));
-        $soals = Mtk_ujian::leftJoin('ujian_aprovs', 'mtk_ujians.kd_mtk', '=', 'ujian_aprovs.kd_mtk')
-        ->select(
-            'mtk_ujians.*', 
-            'ujian_aprovs.kd_dosen_perakit',
-            'ujian_aprovs.perakit_kirim',
-            'ujian_aprovs.perakit_kirim_essay',
-            'ujian_aprovs.acc_kaprodi',
-            'ujian_aprovs.acc_kaprodi_essay',
-            'ujian_aprovs.kd_dosen_kaprodi',
-            'ujian_aprovs.kd_dosen_baak',
-            'ujian_aprovs.acc_baak',
-            'ujian_aprovs.acc_baak_essay'
-        )
-        ->where(['mtk_ujians.paket' => $pecah[0]])
-        ->get();
-
+        $soals = Mtk_ujian::where('mtk_ujians.paket', $pecah[0])->get();
+    
+        // Mendapatkan data aprovasi dan mengurutkannya berdasarkan perakit_kirim
+        $aprov = ujian_aprov::select('kd_mtk', 'perakit_kirim',
+                'perakit_kirim_essay',
+                'acc_kaprodi',
+                'acc_kaprodi_essay',
+                'acc_baak',
+                'acc_baak_essay',)
+            ->where('paket', $pecah[0])
+            ->get()
+            ->sortByDesc('perakit_kirim') 
+            ->keyBy('kd_mtk');
+    
         $detailsoal = DB::table('ujian_detailsoals')
-                        ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                        // ->where('status', 'Y')
-                        ->where('jenis', $pecah[0])
-                        ->groupBy('kd_mtk')
-                        ->pluck('jumlah', 'kd_mtk');
-        
+            ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+            ->where('jenis', $pecah[0])
+            ->groupBy('kd_mtk')
+            ->pluck('jumlah', 'kd_mtk');
+
+            // dd($detailsoal);
+    
         $detailsoal_essay = DB::table('ujian_detail_soal_esays')
-                              ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
-                            //   ->where('status', 'Y')
-                              ->where('jenis', $pecah[0])
-                              ->groupBy('kd_mtk')
-                              ->pluck('jumlah', 'kd_mtk'); 
-      
-        return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals','detailsoal','detailsoal_essay'));
+            ->select(DB::raw('kd_mtk, COUNT(*) as jumlah'))
+            ->where('jenis', $pecah[0])
+            ->groupBy('kd_mtk')
+            ->pluck('jumlah', 'kd_mtk');
+    
+        return view('admin.ujian.uts.baak.mastersoal.uts', compact('soals', 'detailsoal', 'detailsoal_essay', 'aprov'));
+        } else {
+            return redirect('/dashboard');
+        }
     }
-
-
+    
     public function create_pilih_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
@@ -303,11 +308,10 @@ class MastersoalController extends Controller
             return redirect()->back()->with(['error' => 'Mohon pilih file terlebih dahulu.']);
         }
 
-
+  
     public function show($id, Request $request)
     {
 
-      
         $pecah = explode(',', Crypt::decryptString($id));
 
         if (Auth::user()->utype == 'ADM') {
@@ -336,8 +340,26 @@ class MastersoalController extends Controller
                 ])->select('kd_mtk','paket','nm_mtk','jenis_mtk')
                 ->first();
 
+            $acc = ujian_aprov::where([
+                'kd_mtk' => $pecah[0],
+                'paket' => $pecah[1]
+                    
+                ])->select('kd_mtk','paket','kd_dosen_perakit',
+                'perakit_kirim',
+                'perakit_kirim_essay',
+                'tgl_perakit',
+                'kd_dosen_kaprodi',
+                'acc_kaprodi',
+                'acc_kaprodi_essay',
+                'tgl_kaprodi',
+                'kd_dosen_baak',
+                'acc_baak',
+                'acc_baak_essay',
+                'tgl_baak',)
+                ->first();
+
               
-            return view('admin.ujian.uts.baak.mastersoal.show_uts', compact('soals', 'essay', 'soal'));
+            return view('admin.ujian.uts.baak.mastersoal.show_uts', compact('soals', 'essay', 'soal','acc'));
         } else {
             return redirect('/dashboard');
         }
@@ -390,7 +412,8 @@ class MastersoalController extends Controller
             'pild'      => 'required',
             'pile'      => 'required',
             'kunci'     => 'required',
-            'score'     => 'required'
+            'score'     => 'required',
+            'file'  => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
         ]);
 
         if ($request->file('file') == "") {
@@ -398,7 +421,6 @@ class MastersoalController extends Controller
             $detailsoal_ujian = Detailsoal_ujian::findOrFail($detailsoal_ujian->id);
             $detailsoal_ujian->update([
                 'kd_mtk'        => $request->input('kd_mtk'),
-                'file'          => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
                 'pila'          => $request->input('pila'),
@@ -497,48 +519,13 @@ class MastersoalController extends Controller
             return redirect('/baak/uts-soal-show/' . $gabung)->with(['error' => 'Data Gagal Disimpan!']);
         }
     }
-    
-    public function approveKaprodi(Request $request)
-    {
-        dd($request);
-        $soalIds = $request->input('soal_ids', []);
-    
-        
-        // Periksa jika tidak ada soal yang dipilih
-        if (empty($soalIds)) {
-            return redirect()->back()->with('error', 'Tidak ada soal yang dipilih.');
-        }
-    
-        // Update status soal yang dipilih
-        foreach ($soalIds as $soalId) {
-            DB::table('ujian_detailsoals')
-                ->where('id', $soalId)
-                ->update(['status' => 'Y']);
-        }
-    
-        // Kembali ke halaman sebelumnya dengan pesan sukses
-        return redirect()->back()->with('success', 'Status soal telah berhasil diperbarui.');
-    }
-    
-    
+     
     public function singmtkuji()
     {
         $singmtkuji = DB::select('call uts_insert_jadwal');
         return redirect()->back()->with(['success' => 'success di singkron']);
     }
 
-    public function destroy(Request $request)
-    {
-        $idsToDelete = $request->input('deleteIds');
-        if (!empty($idsToDelete)) {
-            // Menggunakan Materi::destroy() untuk menghapus berdasarkan ID
-            Detailsoal_ujian::destroy($idsToDelete);
-        
-    
-            return back()->with('success', 'Materi terpilih berhasil dihapus.');
-        }
-        return back()->with('error', 'Tidak ada materi yang dipilih untuk dihapus.');
-    }
 
     public function destroy1($id)
     {

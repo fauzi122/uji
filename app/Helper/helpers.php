@@ -153,6 +153,11 @@ function formatDate($date)
     return Carbon::parse($date)->format('d M Y H:i:s');
 }
 
+function formatDatebln($date)
+{
+    return Carbon::parse($date)->format('d M Y');
+}
+
 function formatTanggal2($date = null)
 {
     //buat array nama hari dalam bahasa Indonesia dengan urutan 1-7

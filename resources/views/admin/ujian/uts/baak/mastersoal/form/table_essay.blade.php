@@ -1,22 +1,47 @@
-<br>
-<br>
+
     <a href="/baak/uts-create-essay/{{$id}}" class="btn btn-success">Input Soal Essay</a>
   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal1">
     Import Excel Soal Essay
   </button>
-  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#basicModal">
-    Persetujuan Kaprodi
-  </button>
+
 <br>
 <br>
  
   <h4>List Soal Pilihan Essay</h4>
   <hr>
   </p>
-                            
-    <table id="myTable5" class="table custom-table">
+  @can('master_soal_ujian.acc_prodi') 
+  @php
+    $jenis = $soal->jenis_mtk;
+@endphp
+
+<form action="{{ url('/prodi/aprov-soal-essay') }}" method="POST">
+    @csrf
+    <input type="hidden" readonly name="kd_mtk" value="{{ $soal->kd_mtk }}">
+    <input type="hidden" readonly name="paket" value="{{ $soal->paket }}">
+    <input type="hidden" readonly name="jenis_mtk" value="{{ $soal->jenis_mtk }}">
+
+        @if(isset($acc->perakit_kirim) && $acc->perakit_kirim == 1)
+        <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
+            <i class="icon-check"></i> Persetujuan Kaprodi
+        </button>
+    @elseif (isset($acc->perakit_kirim_essay) && $acc->perakit_kirim_essay == 1)
+        <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
+            <i class="icon-check"></i> Persetujuan Kaprodi
+        </button>
+    @else
+        <button type="submit" class="btn btn-secondary" disabled title="Anda belum bisa memberikan persetujuan karena perakit belum mengirim soal">
+            <i class="icon-warning"></i> Persetujuan Kaprodi
+        </button>
+    @endif
+
+
+    @endcan   
+    <br>                    
+    <table id="copy-print-csv" class="table custom-table">
               <thead>
                 <tr>
+                  <th><input type="checkbox" id="checkAll"></th>
                   <th>No</th>
                   <th>Soal</th>
                   <th style="text-align: center;">Status</th>
@@ -28,7 +53,10 @@
               <tbody>
                 @foreach ($essay as $no => $essay)
              <tr>
-             
+              <td>
+               
+                <input type="checkbox" class="soal-checkbox" name="soal_ids[]" value="{{ $essay->id }}">
+            </td>
              <td>{{ ++$no }}</td>
              <td>{{ strip_tags($essay->soal) }}</td>
              <td>
@@ -78,3 +106,19 @@
              @endforeach        
               </tbody>
             </table>
+            <script>
+              document.getElementById('checkAll').onclick = function() {
+                  var checkboxes = document.querySelectorAll('.soal-checkbox');
+                  for (var checkbox of checkboxes) {
+                      checkbox.checked = this.checked;
+                  }
+              };
+          
+              document.getElementById('persetujuanKaprodiBtn').onclick = function(event) {
+                  var selectedCheckboxes = document.querySelectorAll('.soal-checkbox:checked');
+                  if (selectedCheckboxes.length === 0) {
+                      event.preventDefault();
+                      alert('Silahkan pilih minimal satu soal sebelum memberikan persetujuan.');
+                  }
+              };
+          </script>

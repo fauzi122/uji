@@ -12,6 +12,19 @@
                     <div class="card-body p-0">
                         <div class="invoice-container">
                             <div class="invoice-header">
+                                
+                            @if (session('success'))
+                            <div class="alert alert-info">
+                                {{ session('success') }}
+                            </div>
+                            @endif
+            
+                            @if (session('error'))
+                            <div class="alert alert-info">
+                                {{ session('error') }}
+                            </div>
+                            @endif
+
                                 @php
                                   $kirim =Crypt::encryptString ($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode); 
                                     $id = Crypt::encryptString($soal->kd_mtk.','.$soal->paket.','.Auth::user()->kode);

@@ -7,11 +7,20 @@
                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal">
                                         Import Excel Soal Pilihan Ganda
                                     </button>
+                                
+                               @if($soals->isNotEmpty())
                                     <a href="{{ route('kirim.soal.uts', $kirim) }}" class="btn btn-secondary" onclick="return confirm('Apakah Anda yakin akan mengirim semua soal?')">Kirim Semua Soal Pilihan Ganda</a>
-                                  
+                                    <ul>
 
-                                      
-                                    @endif                      
+                                  </ul>
+                                    @else
+                                    <a href="" title="isi dulu bank soalnya" class="btn btn-secondary" onclick="return false;">
+                                      <span class="icon-warning">Kirim Semua Soal Pilihan Ganda.</span>
+                                  </a>
+                                  
+                                @endif 
+                                    @endif  
+
                                   <p>
                                     <br>
                                   <h4>List Soal Pilihan Ganda</h4>	

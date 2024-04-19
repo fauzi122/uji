@@ -5,7 +5,18 @@
     {{-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal1">
         Import Excel Soal Essay
     </button> --}}
+    @if($essay->isNotEmpty())
     <a href="{{ route('kirim.soalessay.uts', $kirim) }}" class="btn btn-secondary" onclick="return confirm('Apakah Anda yakin akan mengirim semua soal?')">Kirim Semua Soal Essay</a>
+
+    <ul>
+
+  </ul>
+    @else
+    <a href="" title="isi dulu bank soalnya" class="btn btn-secondary" onclick="return false;">
+        <span class="icon-warning">Kirim Semua Soal Essay</span>
+    </a>
+@endif 
+   
 @endif
 <br><p><br>
 <h4>List Soal Pilihan Essay</h4>

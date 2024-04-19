@@ -19,6 +19,7 @@
                                 <div>
                                     <br><br><br>
                                     <div class="row gutters">
+                                        @can('master_soal_ujian.index') 
                                         @foreach ($encryptedExamTypes as $examType => $encryptedValue)
                                         <div class="col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
                                             <div class="info-tiles">
@@ -32,12 +33,16 @@
                                         </div>
                                     @endforeach
                                     <hr>
+                                    @endcan
 
+                                    @can('master_soal_ujian.setting_waktu') 
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="card-header badge-secondary">
                                             <h4 class="m-b-0 text-white">Setting Waktu</h4>
                                         </div>
+                                        
                                         <div class="row gutters">
+                                           
                                             <div class="col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
                                                 <div class="info-tiles">
                                                     <div class="info-icon">
@@ -48,6 +53,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                             <div class="col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
                                                 <div class="info-tiles">
                                                     <div class="info-icon">
@@ -59,6 +65,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endcan
                                     </div>
                                 </div>
                             </div>

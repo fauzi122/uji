@@ -89,16 +89,34 @@
                                   </div>
                                 </div>
                               </div>
-                                                  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                                 <div class="row gutters">	
                                 <div class="box-body">
                                 <div class="alert-notify info">
                                     <div class="alert-notify-body">
-                                    <span class="type">Info</span>
+                                    <span class="type">Info Penting</span>
                                    
-                                    <div class="alert-notify-text"> Di halaman ini Anda dapat melihat tampilan soal yang akan dikerjakan oleh siswa.
-                                        <p></p>
+                                    <div class="alert-notify-text"> <i>Di halaman ini Anda dapat melihat tampilan soal yang akan dikerjakan oleh Mahasiswa.
+                                    </i> <p> <br>
                                         Silahkan koreksi jika soal yang tampil disamping kurang sesuai dengan yang diharapkan, Anda dapat melakukan perubahan terhadap soal tersebut.</div>
+                                        
+                                        <br>
+                                        <hr>
+                                        <table border=0>
+                                          <tr>
+                                            <td>Perakit Soal </td>
+                                            <td>: <b>{{ $detailsoal->id_user }}</b></td>
+                                          </tr>
+                                          
+                                          <tr>
+                                            <td>Disetujui oleh </td>
+                                            <td>: <b>{{ $detailsoal->petugas }}</b></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Tgl pembuatan soal </td>
+                                            <td>: <b>{{ $detailsoal->created_at }}</b></td>
+                                          </tr>
+                                        </table>
                                     </div>
                                 </div>
                                 </div>

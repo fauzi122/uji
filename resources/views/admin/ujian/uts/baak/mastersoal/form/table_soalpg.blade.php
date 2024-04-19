@@ -1,17 +1,44 @@
-<a href="/baak/uts-create-pilih/{{$id}}" class="btn btn-success">Input Soal Pilihan Ganda</a>
+@can('master_soal_ujian.add_soal') 
+    <a href="/baak/uts-create-pilih/{{$id}}" class="btn btn-success">Input Soal Pilihan Ganda</a>
 									
                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#basicModal">
                                       Import Excel Soal Pilihan Ganda
-                                    </button>                       
+                                    </button>
+                                    @endcan                       
                                   <p>
                                     <br>
                                   <h4>List Soal Pilihan Ganda</h4>	
                                   <hr>
                                   </p>
-                                  
+                                  @can('master_soal_ujian.acc_prodi') 
+
+                                  @php
+                                    $jenis = $soal->jenis_mtk;
+                                @endphp
+                                
+                                
+                                
                                   <form action="{{ url('/prodi/aprov-soal') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">Persetujuan Kaprodi</button>
+                                    <input type="hidden" readonly name="kd_mtk" value="{{ $soal->kd_mtk }}">
+                                    <input type="hidden" readonly name="paket" value="{{ $soal->paket }}">
+                                    <input type="hidden" readonly name="jenis_mtk" value="{{ $soal->jenis_mtk }}">
+
+                                    @if(isset($acc->perakit_kirim) && $acc->perakit_kirim == 1)
+                                    <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
+                                        <i class="icon-check"></i> Persetujuan Kaprodi
+                                    </button>
+                                @elseif (isset($acc->perakit_kirim_essay) && $acc->perakit_kirim_essay == 1)
+                                    <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
+                                        <i class="icon-check"></i> Persetujuan Kaprodi
+                                    </button>
+                                @else
+                                    <button type="submit" class="btn btn-secondary" disabled title="Anda belum bisa memberikan persetujuan karena perakit belum mengirim soal">
+                                        <i class="icon-warning"></i> Persetujuan Kaprodi
+                                    </button>
+                                @endif
+                            
+                                    @endcan
                                     <table id="copy-print-csv" class="table custom-table">
                                         <thead>
                                             <tr>
@@ -25,42 +52,43 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($soals as $no => $soals)
+                                            @foreach ($soals as $no => $soal)
                                             <tr>
                                                 <td>
-                                               
-                                            <input type="checkbox" class="soal-checkbox" name="soal_ids[]" value="{{ $soal->id }}">
-                                                   
+                                                    <input type="checkbox" class="soal-checkbox" name="soal_ids[]" value="{{ $soal->id }}">
                                                 </td>
-                                                <td>{{ strip_tags($soals->soal) }}</td>
-                                                <td><center>{{ $soals->kunci }}</center></td>
+                                                <td>{{ strip_tags($soal->soal) }}</td>
+                                                <td style="text-align: center;">{{ $soal->kunci }}</td>
                                                 <td>
                                                     @php
-                                                        $detail=Crypt::encryptString($soals->id);                                    
+                                                        $detail = Crypt::encryptString($soal->id);                                    
                                                     @endphp
-                                                    @if ($soals->status == 'Y')
-                                                        <center><span class='badge badge-pill badge-light'>Tampil</span></center>
-                                                    @else
-                                                        <center><span class='badge badge-pill badge-secondary'>Tidak tampil</span></center>
-                                                    @endif
-                                
-                                                    @if ($soals->file != '')
+                                                    <center>
+                                                        @if ($soal->status == 'Y')
+                                                            <span class='badge badge-pill badge-light'>Tampil</span>
+                                                        @else
+                                                            <span class='badge badge-pill badge-secondary'>Tidak tampil</span>
+                                                        @endif
+                                                    </center>
+                                                    @if ($soal->file != '')
                                                         <center>
                                                             <a href="/baak/detail/soal-show-uts/{{$detail}}"><span class='badge badge-pill badge-info'>cek gambar</span></a>
                                                         </center>
                                                     @endif
                                                 </td>
-                                                <td><center>{{ $soals->updated_at }}</center></td>
-                                                <td><center>{{ $soals->id_user }}</center></td>
+                                                <td style="text-align: center;">{{ $soal->updated_at }}</td>
+                                                <td style="text-align: center;">{{ $soal->id_user }}</td>
                                                 <td>
                                                     <center>
                                                         <div class="btn-group" role="group">
                                                             <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                menu
+                                                                Menu
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                                @can('master_soal_ujian.edit')
                                                                 <a class="dropdown-item" href="/baak/edit-detail/soal-uts/{{$detail}}">Edit Data Soal</a>
                                                                 <a class="dropdown-item" href="/baak/detail/soal-show-uts/{{$detail}}">Show Data Soal</a>
+                                                                @endcan
                                                             </div>
                                                         </div>
                                                     </center>
@@ -87,5 +115,6 @@
                                         }
                                     };
                                 </script>
+                                
                                     
                                 

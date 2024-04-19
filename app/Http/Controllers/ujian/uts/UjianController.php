@@ -356,6 +356,14 @@ class ujianController extends Controller
                 ])
             ->orderBy('created_at', 'DESC')
                 ->get();
+            // Check if data exists
+            if ($soals->count() > 0) {
+                // True, data exists
+                $dataExists = true;
+            } else {
+                // False, data does not exist
+                $dataExists = false;
+            }
                 
             // essay
             $essay = DetailSoalEssay_ujian::where([
@@ -365,6 +373,14 @@ class ujianController extends Controller
                 ])
                 ->orderBy('created_at', 'DESC')
                 ->get();
+
+                if ($essay->count() > 0) {
+                    // True, data exists
+                    $dataExists = true;
+                } else {
+                    // False, data does not exist
+                    $dataExists = false;
+                }
                 
             // Detail
             $soal = Mtk_ujian::where([
@@ -386,8 +402,6 @@ class ujianController extends Controller
                     'paket' => $pecah[1],
                     'kd_dosen_perakit' => Auth::user()->kode
                 ])->first();
-
-                //   dd($aprov_essay);
 
             return view('admin.soalujian.show_uts', compact('soals', 'essay', 'soal','aprov','aprov_essay'));
         } else {

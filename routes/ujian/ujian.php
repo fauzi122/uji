@@ -12,7 +12,8 @@ use App\Http\Controllers\ujian\uts\{
     MastersoalController,
     SettingtimeUjianController,
     AdmRekapMengawasController,
-    PerakitSoalController
+    PerakitSoalController,
+    ApproveController
     
 };
 
@@ -70,11 +71,12 @@ Route::controller(MastersoalController::class)->group(function () {
     Route::get('/baak/uts-create-essay/{id}','create_essay_uts');
     Route::post('/baak/store/pilih-uts','store_pilihan_uts');
     Route::post('/baak/store/essay-uts','store_essay_uts');
+
     Route::get('/baak/detail/soal-show-uts/{id}','show_detailsoal_uts');
     Route::get('/baak/edit-detail/soal-uts/{id}','edit_detalsoal_uts');
     Route::get('/baak/edit-essay/soal-uts/{id}','edit_detalessay_uts');
     Route::get('/baak/essay/soal-show-uts/{id}','show_detalessay_uts');
-    Route::post('/prodi/aprov-soal','approveKaprodi')->name('kaprodi.approve');
+    
     Route::patch('/baak/uts-pilih/update/{detailsoal_ujian}','update_soalpilih_uts');
     Route::patch('/baak/uts-essay/update/{detailSoalEssay_ujian}','update_essay_uts');
     
@@ -82,6 +84,13 @@ Route::controller(MastersoalController::class)->group(function () {
     Route::post('/baak/upload-soalpg-ujian','storeData_SoalPg');
     Route::post('/baak/upload-soalessay-ujian','storeData_SoalEssay');
     
+});
+
+Route::controller(ApproveController::class)->group(function () {
+    Route::post('/prodi/aprov-soal','approveKaprodi')->name('kaprodi.approve');
+    Route::post('/prodi/aprov-soal-essay','approveKaprodiessay')->name('kaprodi.approve.essay');
+    Route::post('/baak/aprov-soal','approveBaak')->name('baak.approve');
+    Route::post('/baak/aprov-soal-essay','approveBaakEssay')->name('approveBaakEssay');
 });
 
 Route::controller(JadwalujianController::class)->group(function () {

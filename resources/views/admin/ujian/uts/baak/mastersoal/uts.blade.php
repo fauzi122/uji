@@ -70,39 +70,75 @@
             <tbody>
               @php $no = 0; @endphp
               @foreach ($soals as $soal)
-                @php
-                $id = Crypt::encryptString($soal->kd_mtk . ',' . $soal->paket);
-                @endphp
-                <tr>
-                  <td>{{ ++$no }}</td>
-                  <td><b>{{ $soal->kd_mtk }}</b> - {{ $soal->nm_mtk }}</td>
-                  <td>{{ $soal->paket }}</td>
-                  <td><b>{{ $detailsoal[$soal->kd_mtk] ?? '0' }}</b></td>
-                  <td><b>{{ $detailsoal_essay[$soal->kd_mtk] ?? '0' }}</b></td>
-                  <td>{{ $soal->jml_soal }} soal</td>
-                  <td>{{ $soal->jml_essay }} soal</td>
-                  <td class="status-cell {{ $soal->perakit_kirim == 1 ? 'ok' : 'none' }}">
-                    <span style="color: {{ $soal->perakit_kirim == 1 ? '#008000' : 'transparent' }};">✔️</span>
-                    <span style="color: {{ $soal->perakit_kirim_essay == 1 ? '#0000FF' : 'transparent' }};">✔️</span>
-                </td>
-                <td class="status-cell {{ $soal->acc_kaprodi == 1 ? 'ok' : 'none' }}">
-                    <span style="color: {{ $soal->acc_kaprodi == 1 ? '#008000' : 'transparent' }};">✔️</span>
-                    <span style="color: {{ $soal->acc_kaprodi_essay == 1 ? '#0000FF' : 'transparent' }};">✔️</span>
-                </td>
-                <td class="status-cell {{ $soal->acc_baak == 1 ? 'ok' : 'none' }}">
-                    <span style="color: {{ $soal->acc_baak == 1 ? '#008000' : 'transparent' }};">✔️</span>
-                    <span style="color: {{ $soal->acc_baak_essay == 1 ? '#0000FF' : 'transparent' }};">✔️</span>
-                </td>
-                
-                  <td><a href="/baak/uts-soal-show/{{ $id }}" class="btn btn-info">SOAL</a></td>
-                </tr>
+                  @php
+                  $id = Crypt::encryptString($soal->kd_mtk . ',' . $soal->paket);
+                  @endphp
+                  <tr>
+                      <td>{{ ++$no }}</td>
+                      <td><b>{{ $soal->kd_mtk }}</b> - {{ $soal->nm_mtk }}</td>
+                      <td>{{ $soal->paket }}</td>
+                      <td>{{ $detailsoal[$soal->kd_mtk] ?? '0' }} </td>
+                      <td>{{ $detailsoal_essay[$soal->kd_mtk] ?? '0' }} </td>
+                      <td>{{ $soal->jml_soal }} soal</td>
+                      <td>{{ $soal->jml_essay }} soal</td>
+
+                      <td class="status-cell {{ isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->perakit_kirim == 1 ? 'ok' : 'none' }}">
+                        <b>
+                            @if(isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->perakit_kirim == 1)
+                                <span class="check-green">✔️</span>
+                            @elseif (isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->perakit_kirim_essay == 1)
+                                <span class="check-green">✔️</span>
+                            @else
+                                <span class="check-transparent"></span>
+                            @endif
+                        </b>
+                    </td>
+                    <td class="status-cell {{ isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->acc_kaprodi == 1 ? 'ok' : 'none' }}">
+                      <b>
+                          @if(isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->acc_kaprodi == 1)
+                              <span class="check-green">✔️</span>
+                          @elseif (isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->acc_kaprodi_essay == 1)
+                              <span class="check-green">✔️</span>
+                          @else
+                              <span class="check-transparent"></span>
+                          @endif
+                      </b>
+                  </td>
+                  <td class="status-cell {{ isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->acc_baak == 1 ? 'ok' : 'none' }}">
+                    <b>
+                        @if(isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->acc_baak == 1)
+                            <span class="check-green">✔️</span>
+                        @elseif (isset($aprov[$soal->kd_mtk]) && $aprov[$soal->kd_mtk]->acc_baak_essay == 1)
+                            <span class="check-green">✔️</span>
+                        @else
+                            <span class="check-transparent"></span>
+                        @endif
+                    </b>
+                </td> 
+                      <td><a href="/baak/uts-soal-show/{{ $id }}" class="btn btn-info">SOAL</a></td>
+                  </tr>
               @endforeach
-            </tbody>
+          </tbody>
+          
           </table>
           
         </div>
       </div>
 
+    </div>
+  </div>
+  <div class="alert-notify info">
+    <div class="alert-notify-body">
+      <span class="type">Info</span>
+      <div class="alert-notify-title">info penerbitan soal<img src="img/notification-info.svg" alt=""></div>
+
+        <div class="alert-notify-text"></i>
+        <H6>
+            <li>1.Perakit ✔️ = Perakit Soal Sudah Menyerahkan Hasil Rakitan Soal</li>
+            <li>2.Kaprodi ✔️ = Kaprodi Sudah Menyetujui Soal Akan di Tayangkan</li>
+            <li>2.BAAK    ✔️ = BAAK Sudah Menyetujui Soal Akan di Tayangkan</li>
+          </H4>
+      </div>
     </div>
   </div>
   <!-- Row end -->

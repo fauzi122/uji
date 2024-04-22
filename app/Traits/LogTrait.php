@@ -1,15 +1,11 @@
 <?php
 
-
-
 namespace App\Traits;
-
 use App\Models\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 trait LogTrait
-
 {
 
     /**
@@ -46,14 +42,6 @@ trait LogTrait
             }
         });
 
-
-
-        /**
-
-         * Data deleting event
-
-         */
-
         static::deleted(function ($model) {
 
             static::storeLog($model, static::class, 'DELETED');
@@ -63,8 +51,6 @@ trait LogTrait
             static::storeLog($model, static::class, 'DELETED');
         });
     }
-
-
 
     /**
 
@@ -83,8 +69,6 @@ trait LogTrait
         return !empty($model->tagName) ? $model->tagName : Str::title(Str::snake(class_basename($model), ' '));
     }
 
-
-
     /**
 
      * Store model logs
@@ -100,9 +84,6 @@ trait LogTrait
     public static function storeLog($model, $modelPath, $action)
 
     {
-
-
-
         $newValues = null;
 
         $oldValues = null;
@@ -116,14 +97,9 @@ trait LogTrait
             $oldValues = $model->getAttributes(); // Simpan nilai sebelum dihapus
         }
 
-
-
         $subject = static::getTagName($model);
 
         $description = 'Data ' . $subject . ' [' . $action . ']';
-
-
-
         $systemLog = new Log();
 
         $systemLog->subject = $subject . ':' . $action;

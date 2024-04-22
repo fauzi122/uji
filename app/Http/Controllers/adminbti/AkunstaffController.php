@@ -21,13 +21,45 @@ class AkunstaffController extends Controller
         // $akunstaff = User::where('utype', 'ADM')
         //     ->orderBy('username', 'desc')
         //     ->get();
-            $usermhs = User::where('utype', 'ADM')
+            $usermhs = User::where('utype', 'ADM')->whereNotIn('kode', ['AAU', 'mmz'])
             ->when(request()->q, function ($usermhs) {
                 $usermhs = $usermhs->where('username', 'like', '%' . request()->q . '%');
             })->paginate(15);
             // dd($akunstaff);
         return view('adminbti.userstaff.listakun', compact('usermhs'));
     }
+
+    public function search(Request $request)
+    {
+        $username = $request->input('username');
+        $kode = $request->input('kode');
+    
+        // Start the query with basic conditions
+        $query = User::where('utype', 'ADM')
+                     ->whereNotIn('kode', ['AAU', 'mmz']);
+    
+        // Apply conditions based on the input
+        if ($username) {
+            $query->where(function ($q) use ($username, $kode) {
+                $q->where('username', $username);
+    
+                if ($kode) {
+                    // Use 'orWhere' only within this closure to ensure it only applies if username is also provided
+                    $q->orWhere('kode', $kode);
+                }
+            });
+        } elseif ($kode) {
+            // If there is no username provided, just filter by 'kode'
+            $query->where('kode', $kode);
+        }
+    
+        // Execute the query
+        $users = $query->get();
+    
+        // Return the view with the users
+        return view('adminbti.userstaff.cari', compact('users'));
+    }
+    
 
     public function create()
     {

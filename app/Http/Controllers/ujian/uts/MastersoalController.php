@@ -200,6 +200,7 @@ class MastersoalController extends Controller
 
                 'soal'      => 'required',
                 'status'    => 'required',
+                'kunci' => 'required',
                 'file'      => 'nullable|file|mimes:jpg,jpeg,png|max:2500',
             ]);
 
@@ -210,6 +211,7 @@ class MastersoalController extends Controller
                 'kd_mtk'        => $request->input('kd_mtk'),
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
+                'kunci'   => $request->input('kunci'),
                 'status'        => $request->input('status'),
                 'id_user'       => $request->input('id_user'),
                 'file'          => $file->hashName()
@@ -218,7 +220,9 @@ class MastersoalController extends Controller
             $this->validate($request, [
 
                 'soal'      => 'required',
-                'status'    => 'required'
+                'status'    => 'required',
+                'kunci'     => 'required',
+                
 
             ]);
             $essaysoal = DetailSoalEssay_ujian::create([
@@ -226,6 +230,7 @@ class MastersoalController extends Controller
                 'kd_mtk'        => $request->input('kd_mtk'),
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
+                'kunci'   => $request->input('kunci'),
                 'status'        => $request->input('status'),
                 'id_user'       => $request->input('id_user'),
 
@@ -479,6 +484,7 @@ class MastersoalController extends Controller
         $this->validate($request, [
             'soal'      => 'required',
             'status'    => 'required',
+            'kunci'      => 'required',
             'file'      => 'nullable|file|mimes:jpg,jepg,png|max:2500'
         ]);
         if ($request->file('file') == "") {
@@ -488,6 +494,7 @@ class MastersoalController extends Controller
                 'kd_mtk'        => $request->input('kd_mtk'),
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
+                'kunci'         => $request->input('kunci'),
                 'status'        => $request->input('status'),
                 // 'id_user'       => $request->input('id_user')
             ]);
@@ -505,6 +512,7 @@ class MastersoalController extends Controller
                 'kd_mtk'         => $request->input('kd_mtk'),
                 'jenis'         => $request->input('jenis'),
                 'soal'          => $request->input('soal'),
+                'kunci'         => $request->input('kunci'),
                 'status'        => $request->input('status'),
                 // 'id_user'       => $request->input('id_user'),
                 'file'          => $image->hashName()

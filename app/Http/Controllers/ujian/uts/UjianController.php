@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 use Carbon\Carbon;
 use App\Models\Mtk_ujian;
+use App\Models\SettingUjian;
 use App\Models\Soal_ujian;
 use App\Models\Perakit_soal;
 use App\Models\Paket_ujian;
@@ -112,11 +113,6 @@ class ujianController extends Controller
  }
     
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create_pilih_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
@@ -139,12 +135,6 @@ class ujianController extends Controller
             ])->first();
         return view('admin.soalujian.createessay_uts', compact('id', 'soal'));
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
 
     public function store_pilihan_uts(Request $request)
     {
@@ -227,41 +217,41 @@ class ujianController extends Controller
         }
     }
 
-    public function storeData_SoalPg(Request $request)
-{
-    // Validasi
-    $this->validate($request, [
-        'file' => 'required|mimes:xls,xlsx'
-    ]);
+        public function storeData_SoalPg(Request $request)
+    {
+        // Validasi
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
 
-    if ($request->hasFile('file')) {
-        $set = [
-            'kd_mtk'    => $request->input('kd_mtk'),
-            'jenis'     => $request->input('jenis'),
-            'score'     => 1,
-            'id_user'   => Auth::user()->kode,
-            'status'    => 'T',
-            'sesi'      => $request->input('sesi')
-        ];
-        $file = $request->file('file'); // Mengambil file
+        if ($request->hasFile('file')) {
+            $set = [
+                'kd_mtk'    => $request->input('kd_mtk'),
+                'jenis'     => $request->input('jenis'),
+                'score'     => 1,
+                'id_user'   => Auth::user()->kode,
+                'status'    => 'T',
+                'sesi'      => $request->input('sesi')
+            ];
+            $file = $request->file('file'); // Mengambil file
 
-        $import = new UjianSoalpgImport($set); // Membuat instance import dengan konfigurasi
-        Excel::import($import, $file); // Melakukan impor file
+            $import = new UjianSoalpgImport($set); // Membuat instance import dengan konfigurasi
+            Excel::import($import, $file); // Melakukan impor file
 
-        // Cek jumlah pembaruan dan kirim notifikasi yang sesuai
-        if ($import->getUpdatesCount() > 0) {
-            // Jika ada pembaruan, kirim notifikasi tentang pembaruan
-            $message = 'Upload Soal Pilihan Ganda Berhasil. ' . $import->getUpdatesCount() . ' data diperbarui.';
-            return redirect()->back()->with(['success' => $message]);
-        } else {
-            // Jika tidak ada pembaruan, kirim notifikasi umum
-            return redirect()->back()->with(['success' => 'Upload Soal Pilihan Ganda Berhasil.']);
+            // Cek jumlah pembaruan dan kirim notifikasi yang sesuai
+            if ($import->getUpdatesCount() > 0) {
+                // Jika ada pembaruan, kirim notifikasi tentang pembaruan
+                $message = 'Upload Soal Pilihan Ganda Berhasil. ' . $import->getUpdatesCount() . ' data diperbarui.';
+                return redirect()->back()->with(['success' => $message]);
+            } else {
+                // Jika tidak ada pembaruan, kirim notifikasi umum
+                return redirect()->back()->with(['success' => 'Upload Soal Pilihan Ganda Berhasil.']);
+            }
         }
-    }
 
-    // Jika file tidak dipilih
-    return redirect()->back()->with(['error' => 'Mohon pilih file terlebih dahulu.']);
-}
+        // Jika file tidak dipilih
+        return redirect()->back()->with(['error' => 'Mohon pilih file terlebih dahulu.']);
+    }
 
 
     public function storeData_SoalEssay(Request $request)
@@ -294,8 +284,6 @@ class ujianController extends Controller
 
         return redirect()->back()->with(['error' => 'Mohon pilih file terlebih dahulu.']);
     }
-
-
 
     public function store_essay_uts(Request $request)
     {
@@ -403,7 +391,22 @@ class ujianController extends Controller
                     'kd_dosen_perakit' => Auth::user()->kode
                 ])->first();
 
-            return view('admin.soalujian.show_uts', compact('soals', 'essay', 'soal','aprov','aprov_essay'));
+                $setting = SettingUjian::where([
+                    'paket' => $pecah[1],
+                ])->first();
+
+                $acc = ujian_aprov::where([
+                    'kd_mtk' => $pecah[0],
+                    'paket' => $pecah[1],
+                    'kd_dosen_perakit' => Auth::user()->kode
+                        
+                    ])->select('kd_mtk','paket','kd_dosen_perakit',
+                    'perakit_kirim',
+                    'perakit_kirim_essay',
+                    'tgl_perakit')
+                    ->first();
+
+            return view('admin.soalujian.show_uts', compact('soals', 'essay', 'soal','aprov','aprov_essay','setting','acc'));
         } else {
             return redirect('/dashboard');
         }

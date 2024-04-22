@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\ujian\uts;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Soal_ujian;
@@ -25,6 +27,23 @@ class PenggantiMengawasController extends Controller
                 ->get();
     
         return view('admin.ujian.uts.baak.pengganti.index', compact('jadwal', 'result'));
+    }
+
+    public function edit($id)
+    {
+        $pecah = explode(',', Crypt::decryptString($id));
+        $jadwal = Soal_ujian::where([
+            'kd_dosen'    => $pecah[0],
+            'kd_mtk'      => $pecah[1],
+            'kel_ujian'   => $pecah[2],
+            'paket'       => $pecah[3],       
+            'nm_kampus'   => $pecah[4]        
+            ])->first();
+
+        $dosens = DB::table('jadwal')->select('jadwal.kd_dosen','jadwal.nm_dosen')
+        ->groupby('kd_dosen') ->get();
+        
+        return view('admin.ujian.uts.baak.pengganti.edit',compact('jadwal','dosens'));
     }
     
 }

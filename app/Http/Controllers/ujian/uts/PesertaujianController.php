@@ -53,19 +53,19 @@ class PesertaujianController extends Controller
     }
     
 
-    public function uas()
-    {
+    // public function uas()
+    // {
 
-        $peserta = DB::table('ujian_distribusisoals')
-            ->when(request()->q, function ($peserta) {
-                $peserta = $peserta->where('nim', 'like', '%' . request()->q . '%');
-            })->where('paket', 'UAS')->paginate(10);
+    //     $peserta = DB::table('ujian_distribusisoals')
+    //         ->when(request()->q, function ($peserta) {
+    //             $peserta = $peserta->where('nim', 'like', '%' . request()->q . '%');
+    //         })->where('paket', 'UAS')->paginate(10);
 
-        // dd($peserta);
-        $peserta_upload = Distribusisoal_ujian_tmp::where('paket', 'UAS')->get();
+    //     // dd($peserta);
+    //     $peserta_upload = Distribusisoal_ujian_tmp::where('paket', 'UAS')->get();
 
-        return view('admin.ujian.uts.baak.peserta.uas', compact('peserta', 'peserta_upload'));
-    }
+    //     return view('admin.ujian.uts.baak.peserta.uas', compact('peserta', 'peserta_upload'));
+    // }
 
     public function storeData_Pesertaujian(Request $request)
     {

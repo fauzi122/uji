@@ -33,6 +33,23 @@
                     <td>Kode MTK</td>
                     <td>{{ $soal->kd_mtk ?? 'Data tidak tersedia' }}</td>
                 </tr>
+
+                <tr style="font-weight: 600; color: #e61111;">
+                  <td>Status Kirim</td>
+                  <td>
+
+                    @if(isset($acc->perakit_kirim) && $acc->perakit_kirim == 1)
+                    <span class="check-green">✔️</span>
+                    <span>{{ $acc->kd_dosen_perakit }} | {{ formatDatebln($acc->tgl_perakit) }}</span>
+                @elseif (isset($acc->perakit_kirim_essay) && $acc->perakit_kirim_essay == 1)
+                    <span class="check-green">✔️</span>
+                    <span>{{ $acc->kd_dosen_perakit }} | {{ formatDatebln($acc->tgl_perakit) }}</span>
+                @else
+                    <span class="check-transparent">Anda Belum Mengirim soal</span>
+                @endif
+                  </td>
+              </tr>
+                
             </tbody>
         </table>									
                     </div>

@@ -273,6 +273,37 @@
 				}
 			});
 		});
+
+
+		$(function() {
+			$('#summernote3').summernote({
+				toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+					['font', ['strikethrough', 'superscript', 'subscript']],
+					['fontsize', ['fontsize']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['height', ['height']],
+					// Tambahkan lebih banyak item toolbar jika diperlukan
+				],
+				placeholder: 'Masukkan Konten',
+				height: 60, // Tinggi editor dalam pixel
+				callbacks: {
+					onKeyup: function(e) {
+						var t = $(this).summernote('code').replace(/(<([^>]+)>)/ig, "").length;
+						$('#charCount').text(t + "/40000 karakter");
+		
+						if (t > 40000) {
+							$('#charCount').css('color', 'red');
+							var trimmedContent = $(this).summernote('code').substring(0, 2500);
+							$(this).summernote('code', trimmedContent);
+						} else {
+							$('#charCount').css('color', 'black');
+						}
+					}
+				}
+			});
+		});
 		
 		  
 		  </script>

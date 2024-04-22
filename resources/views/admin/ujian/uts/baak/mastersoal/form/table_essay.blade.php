@@ -52,18 +52,28 @@
                </thead>
               <tbody>
                 @foreach ($essay as $no => $essay)
+                @php
+                  $detail_essay=Crypt::encryptString($essay->id);                                    
+                  @endphp
              <tr>
               <td>
                
                 <input type="checkbox" class="soal-checkbox" name="soal_ids[]" value="{{ $essay->id }}">
             </td>
              <td>{{ ++$no }}</td>
-             <td>{{ strip_tags($essay->soal) }}</td>
+             <td>
+              
+                {{ Str::limit(strip_tags($essay->soal), 100) }}
+                @if(strlen(strip_tags($essay->soal)) > 100)
+                <a href="/baak/essay/soal-show-uts/{{$detail_essay}}">Lihat Lebih Lengkap</a>
+                @endif
+           
+            
+          
+            </td>
              <td>
              
-               @php
-              $detail_essay=Crypt::encryptString($essay->id);                                    
-              @endphp
+
 
               @if ($essay->status == 'Y')
               <center><span class='badge badge-pill badge-light'>Tampil</span></center>

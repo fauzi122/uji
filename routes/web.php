@@ -175,8 +175,9 @@ Route::middleware('auth')->group(function () {
             //create user staff
             Route::get('/lecturer-data', [AkunstaffController::class, 'index']);
             Route::post('/lecturer/data', [AkunstaffController::class, 'password_res']);
-            Route::get('/lecturer-data/create', [AkunstaffController::class, 'create']);
+            // Route::get('/lecturer-data/create', [AkunstaffController::class, 'create']);
             Route::post('/lecturer-data', [AkunstaffController::class, 'store']);
+            Route::get('/lecturer-search/users-mhs', [AkunstaffController::class, 'search']);
             Route::get('/edit/lecturer-data/{user}', [AkunstaffController::class, 'edit']);
             Route::patch('/update/lecturer-data/{user}', [AkunstaffController::class, 'update']);
 

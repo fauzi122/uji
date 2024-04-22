@@ -1,3 +1,9 @@
+
+@php
+    $sekarang = now();
+@endphp
+
+@if ($setting && $sekarang->between($setting->mulai, $setting->selsai))
 @if ($aprov)
     <div class="alert alert-info">Soal sudah dikirim, Anda tidak dapat menambah, edit, dan hapus</div>
 @else
@@ -18,7 +24,7 @@
 @endif 
    
 @endif
-<br><p><br>
+<br><br>
 <h4>List Soal Pilihan Essay</h4>
 <hr>
 
@@ -27,6 +33,9 @@
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-danger" onclick="return confirmDeletion();">Hapus Soal Essay Terpilih</button>
+@endif
+@else
+    <div class="alert alert-warning">Bukan periode aktivitas. Anda tidak dapat menambah, mengedit, atau menghapus soal saat ini.</div>
 @endif
 
 <table id="copy-print-csv" class="table custom-table">
@@ -43,7 +52,14 @@
         @foreach ($essay as $item)
         <tr>
             <td><input type="checkbox" name="essayIds[]" value="{{ $item->id }}"></td>
-            <td>{!! $item->soal !!}</td>
+            <td>
+
+                {{ Str::limit(strip_tags($item->soal), 100) }}
+                @if(strlen(strip_tags($item->soal)) > 100)
+                <a href="/essay/soal-show-uts/{{ Crypt::encryptString($item->id) }}">Lihat Lebih Lengkap</a>
+
+                @endif
+            </td>
             <td style="text-align: center;">
                 @if ($item->file != '')
                     <center>

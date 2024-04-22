@@ -75,7 +75,7 @@
                     @can('master_soal_ujian.acc_baak') 
                         @if (empty($acc->kd_dosen_baak) && !empty($acc->kd_dosen_kaprodi))
                             @if($soal->jenis_mtk=='PG ONLINE')
-                            <form action="{{ url('/baak/aprov-soal-essay') }}" method="POST">
+                            <form action="{{ url('/baak/aprov-soal') }}" method="POST">
                               @csrf
                               <input type="hidden" name="kd_mtk" value="{{ $acc->kd_mtk }}">
                               <input type="hidden" name="paket" value="{{ $acc->paket }}">

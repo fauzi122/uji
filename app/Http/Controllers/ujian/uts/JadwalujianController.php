@@ -37,6 +37,7 @@ class JadwalujianController extends Controller
 
     public function jadwal($id)
     {
+        
         $pecah = explode(',', Crypt::decryptString($id));
 
         $jadwal = Soal_ujian::where([
@@ -58,12 +59,31 @@ class JadwalujianController extends Controller
     
         return view('admin.ujian.uts.baak.jadwal.jadwal', compact('jadwal', 'resultArray'));
     }
-    
 
+    public function search(Request $request)
+    {
+        $query = Soal_ujian::query();
+
+        if ($request->filled('kd_lokal')) {
+            $query->where('kd_lokal', $request->kd_lokal);
+        }
+
+        if ($request->filled('kel_ujian')) {
+            $query->where('kel_ujian', $request->kel_ujian);
+        }
+
+        if ($request->filled('tgl_ujian')) {
+            $query->whereDate('tgl_ujian', $request->tgl_ujian);
+        }
+
+        $jadwal = $query->get();
+
+        return view('admin.ujian.uts.baak.jadwal.cari', compact('jadwal'));
+    }
+    
     public function show_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-//    dd($pecah[2]);
         $soal = Soal_ujian::where([
             'kd_dosen'    => $pecah[0],
             'kd_mtk'      => $pecah[1],
@@ -88,6 +108,58 @@ class JadwalujianController extends Controller
         return view('admin.ujian.uts.baak.jadwal.show',compact('soal','id','beritaAcara','mhsujian'));
     }
 
+    public function edit($id)
+    {
+        $pecah = explode(',', Crypt::decryptString($id));
+        $jadwal = Soal_ujian::where([
+            'kd_dosen'    => $pecah[0],
+            'kd_mtk'      => $pecah[1],
+            'kel_ujian'   => $pecah[2],
+            'paket'       => $pecah[3]        
+            ])->first();
+        
+        return view('admin.ujian.uts.baak.jadwal.edit',compact('jadwal'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $keys = explode(',', Crypt::decryptString($id));
+    
+            $validatedData = $request->validate([
+                'tgl_ujian'     => 'required|date',
+                'hari_t'        => 'required|string|max:255',
+                'no_ruang'      => 'required|string|max:255',
+                'mulai'         => 'required|date_format:H:i',
+                'selesai'       => 'required|date_format:H:i',
+                'nm_kampus'     => 'required|string|max:255'
+            ]);
+
+            $encryptedPaket = Crypt::encryptString($request->input('paket'));
+
+            $soalUjian = Soal_ujian::where([
+                'kd_dosen'  => $keys[0],
+                'kd_mtk'    => $keys[1],
+                'kel_ujian' => $keys[2],
+                'paket'     => $keys[3]
+            ])->firstOrFail();
+          
+            $soalUjian->fill($validatedData);
+            if ($soalUjian->isDirty()) { // Check if there are any changes
+                $soalUjian->save(); // This will trigger the model events
+                $successMessage = 'Jadwal ujian untuk kode dosen ' . $keys[0] . 
+                                  ' dan kelompok ujian ' . $keys[2] . 
+                                  ' berhasil diperbarui';
+            } else {
+                $successMessage = 'Tidak ada perubahan yang dilakukan pada data';
+            }
+    
+            return redirect('/baak/jadwal-ujian/'. $encryptedPaket)->with('success', $successMessage);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui jadwal ujian: ' . $e->getMessage());
+        }
+    }
+     
     public function updateStatus(Request $request)
     {
         $request->validate([

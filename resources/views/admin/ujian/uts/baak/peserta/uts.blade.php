@@ -139,9 +139,6 @@
 									</table>
 								</form>
 								
-							
-
-
 											<div class="table-responsive">
 									 <table class="table custom-table">
 										<thead>

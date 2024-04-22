@@ -17,9 +17,10 @@ class PesertaujianController extends Controller
 {
     public function __construct()
     {
-        if (!$this->middleware('auth:sanctum')) {
-            return redirect('/login');
-        }
+    $this->middleware(['permission:peserta_ujian|peserta_ujian.edit|peserta_ujian.add|peserta_ujian.singkron']);
+       if(!$this->middleware('auth:sanctum')){
+        return redirect('/login');
+    }
     }
 
     public function index()

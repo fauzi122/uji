@@ -16,9 +16,10 @@ class MtkujianController extends Controller
 {
     public function __construct()
     {
-        if (!$this->middleware('auth:sanctum')) {
-            return redirect('/login');
-        }
+       $this->middleware(['permission:mtk_ujian|mtk_ujian.edit|mtk_ujian.add']);
+       if(!$this->middleware('auth:sanctum')){
+        return redirect('/login');
+    }
     }
 
     public function utama()

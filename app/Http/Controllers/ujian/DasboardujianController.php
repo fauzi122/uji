@@ -14,11 +14,11 @@ class DasboardujianController extends Controller
 {
     public function __construct()
     {
-        if (!$this->middleware('auth:sanctum')) {
-            return redirect('/login');
-        }
+       $this->middleware(['permission:examschedule.index']);
+       if(!$this->middleware('auth:sanctum')){
+        return redirect('/login');
     }
-
+    }
 
     public function index()
     {

@@ -1,10 +1,10 @@
 @extends('layouts.dosen.main')
-<div class="flash-tambah" data-flashdata="{{ session('status') }}"></div>
-<div class="flash-error" data-flasherror="{{ session('error') }}"></div>
+
 
 @section('content')
                     <div class="table-container">
-                        
+                        <div class="flash-tambah" data-flashdata="{{ session('status') }}"></div>
+                        <div class="flash-error" data-flasherror="{{ session('error') }}"></div>          
                         <div class="t-header">
                             {{-- @can('users.create') 
                             <a href="/user/create" class="icon-plus"> </a> 

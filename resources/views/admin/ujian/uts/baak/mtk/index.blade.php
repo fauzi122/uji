@@ -11,11 +11,13 @@
 							<div class="card-header badge-info">
 							
 								<h4 class="m-b-0 text-white">
+									@can('mtk_ujian.edit')
 									<a href="/create-mtk-uji">
 										<b><i class="icon icon-plus"></i></b>
 									</a>
+									@endcan
 									List Matakuliah Ujian</h4>
-								
+									
 							</div>
 							<div class="table-container">
 								
@@ -62,10 +64,12 @@
 											 <td>{{ $mtk->updated_at }}</td>
 											
 											 <td>
+												@can('mtk_ujian.edit')
                                                 <center>
 												<a href="" class="btn btn-xs btn-info">Edit</a>
 												{{--  <a href="" class="btn btn-xs btn-secondary">Hapus</a>  --}}
                                                 </center>
+												@endcan
 											 </td>
 											</tr>
 											@endforeach

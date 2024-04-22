@@ -94,9 +94,11 @@
 									<li class="nav-item">
 										<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Peserta Ujian ALL</a>
 									</li>
+									@can('peserta_ujian.singkron')
 									<li class="nav-item">
 										<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"> Data Peserta Ujian Tambahan</a>
 									</li>
+									@endcan
 									{{--  <li class="nav-item">
 										<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
 									</li>  --}}
@@ -105,13 +107,13 @@
 									<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 										<p>
 										
-							
+											@can('peserta_ujian.singkron')
 									<form action="/baak/pesertauji" method="POST">
 										@csrf
 										<button class="btn btn-info btn-lg" type="submit">
 										<i class="icon-loader"></i>  Singkron Peserta Ujian </button>
 									</form> 
-									 
+									@endcan 
                                 <br>
                                 <form action="/baak/cari-peserta-ujian" method="GET">
 									<table class="table custom-table">
@@ -179,7 +181,7 @@
 									</div>
 									<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 										<p>
-										
+											@can('peserta_ujian.add')	
 									<div class="btn-group">
 										<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 											Action
@@ -202,7 +204,7 @@
 											
 										</div>
 									</div>
-									
+									@endcan
 											 <table id="copy-print-csv" class="table custom-table">
 										<thead>
 											<tr>

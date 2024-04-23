@@ -21,4 +21,6 @@ class Detailsoal_ujian extends Model
 	{
 		return $this->hasOne('App\Models\Jawab', 'id', 'no_soal_id')->where('id_user', Auth::user()->username);
 	}
+
+	
 }

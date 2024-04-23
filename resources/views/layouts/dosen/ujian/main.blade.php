@@ -1,7 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<!-- Required meta tags -->
+		<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+		<!-- Load DataTables -->
+		{{-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script> --}}
+		{{-- <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script> --}}
+		{{-- <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script> <!-- Column Visibility --> --}}
+		{{-- <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script> --}}
+	  
+		<!-- Load DataTables CSS -->
+		{{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"> --}}
+		{{-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css"> --}}
+		{{-- <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.dataTables.min.css"> --}}
+
+				<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -12,7 +25,6 @@
 
 		<!-- Title -->
 		<title>Ujian Online UBSI</title>
-
 
 		<!-- *************
 			************ Common Css Files *************
@@ -39,6 +51,7 @@
 		<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4.css') }}" />
 		<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4-custom.css') }}" />
 		<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/buttons.bs.css') }}"/>
+		
 
 	</head>
 	<body>
@@ -343,7 +356,7 @@
 	  })
 	  });
 	  $(document).ready(function () {
-		   $('#myTable1').DataTable({
+		   $('#myTable2').DataTable({
 			dom: 'Blfrtip',
 						lengthMenu: [
 							[ 10, 25, 50, 10000 ],
@@ -357,6 +370,7 @@
 	  
 		 });
 		  </script>
+		  
 
 		<script>
 $(document).ready(function () {

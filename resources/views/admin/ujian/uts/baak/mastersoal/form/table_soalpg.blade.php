@@ -18,32 +18,35 @@
                                 
                                 
                                 
-                                  <form action="{{ url('/prodi/aprov-soal') }}" method="POST">
+                                <form action="{{ url('/prodi/aprov-soal') }}" method="POST">
                                     @csrf
                                     <input type="hidden" readonly name="kd_mtk" value="{{ $soal->kd_mtk }}">
                                     <input type="hidden" readonly name="paket" value="{{ $soal->paket }}">
                                     <input type="hidden" readonly name="jenis_mtk" value="{{ $soal->jenis_mtk }}">
-
+                                
                                     @if(isset($acc->perakit_kirim) && $acc->perakit_kirim == 1)
-                                    <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
-                                        <i class="icon-check"></i> Persetujuan Kaprodi
-                                    </button>
-                                @elseif (isset($acc->perakit_kirim_essay) && $acc->perakit_kirim_essay == 1)
-                                    <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
-                                        <i class="icon-check"></i> Persetujuan Kaprodi
-                                    </button>
-                                @else
-                                    <button type="submit" class="btn btn-secondary" disabled title="Anda belum bisa memberikan persetujuan karena perakit belum mengirim soal">
-                                        <i class="icon-warning"></i> Persetujuan Kaprodi
-                                    </button>
-                                @endif
-                            
+                                        <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
+                                            <i class="icon-check"></i> Persetujuan Kaprodi
+                                        </button>
+                                    @elseif (isset($acc->perakit_kirim_essay) && $acc->perakit_kirim_essay == 1)
+                                        <button type="submit" class="btn btn-primary" id="persetujuanKaprodiBtn">
+                                            <i class="icon-check"></i> Persetujuan Kaprodi
+                                        </button>
+                                    @else
+                                        <button type="submit" class="btn btn-secondary" disabled title="Anda belum bisa memberikan persetujuan karena perakit belum mengirim soal">
+                                            <i class="icon-warning"></i> Persetujuan Kaprodi
+                                        </button>
+                                    @endif
+                                    <!-- Tombol Download Excel -->
+
+                                    
                                     @endcan
-                                    <table id="copy-print-csv" class="table custom-table">
+                                
+                                    <table id="myTable1" class="table custom-table">
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox" id="checkAll"></th>                               
-                                                <th>Soal</th>                               
+                                                <th><input type="checkbox" id="checkAll"></th>
+                                                <th>Soal</th>
                                                 <th style="text-align: center;">Kunci</th>
                                                 <th style="text-align: center;">Status</th>
                                                 <th style="text-align: center;">Updated</th>
@@ -61,7 +64,7 @@
                                                 <td style="text-align: center;">{{ $soal->kunci }}</td>
                                                 <td>
                                                     @php
-                                                        $detail = Crypt::encryptString($soal->id);                                    
+                                                        $detail = Crypt::encryptString($soal->id);
                                                     @endphp
                                                     <center>
                                                         @if ($soal->status == 'Y')
@@ -94,27 +97,61 @@
                                                     </center>
                                                 </td>
                                             </tr>
-                                            @endforeach     
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </form>
+<script>
+    var checkedBoxes = {};
+
+    $(document).ready(function() {
+        var table = $('#myTable1').DataTable({
+                dom: 'Blfrtip',
+                lengthMenu: [
+                    [-1, 200, 100],
+                    ['Show All', '200', '100']
+                ],
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                responsive: true
+            });
+       
+
+        table.on('draw', function() {
+            $('.soal-checkbox').each(function() {
+                this.checked = checkedBoxes[this.value] || false;
+            });
+        });
+
+        $('#myTable1 tbody').on('change', '.soal-checkbox', function() {
+            var id = this.value;
+            checkedBoxes[id] = this.checked;
+        });
+
+        $('#checkAll').on('click', function() {
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            $('input[type="checkbox"]', rows).each(function() {
+                var id = this.value;
+                checkedBoxes[id] = this.checked; // Update nilai checkedBoxes saat Check All
+            });
+        });
+
+        $('#persetujuanKaprodiBtn').on('click', function(event) {
+            var selectedCheckboxes = $('.soal-checkbox:checked');
+            if (selectedCheckboxes.length === 0) {
+                event.preventDefault();
+                alert('Silahkan pilih minimal satu soal sebelum memberikan persetujuan.');
+            } else {
+                var soal_ids = $.map(selectedCheckboxes, function(checkbox) {
+                    return checkbox.value;
+                });
+                // Simpan array soal_ids ke dalam input hidden sebelum pengiriman formulir
+                $('input[name="soal_ids"]').val(JSON.stringify(soal_ids));
+            }
+        });
+    });
+</script>
                                 
-                                <script>
-                                    document.getElementById('checkAll').onclick = function() {
-                                        var checkboxes = document.querySelectorAll('.soal-checkbox');
-                                        for (var checkbox of checkboxes) {
-                                            checkbox.checked = this.checked;
-                                        }
-                                    };
-                                
-                                    document.getElementById('persetujuanKaprodiBtn').onclick = function(event) {
-                                        var selectedCheckboxes = document.querySelectorAll('.soal-checkbox:checked');
-                                        if (selectedCheckboxes.length === 0) {
-                                            event.preventDefault();
-                                            alert('Silahkan pilih minimal satu soal sebelum memberikan persetujuan.');
-                                        }
-                                    };
-                                </script>
-                                
-                                    
                                 

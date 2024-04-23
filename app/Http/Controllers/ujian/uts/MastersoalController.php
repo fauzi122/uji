@@ -370,6 +370,7 @@ class MastersoalController extends Controller
         }
     }
 
+    
     public function show_detailsoal_uts($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));

@@ -25,8 +25,7 @@ use App\Models\Detailsoal_ujian;
 use App\Models\ujian_aprov_essay;
 use App\Models\perakit_bahan_ajar;
 use App\Models\DetailSoalEssay_ujian;
-
-
+use App\Exports\DetailsoalExport;
 
 class ujianController extends Controller
 {
@@ -628,6 +627,7 @@ class ujianController extends Controller
         }
     }
 
+    
     public function destroy(Request $request)
     {
         $idsToDelete = $request->input('deleteIds');
@@ -652,5 +652,32 @@ class ujianController extends Controller
         return redirect()->back()->with('success', 'Selected essays have been deleted successfully.');
     }
     
+        // Fungsi untuk mengunduh data dalam format Excel
+        public function downloadDataPgdosen(Request $request)
+        {
+            // Validasi input
+            $request->validate([
+                'kd_mtk' => 'required',
+                'jenis' => 'required'
+            ]);
+    
+            // Ambil data berdasarkan parameter kd_mtk dan jenis_mtk
+            $data = Detailsoal_ujian::select('kd_mtk',
+            'jenis',
+            'soal',
+            'file',
+            'pila',
+            'pilb',
+            'pilc',
+            'pild',
+            'pile',
+            'kunci')->where([
+                    'kd_mtk' => $request->kd_mtk,
+                    'jenis' => $request->jenis
+                ])->orderBy('created_at', 'DESC')->get();
+    
+            // Export data ke dalam file Excel
+            return Excel::download(new DetailsoalExport($data), 'detail_soal_pg.xlsx');
+        }
 
 }

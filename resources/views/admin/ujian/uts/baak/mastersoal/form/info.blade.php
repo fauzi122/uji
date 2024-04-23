@@ -117,6 +117,37 @@ function confirmSubmit() {
                             </td>
                         </tr>
                         
+                        <tr>
+                          <td>Download soal</td>
+                          <td>
+                            @can('master_soal_ujian.acc_prodi')
+                            @if($soal->jenis_mtk=='PG ONLINE')
+                            <form action="{{ route('download.datapg') }}" method="POST">
+                              @csrf
+                                  <input type="hidden" id="kd_mtk" name="kd_mtk" value="{{ $soal->kd_mtk }}" required>
+
+                                  <input type="hidden" id="jenis" name="jenis" value="{{ $soal->paket }}" required>
+                              <button type="submit" class="btn btn-info">
+                                  <i class="icon-download"></i> Download Data
+                              </button>
+                          </form>
+                            @endif
+                            @endcan
+                            @if($soal->jenis_mtk=='ESSAY ONLINE')
+
+                           <b>Belum Tersedia</b> 
+                            {{-- <form action="{{ route('download.datapg') }}" method="POST">
+                              @csrf
+                                  <input type="hidden" id="kd_mtk" name="kd_mtk" value="{{ $soal->kd_mtk }}" required>
+
+                                  <input type="hidden" id="jenis" name="jenis" value="{{ $soal->paket }}" required>
+                              <button type="submit" class="btn btn-info">
+                                  <i class="icon-download"></i> Download Data
+                              </button>
+                          </form> --}}
+                            @endif
+
+                          </td>
                         </tr>
                        
                       </tbody>

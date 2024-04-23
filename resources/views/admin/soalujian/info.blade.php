@@ -49,7 +49,20 @@
                 @endif
                   </td>
               </tr>
-                
+                <tr>
+                  <td>Download Soal</td>
+                  <td> @if($soal->jenis_mtk=='PG ONLINE')
+                    <form action="{{ route('download.datapg.dosen') }}" method="POST">
+                      @csrf
+                          <input type="hidden" id="kd_mtk" name="kd_mtk" value="{{ $soal->kd_mtk }}" required>
+
+                          <input type="hidden" id="jenis" name="jenis" value="{{ $soal->paket }}" required>
+                      <button type="submit" class="btn btn-info">
+                          <i class="icon-download"></i> Download Data
+                      </button>
+                  </form>
+                    @endif</td>
+                </tr>
             </tbody>
         </table>									
                     </div>

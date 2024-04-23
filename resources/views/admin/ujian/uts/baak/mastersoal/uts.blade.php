@@ -51,7 +51,7 @@
       </div>
       
         <div class="table-responsive">
-          <table id="copy-print-csv" class="table custom-table">
+          <table id="myTable1" class="table custom-table">
             <thead>
               <tr>
                 <th>No</th>                
@@ -155,7 +155,21 @@
 			</div>
 
 </div>
-
+<script>
+  $(document).ready(function() {
+    $('#myTable1').DataTable({
+      dom: 'Blfrtip',
+      lengthMenu: [
+        [10, 25, 50, -1],
+        ['10', '25', '50', 'Show All']
+      ],
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ],
+      responsive: true
+    });
+  });
+  </script>
 @endsection
 <style>
   .custom-table {
@@ -214,3 +228,4 @@
     background-color: #f2f2f2; /* light grey for neutral or no status */
   }
   </style>
+  

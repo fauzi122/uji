@@ -58,6 +58,7 @@ Route::controller(UjianController::class)->group(function () {
     Route::post('/upload-soalessay-ujian','storeData_SoalEssay');
 
     Route::post('/hapus-soal','hapus')->name('soal.hapus');
+    Route::post('/dosen/download-data-pg','downloadDataPgdosen')->name('download.datapg.dosen');
 
 
     
@@ -67,6 +68,7 @@ Route::controller(MastersoalController::class)->group(function () {
     Route::get('/soal/master-baak','index')->name('master-soal');
     Route::get('/soal/ujian-baak/{id}','index_uts');
     Route::get('/baak/uts-soal-show/{id}','show');
+
     Route::get('/baak/uts-create-pilih/{id}','create_pilih_uts');
     Route::get('/baak/uts-create-essay/{id}','create_essay_uts');
     Route::post('/baak/store/pilih-uts','store_pilihan_uts');
@@ -91,6 +93,7 @@ Route::controller(ApproveController::class)->group(function () {
     Route::post('/prodi/aprov-soal-essay','approveKaprodiessay')->name('kaprodi.approve.essay');
     Route::post('/baak/aprov-soal','approveBaak')->name('baak.approve');
     Route::post('/baak/aprov-soal-essay','approveBaakEssay')->name('approveBaakEssay');
+    Route::post('/baak/download-data-pg','downloadDataPg')->name('download.datapg');
 });
 
 Route::controller(JadwalujianController::class)->group(function () {

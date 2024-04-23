@@ -56,7 +56,7 @@
 										</div>
 										@endif
 								<div class="table-responsive">
-									<table id="copy-print-csv" class="table custom-table">
+									<table id="myTable1" class="table custom-table">
 										<thead>
 											<tr>
 											  
@@ -69,6 +69,7 @@
 												<th>Selsai</th>
 												<th>Ruang</th>
 												<th>paket</th>
+												<th>sks</th>
 												<th>kampus</th>
 												<th>Aksi</th>
 												<th><span class="icon-edit1"></span></th>
@@ -95,6 +96,7 @@
 											
 											 <td>{{ $jadwal->no_ruang }}</td>
 											 <td>{{ $jadwal->paket }}</td>
+											 <td>{{ $jadwal->sks }}</td>
 											 <td>{{ $jadwal->nm_kampus }}</td>
 											
 											 <td>
@@ -141,4 +143,20 @@
 
 
 			</div>
+			<script>
+				$(document).ready(function() {
+					var table = $('#myTable1').DataTable({
+						dom: 'Blfrtip',
+						lengthMenu: [
+							[10, 25, 50, -1],
+                			['10', '25', '50', 'Show All']
+							
+						],
+						buttons: [
+							'copy', 'csv', 'excel', 'pdf', 'print'
+						],
+						responsive: true
+					});
+				});
+			</script>
 @endsection

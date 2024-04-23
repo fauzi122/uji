@@ -38,7 +38,7 @@
 
     @endcan   
     <br>                    
-    <table id="copy-print-csv" class="table custom-table">
+    <table id="myTable1" class="table custom-table">
               <thead>
                 <tr>
                   <th><input type="checkbox" id="checkAll"></th>
@@ -132,3 +132,18 @@
                   }
               };
           </script>
+          <script>
+            $(document).ready(function() {
+                var table = $('#myTable1').DataTable({
+                    dom: 'Blfrtip',
+                    lengthMenu: [
+                        [-1, 10, 25, 50],
+                        ['Show All', '10', '25', '50']
+                    ],
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ],
+                    responsive: true
+                });
+            });
+        </script>

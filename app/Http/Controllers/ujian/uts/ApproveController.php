@@ -15,13 +15,15 @@ use App\Models\Paket_ujian;
 use App\Models\Detailsoal_ujian;
 use App\Models\DetailSoalEssay_ujian;
 use App\Models\perakit_bahan_ajar;
-use Carbon\Carbon; 
+use Carbon\Carbon;
+use App\Exports\DetailsoalExport;
+use Maatwebsite\Excel\Facades\Excel; 
 
 class ApproveController extends Controller
 {
     public function __construct()
     {
-       $this->middleware(['permission:master_soal_ujian|master_soal_ujian.index|master_soal_ujian.edit']);
+       $this->middleware(['permission:master_soal_ujian|master_soal_ujian.acc_prodi']);
        if(!$this->middleware('auth:sanctum')){
         return redirect('/login');
     }
@@ -189,4 +191,32 @@ class ApproveController extends Controller
 
         return redirect()->back()->with('success', 'Soal berhasil disetujui.');
     } 
+
+    // Fungsi untuk mengunduh data dalam format Excel
+    public function downloadDataPg(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'kd_mtk' => 'required',
+            'jenis' => 'required'
+        ]);
+
+        // Ambil data berdasarkan parameter kd_mtk dan jenis_mtk
+        $data = Detailsoal_ujian::select('kd_mtk',
+        'jenis',
+        'soal',
+        'file',
+        'pila',
+        'pilb',
+        'pilc',
+        'pild',
+        'pile',
+        'kunci')->where([
+                'kd_mtk' => $request->kd_mtk,
+                'jenis' => $request->jenis
+            ])->orderBy('created_at', 'DESC')->get();
+
+        // Export data ke dalam file Excel
+        return Excel::download(new DetailsoalExport($data), 'detail_soal_pg.xlsx');
+    }
 }

@@ -63,6 +63,7 @@ use App\Http\Controllers\Api\{
 use App\Http\Controllers\Api\Mhs\{
     LoginmhsController
 };
+use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
 
 Route::get('/', function () {
@@ -279,7 +280,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/branch', [JadwalujianController::class, 'branch']);
             Route::get('/show/exam-schedule/{id}', [JadwalujianController::class, 'jadwal_ujian']);
             Route::get('/edit/exam-schedule/{id}', [JadwalujianController::class, 'edit_jadwal_ujian']);
-
             // Panitia ujian
             // Route::get('/jadwal-ujian', [PanitiaujianController::class, 'index']);
             // Route::post('/create-ujian-teori', [PanitiaujianController::class, 'store_teori']);

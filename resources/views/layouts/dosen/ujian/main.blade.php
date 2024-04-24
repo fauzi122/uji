@@ -184,8 +184,8 @@
 	<script src="{{ asset('assets/summernote/summernote-bs4.min.js') }}"></script>
 
 	<!-- Main JS -->
-	<script src="{{ asset('assets/uji/js/main.js') }}"></script>
 	@stack('scripts')
+	<script src="{{ asset('assets/uji/js/main.js') }}"></script>
 	<script>
 		$(function() {
 			$('#summernote').summernote({

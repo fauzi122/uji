@@ -21,6 +21,17 @@
 									
 									List Pengawas Pengganti</h4>
 							</div>
+							@if (session('success'))
+							<div class="alert alert-info">
+								{{ session('success') }}
+							</div>
+							@endif
+			
+							@if (session('error'))
+							<div class="alert alert-info">
+								{{ session('error') }}
+							</div>
+							@endif
 							<div class="table-container">
 								<div class="table-responsive">
 									<table id="copy-print-csv" class="table custom-table">

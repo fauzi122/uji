@@ -1,6 +1,7 @@
 @extends('layouts.dosen.ujian.main')
 
 @section('content')
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <div class="main-container">
@@ -10,6 +11,7 @@
                 <div class="card-header badge-info">
                     <h4 class="m-b-0 text-white">Pengganti Mengawas Ujian - {{ $jadwal->paket }}</h4>
                 </div>
+               
                 <div class="row">
                     <div class="col-md-6">
                         <!-- Tabel Informasi Jadwal -->
@@ -71,7 +73,7 @@
                     </div>
                     <!-- Tabel Form Dosen Pengganti -->
                     <div class="col-md-6">
-                        <form method="POST" action=""> <!-- Sesuaikan action -->
+                        <form method="POST" action="/store/ganti-pengawas"> <!-- Sesuaikan action -->
                             @csrf
                             <div class="table-responsive">
                                 <table class="table">
@@ -88,13 +90,19 @@
                                         <tr>
                                             <td>Kode Dosen Pengganti</td>
                                             <td>
-                                                <select class="form-control select2" name="kd_dosen_pengganti">
-                                                    @foreach($dosens as $dosen)
-                                                        <option value="{{ $dosen->kd_dosen }}">{{ $dosen->nm_dosen }} - {{ $dosen->kd_dosen }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
+                                            <select class="form-control select2" name="kd_dosen_pengganti">
+                                                <option value="">Pilih Dosen Pengganti</option>
+                                                @foreach($dosens as $dosen)
+                                                    <option value="{{ $dosen->kd_dosen }}" data-nip="{{ $dosen->nip }}">{{ $dosen->nm_dosen }} - {{ $dosen->kd_dosen }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
                                         </tr>
+                                        <tr>
+                                            <td>NIP Dosen Pengganti</td>
+                                            <td><input type="text" class="form-control" id="nip_dosen_pengganti" name="nip_dosen_pengganti" readonly></td>
+                                        </tr>
+                                        
                                         <tr>
                                             <td>Kelompok Ujian</td>
                                             <td><input type="text" class="form-control" name="kel_ujian" value="{{ old('kel_ujian', $jadwal->kel_ujian) }}" required readonly></td>
@@ -131,14 +139,21 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
-(function($) {
-    $(document).ready(function() {
-        $('.select2').select2({
-            placeholder: 'Pilih Dosen Pengganti',
-            allowClear: true
+    (function($) {
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: 'Pilih Dosen Pengganti',
+                allowClear: true
+            });
+    
+            // Event listener untuk mengubah nilai NIP ketika dosen pengganti dipilih
+            $('select[name="kd_dosen_pengganti"]').change(function() {
+                var nip = $(this).find('option:selected').data('nip'); // Mengambil NIP dari data attribute
+                $('#nip_dosen_pengganti').val(nip); // Memasukkan NIP ke textbox
+            });
         });
-    });
-})(jQuery);
-</script>
+    })(jQuery);
+    </script>
+    
 
 @endsection

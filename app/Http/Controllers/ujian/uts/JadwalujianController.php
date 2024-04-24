@@ -60,6 +60,37 @@ class JadwalujianController extends Controller
         return view('admin.ujian.uts.baak.jadwal.jadwal', compact('jadwal', 'resultArray'));
     }
 
+    // public function jadwal($id, Request $request)
+    // {
+    //     $pecah = explode(',', Crypt::decryptString($id));
+    //     $paket = $pecah[0];
+    
+    //     if ($request->ajax()) {
+    //         $query = DB::table('uts_soals')
+    //             ->join('ujian_berita_acaras', function($join) {
+    //                 $join->on('uts_soals.kel_ujian', '=', 'ujian_berita_acaras.kel_ujian')
+    //                      ->on('uts_soals.kd_mtk', '=', 'ujian_berita_acaras.kd_mtk');
+    //             })
+    //             ->select('ujian_berita_acaras.*', 'uts_soals.kd_dosen', 'uts_soals.kel_ujian', 'uts_soals.kd_mtk')
+    //             ->where('uts_soals.paket', $paket);
+    
+    //         return datatables()->of($query)
+    //             ->addColumn('action', function ($item) {
+    //                 return '<button class="btn btn-primary">Edit</button>';
+    //             })
+    //             ->rawColumns(['action'])
+    //             ->make(true);
+    //     }
+    //     $encryptedId = $id; 
+    //     // Fallback for non-AJAX request
+    //     $jadwal = Soal_ujian::where('paket', $paket)->get();
+
+    //     // dd($jadwal);
+    //     return view('admin.ujian.uts.baak.jadwal.jadwal', compact('jadwal','encryptedId'));
+    // }
+    
+
+
     public function search(Request $request)
     {
         $query = Soal_ujian::query();

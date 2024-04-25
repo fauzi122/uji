@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Mhs;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Carbon\Carbon;
 use App;
@@ -33,6 +35,9 @@ class LoginmhsController extends Controller
         }
         // dd(App::environment('production'));
         if (app()->environment('production')) {
+            if (Auth::user()->username == "61210008") {
+                $examSystemUrl = 'https://ujiankampusa.bsi.ac.id/authenticate';
+            }
             $examSystemUrl = 'https://ujiankampus.bsi.ac.id/authenticate';
         } else {
             $examSystemUrl = 'http://127.0.0.1:8001/authenticate';

@@ -63,6 +63,9 @@ use App\Http\Controllers\Api\{
 use App\Http\Controllers\Api\Mhs\{
     LoginmhsController
 };
+use App\Http\Controllers\Api\Admin\{
+    LoginController
+};
 use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
 
@@ -539,6 +542,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/lecturer/t/{id}', [RekapajardosenController::class, 'alasan_t']);
             Route::post('/alasan-prodi', [RekapajardosenController::class, 'alasan_prodi_praktek']);
             Route::post('/alasan-prodi-teori', [RekapajardosenController::class, 'alasan_prodi_teori']);
+            Route::get('/baak-ujian', [LoginController::class, 'redirectToUjian'])->name('Ujian.redirect');
+
         });
     });
 });

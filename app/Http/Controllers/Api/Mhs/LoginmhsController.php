@@ -37,8 +37,9 @@ class LoginmhsController extends Controller
         if (app()->environment('production')) {
             if (Auth::user()->username == "61210008") {
                 $examSystemUrl = 'https://ujiankampusa.bsi.ac.id/authenticate';
+            } else {
+                $examSystemUrl = 'https://ujiankampus.bsi.ac.id/authenticate';
             }
-            $examSystemUrl = 'https://ujiankampus.bsi.ac.id/authenticate';
         } else {
             $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
         }

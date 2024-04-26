@@ -34,7 +34,7 @@
 
                 @can('examschedule.index')
                 <a href="{{ url('/dashboard-ujian') }}"target="_blank">
-                {{-- <a href="{{ url('/baak-ujian') }}" target="_blank"> --}}
+                
                     <i class="icon-bookmark1"></i>
                     <span class="menu-text">Panitia Ujian</span>
                 </a>

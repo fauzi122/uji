@@ -125,11 +125,6 @@
                     </center>
                 </form>
                 @endif
-                @elseif (!$absen->first()->ip_address && !str_starts_with($absen->first()->no_ruang, 'E'))
-                {{-- Jika IP tidak ada, tampilkan notifikasi --}}
-                <div class="alert alert-warning" role="alert">
-                    Alamat IP tidak ditemukan ({{ambilIP()}}): Anda wajib terhubung ke Wi-Fi kelas untuk melanjutkan. Periksa koneksi Anda dan coba lagi.
-                </div>
                 @else
                 {{-- Jika mahasiswa belum melakukan absensi, tampilkan form absensi --}}
                 @php

@@ -425,7 +425,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/form-komentar/{id}', [DiskusiController::class, 'komentar']);
             Route::post('/send-komentar', [DiskusiController::class, 'store_komen']);
             //Rekap Absen Praktek
-            Route::get('/rekap-absen', [Rekap_absenController::class, 'index']);
+            // Route::get('/rekap-absen', [Rekap_absenController::class, 'index']);
             Route::post('/rekap-praktek', [Rekap_absenController::class, 'store_praktek']);
             Route::post('/detail-rekap-praktek', [Rekap_absenController::class, 'detail_praktek']);
             Route::post('/bap_praktek', [Rekap_absenController::class, 'bap_praktek']);
@@ -543,7 +543,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/alasan-prodi', [RekapajardosenController::class, 'alasan_prodi_praktek']);
             Route::post('/alasan-prodi-teori', [RekapajardosenController::class, 'alasan_prodi_teori']);
             Route::get('/baak-ujian', [LoginController::class, 'redirectToUjian'])->name('Ujian.redirect');
-
         });
     });
 });

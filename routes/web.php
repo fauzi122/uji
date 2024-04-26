@@ -73,9 +73,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::controller(JadwalkuliahController::class)->group(function () {
-//     Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
-// });
+Route::controller(JadwalkuliahController::class)->group(function () {
+    Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -425,7 +425,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/form-komentar/{id}', [DiskusiController::class, 'komentar']);
             Route::post('/send-komentar', [DiskusiController::class, 'store_komen']);
             //Rekap Absen Praktek
-            // Route::get('/rekap-absen', [Rekap_absenController::class, 'index']);
+            Route::get('/rekap-absen', [Rekap_absenController::class, 'index']);
             Route::post('/rekap-praktek', [Rekap_absenController::class, 'store_praktek']);
             Route::post('/detail-rekap-praktek', [Rekap_absenController::class, 'detail_praktek']);
             Route::post('/bap_praktek', [Rekap_absenController::class, 'bap_praktek']);

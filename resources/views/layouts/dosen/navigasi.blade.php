@@ -119,7 +119,7 @@
                         </li>
 
                         <li>
-                            <!-- <a href="{{url('/rekap-absen')}}">Rekap Absen</a> -->
+                            <a href="{{url('/rekap-absen')}}">Rekap Absen</a>
                         </li>
                         <li>
                             <a href="{{ url('/lecturer/rekap') }}">Rekap Pengajaran </a>

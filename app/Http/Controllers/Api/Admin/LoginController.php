@@ -34,7 +34,7 @@ class LoginController extends Controller
         }
         // dd(App::environment('production'));
         if (app()->environment('production')) {
-            $examSystemUrl = 'https://banksoal.bsi.ac.id/authenticate';
+            $examSystemUrl = 'https://question.bsi.ac.id/authenticate';
         } else {
             $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
         }

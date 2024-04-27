@@ -9,16 +9,17 @@
                     <i class="icon-home"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
-                
-        	 
+
+
                 <a href="{{ url('/profile') }}">
                     <i class="icon-account_circle"></i>
                     <span class="menu-text">Profil</span>
                 </a>
                 <a href="{{ route('Ujian.redirect') }}">
-                    <i class="icon-account_circle"></i>
+                    <i class="icon-sports-club"></i>
                     <span class="menu-text">Ujian</span>
                 </a>
+
 
             </li>
 

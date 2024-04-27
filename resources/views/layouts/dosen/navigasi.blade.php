@@ -21,6 +21,10 @@
                 <i class="icon-log-out1"></i><span class="menu-text">S A Y S</span>
 
                 </a>
+                <a href="{{ route('Banksoal.redirect') }}">
+                    <i class="icon-sports-club"></i>
+                    <span class="menu-text">Bank Ujian</span>
+                </a>
                 {{-- <a href="{{ url('/profil') }}">
                 <i class="icon-account_circle"></i>
                 <span class="menu-text">Profil</span>
@@ -33,8 +37,8 @@
                 </a>
 
                 @can('examschedule.index')
-                <a href="{{ url('/dashboard-ujian') }}"target="_blank">
-                
+                <a href="{{ url('/dashboard-ujian') }}" target="_blank">
+
                     <i class="icon-bookmark1"></i>
                     <span class="menu-text">Panitia Ujian</span>
                 </a>

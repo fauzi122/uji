@@ -21,12 +21,12 @@
                 <i class="icon-log-out1"></i><span class="menu-text">S A Y S</span>
 
                 </a>
-                @can('users.index')
+                {{-- @can('users.index')
                 <a href="{{ route('Banksoal.redirect') }}">
                     <i class="icon-sports-club"></i>
                     <span class="menu-text">Ujian</span>
                 </a>
-                @endcan
+                @endcan --}}
                 {{-- <a href="{{ url('/profil') }}">
                 <i class="icon-account_circle"></i>
                 <span class="menu-text">Profil</span>

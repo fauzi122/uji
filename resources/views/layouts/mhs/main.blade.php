@@ -84,21 +84,6 @@
 </head>
 
 <body>
-	@php
-	if (isset($_GET['alert']) && $_GET['alert'] == 'gagal') {
-	@endphp
-	<script>
-		Swal.fire({
-			title: 'Gagal Masuk Ke Laman Ujian!',
-			text: 'Ganti Browser/Jaringan secara berkala',
-			icon: 'error',
-			confirmButtonText: 'Ok'
-		});
-	</script>
-	@php
-	}
-	@endphp
-
 
 	<!-- Loading starts -->
 	{{-- <div id="loading-wrapper">
@@ -298,6 +283,16 @@
 	<script src="{{asset('assets/dist/sweetalert2.min.js')}}"></script>
 	<script src="{{asset('assets/dist/script.js')}}"></script>
 	<!-- Lobipanel -->
+	<script>
+		@if(isset($_GET['alert']) && $_GET['alert'] == 'gagal')
+		Swal.fire({
+			title: 'Gagal Masuk Ke Laman Ujian!',
+			text: 'Ganti Browser/Jaringan secara berkala',
+			icon: 'error',
+			confirmButtonText: 'Ok'
+		});
+		@endif
+	</script>
 	@stack('scripts')
 </body>
 

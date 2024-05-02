@@ -85,12 +85,20 @@
 
 <body>
 	@php
-	if(isset($_GET['alert']) && $_GET['alert'] == 'yes') {
-	echo "<script>
-		alert('Gagal Masuk Kehalaman Ujian Online');
-	</script>";
+	if (isset($_GET['alert']) && $_GET['alert'] == 'gagal') {
+	@endphp
+	<script>
+		Swal.fire({
+			title: 'Gagal Masuk Ke Laman Ujian!',
+			text: 'Ganti Browser/Jaringan secara berkala',
+			icon: 'error',
+			confirmButtonText: 'Ok'
+		});
+	</script>
+	@php
 	}
 	@endphp
+
 
 	<!-- Loading starts -->
 	{{-- <div id="loading-wrapper">

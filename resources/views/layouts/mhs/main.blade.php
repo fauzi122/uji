@@ -1,144 +1,152 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<!-- Required meta tags -->
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<!-- Meta -->
-		<meta name="description" content="Responsive Bootstrap4 Dashboard Template">
-		<meta name="author" content="ParkerThemes">
-		<meta name="csrf-token" content="{{ csrf_token() }}">
-		<link rel="shortcut icon" href="{{ asset('assets/img/icon1.jfif') }}" />
-		<!-- Title -->
-		<title>My Best</title>
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Meta -->
+	<meta name="description" content="Responsive Bootstrap4 Dashboard Template">
+	<meta name="author" content="ParkerThemes">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<link rel="shortcut icon" href="{{ asset('assets/img/icon1.jfif') }}" />
+	<!-- Title -->
+	<title>My Best</title>
 
 
-		<!-- *************
+	<!-- *************
 			************ Common Css Files *************
 		************ -->
-		<!-- Bootstrap css -->
-		<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/dist/sweetalert2.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/dist/sweetalert2.css') }}">
+	<!-- Bootstrap css -->
+	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/dist/sweetalert2.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/dist/sweetalert2.css') }}">
 
-		<!-- Icomoon Font Icons css -->
-		<link rel="stylesheet" href="{{ asset('assets/fonts/style.css') }}">
-		
-		<!-- Main css -->
-		<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-		<!-- Data Tables -->
-		<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4.css') }}" />
-		<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4-custom.css') }}" />
-		<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/buttons.bs.css') }}"/>
-		
+	<!-- Icomoon Font Icons css -->
+	<link rel="stylesheet" href="{{ asset('assets/fonts/style.css') }}">
+
+	<!-- Main css -->
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<!-- Data Tables -->
+	<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4.css') }}" />
+	<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4-custom.css') }}" />
+	<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/buttons.bs.css') }}" />
 
 
-		<!-- *************
+
+	<!-- *************
 			************ Vendor Css Files *************
 		************ -->
-		<!-- DateRange css -->
-		<link rel="stylesheet" href="{{ asset('assets/vendor/daterange/daterange.css') }}" />
-<style>
-	.dijawab {
-		background: #1980d4;
-		color: #fff;
-		padding: 5px 10px;
-		border-radius: 3px;
+	<!-- DateRange css -->
+	<link rel="stylesheet" href="{{ asset('assets/vendor/daterange/daterange.css') }}" />
+	<style>
+		.dijawab {
+			background: #1980d4;
+			color: #fff;
+			padding: 5px 10px;
+			border-radius: 3px;
+		}
+
+		.pagination>li>a,
+		.pagination>li>span {
+			width: 38px;
+			text-align: center;
+			margin: 3px;
+		}
+
+		.timer {
+			border: solid thin #b9b2b2;
+			padding: 5px 15px;
+			font-size: 14pt;
+			color: #fff;
+			background: #291a71;
+		}
+
+		.soal {
+			margin: 0 0 15px 0;
+		}
+
+		.box-footer {
+			border-top: 1px solid #ebebeb !important;
+		}
+
+		.jawab {
+			cursor: pointer;
+			margin: 0 0 7px 0;
+		}
+
+		.pilihan p {
+			margin: 0;
+		}
+	</style>
+
+</head>
+
+<body>
+	@php
+	if(isset($_GET['alert']) && $_GET['alert'] == 'yes') {
+	echo "<script>
+		alert('Gagal Masuk Kehalaman Ujian Online');
+	</script>";
 	}
+	@endphp
 
-	.pagination>li>a,
-	.pagination>li>span {
-		width: 38px;
-		text-align: center;
-		margin: 3px;
-	}
-
-	.timer {
-		border: solid thin #b9b2b2;
-		padding: 5px 15px;
-		font-size: 14pt;
-		color: #fff;
-		background: #291a71;
-	}
-
-	.soal {
-		margin: 0 0 15px 0;
-	}
-
-	.box-footer {
-		border-top: 1px solid #ebebeb !important;
-	}
-
-	.jawab {
-		cursor: pointer;
-		margin: 0 0 7px 0;
-	}
-
-	.pilihan p {
-		margin: 0;
-	}
-</style>
-
-	</head>
-
-	<body>
-
-		<!-- Loading starts -->
-		{{-- <div id="loading-wrapper">
+	<!-- Loading starts -->
+	{{-- <div id="loading-wrapper">
 			<div class="spinner-border" role="status">
 				<span class="sr-only">Loading...</span>
 			</div>
 		</div> --}}
-		<!-- Loading ends -->
+	<!-- Loading ends -->
 
 
-		<!-- Page wrapper start -->
-		<div class="page-wrapper pinned">
-			
-			<!-- Sidebar wrapper start -->
-			<nav id="sidebar" class="sidebar-wrapper">
-				
-				<!-- Sidebar brand end  -->
+	<!-- Page wrapper start -->
+	<div class="page-wrapper pinned">
 
-				<!-- Sidebar content start -->
-                @include('layouts.mhs.navigasi')
-				<!-- Sidebar content end -->
-			</nav>
-			<!-- Sidebar wrapper end -->
+		<!-- Sidebar wrapper start -->
+		<nav id="sidebar" class="sidebar-wrapper">
 
-			<!-- Page content start  -->
-			<div class="page-content">
+			<!-- Sidebar brand end  -->
 
-				<!-- Header start -->
-				@include('layouts.mhs.header')
-				<!-- Header end -->
+			<!-- Sidebar content start -->
+			@include('layouts.mhs.navigasi')
+			<!-- Sidebar content end -->
+		</nav>
+		<!-- Sidebar wrapper end -->
 
-				<!-- Page header start -->
-				<div class="page-header">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item">Elearning Universitas Bina Sarana Informatika </li>
-						 {{--  <h5 class="btn btn-lg btn-info"> <b>*SEGERA LAKUKAN PERUBAHAN PASSWORD DEMI KEAMANAN AKUN ANDA. <a href="/user/profile">KLIK DI SINI</a></b></h5>  --}}
-						{{-- <li class="breadcrumb-item active">Account Settings</li> --}}
-					</ol>
+		<!-- Page content start  -->
+		<div class="page-content">
 
-					<ul class="app-actions">
-						<li>
-							<a href="#" id="reportrange">
-								<span class="range-text"></span>
-								<i class="icon-chevron-down"></i>	
-							</a>
-						</li>
-						
-					</ul>
-				</div>
-				<!-- Page header end -->
+			<!-- Header start -->
+			@include('layouts.mhs.header')
+			<!-- Header end -->
 
-				<!-- Main container start -->
-				<div class="main-container">
+			<!-- Page header start -->
+			<div class="page-header">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">Elearning Universitas Bina Sarana Informatika </li>
+					{{-- <h5 class="btn btn-lg btn-info"> <b>*SEGERA LAKUKAN PERUBAHAN PASSWORD DEMI KEAMANAN AKUN ANDA. <a href="/user/profile">KLIK DI SINI</a></b></h5>  --}}
+					{{-- <li class="breadcrumb-item active">Account Settings</li> --}}
+				</ol>
+
+				<ul class="app-actions">
+					<li>
+						<a href="#" id="reportrange">
+							<span class="range-text"></span>
+							<i class="icon-chevron-down"></i>
+						</a>
+					</li>
+
+				</ul>
+			</div>
+			<!-- Page header end -->
+
+			<!-- Main container start -->
+			<div class="main-container">
 				@yield('content')
-				</div>
-				{{--  <div class="main-container">
+			</div>
+			{{-- <div class="main-container">
 
 					<!-- Row start -->
 					<div class="row gutters">
@@ -232,56 +240,57 @@
 					<!-- Row end -->
 
 				</div>  --}}
-				<!-- Main container end -->
-
-			</div>
-			<!-- Page content end -->
+			<!-- Main container end -->
 
 		</div>
-		<!-- Page wrapper end -->
+		<!-- Page content end -->
 
-		<!--**************************
+	</div>
+	<!-- Page wrapper end -->
+
+	<!--**************************
 			**************************
 				**************************
 							Required JavaScript Files
 				**************************
 			**************************
 		**************************-->
-		<!-- Required jQuery first, then Bootstrap Bundle JS -->
-		<script src="{{asset('/js/jquery-ui.min.js') }}"></script>
-		<script src="{{asset('assets/js/jquery.min.js')}}"></script>
-		<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
-		<script src="{{asset('assets/js/moment.js')}}"></script>
-		<script type="text/javascript" src="{{asset('assets/js/jquery.expander.js')}}"></script>
+	<!-- Required jQuery first, then Bootstrap Bundle JS -->
+	<script src="{{asset('/js/jquery-ui.min.js') }}"></script>
+	<script src="{{asset('assets/js/jquery.min.js')}}"></script>
+	<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
+	<script src="{{asset('assets/js/moment.js')}}"></script>
+	<script type="text/javascript" src="{{asset('assets/js/jquery.expander.js')}}"></script>
 
 
-		<!-- *************
+	<!-- *************
 			************ Vendor Js Files *************
 		************* -->
-		<!-- Slimscroll JS -->
-		<script src="{{asset('assets/vendor/slimscroll/slimscroll.min.js')}}"></script>
-		<script src="{{asset('assets/vendor/slimscroll/custom-scrollbar.js')}}"></script>
-		<!-- Daterange -->
-		<script src="{{asset('assets/vendor/daterange/daterange.js')}}"></script>
-		<script src="{{asset('assets/vendor/daterange/custom-daterange.js')}}"></script>
-		<!-- Custom Data tables -->
-		<script src="{{asset('assets/vendor/datatables/custom/custom-datatables.js')}}"></script>
-		<script src="{{asset('assets/vendor/datatables/custom/fixedHeader.js')}}"></script>
-		<!-- Data Tables -->
-		<script src="{{asset('assets/vendor/datatables/dataTables.min.js')}}"></script>
-		<script src="{{asset('assets/vendor/datatables/dataTables.bootstrap.min.js')}}"></script>
-		<!-- Download / CSV / Copy / Print -->
-		<script src="{{asset('assets/vendor/datatables/buttons.min.js')}}"></script>
-		<script src="{{asset('assets/vendor/datatables/jszip.min.js')}}"></script>
-		<script src="{{asset('assets/vendor/datatables/pdfmake.min.js')}}"></script>
-		<script src="{{asset('assets/vendor/datatables/vfs_fonts.js')}}"></script>
-		<script src="{{asset('assets/vendor/datatables/html5.min.js')}}"></script>
-		<script src="{{asset('assets/vendor/datatables/buttons.print.min.js')}}"></script>
-		<!-- Main JS -->
-		<script src="{{asset('assets/js/main.js')}}"></script>
-		<script src="{{asset('assets/dist/sweetalert2.min.js')}}"></script>
-		<script src="{{asset('assets/dist/script.js')}}"></script>
-		<!-- Lobipanel -->
-		@stack('scripts')
-	</body>
+	<!-- Slimscroll JS -->
+	<script src="{{asset('assets/vendor/slimscroll/slimscroll.min.js')}}"></script>
+	<script src="{{asset('assets/vendor/slimscroll/custom-scrollbar.js')}}"></script>
+	<!-- Daterange -->
+	<script src="{{asset('assets/vendor/daterange/daterange.js')}}"></script>
+	<script src="{{asset('assets/vendor/daterange/custom-daterange.js')}}"></script>
+	<!-- Custom Data tables -->
+	<script src="{{asset('assets/vendor/datatables/custom/custom-datatables.js')}}"></script>
+	<script src="{{asset('assets/vendor/datatables/custom/fixedHeader.js')}}"></script>
+	<!-- Data Tables -->
+	<script src="{{asset('assets/vendor/datatables/dataTables.min.js')}}"></script>
+	<script src="{{asset('assets/vendor/datatables/dataTables.bootstrap.min.js')}}"></script>
+	<!-- Download / CSV / Copy / Print -->
+	<script src="{{asset('assets/vendor/datatables/buttons.min.js')}}"></script>
+	<script src="{{asset('assets/vendor/datatables/jszip.min.js')}}"></script>
+	<script src="{{asset('assets/vendor/datatables/pdfmake.min.js')}}"></script>
+	<script src="{{asset('assets/vendor/datatables/vfs_fonts.js')}}"></script>
+	<script src="{{asset('assets/vendor/datatables/html5.min.js')}}"></script>
+	<script src="{{asset('assets/vendor/datatables/buttons.print.min.js')}}"></script>
+	<!-- Main JS -->
+	<script src="{{asset('assets/js/main.js')}}"></script>
+	<script src="{{asset('assets/dist/sweetalert2.min.js')}}"></script>
+	<script src="{{asset('assets/dist/script.js')}}"></script>
+	<!-- Lobipanel -->
+	@stack('scripts')
+</body>
+
 </html>

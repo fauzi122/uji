@@ -284,13 +284,23 @@
 	<script src="{{asset('assets/dist/script.js')}}"></script>
 	<!-- Lobipanel -->
 	<script>
-		@if(isset($_GET['alert']) && $_GET['alert'] == 'gagal')
+		@if(isset($_GET['alert']))
+		@if($_GET['alert'] == 'gagal')
 		Swal.fire({
 			title: 'Gagal Masuk Ke Laman Ujian!',
 			text: 'Ganti Browser/Jaringan secara berkala',
 			icon: 'error',
 			confirmButtonText: 'Ok'
 		});
+		@endif
+		@if($_GET['alert'] == 'hp')
+		Swal.fire({
+			title: 'Peringatan!',
+			text: 'Halaman Ujian Tidak Bisa Dibuka Menggunakan Perangkat Hp',
+			icon: 'warning',
+			confirmButtonText: 'Ok'
+		});
+		@endif
 		@endif
 	</script>
 	@stack('scripts')

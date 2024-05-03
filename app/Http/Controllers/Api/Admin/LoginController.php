@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class LoginController extends Controller
 {

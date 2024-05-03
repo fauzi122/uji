@@ -24,7 +24,7 @@
                 @can('users.index')
                 <a href="{{ route('Banksoal.redirect') }}">
                     <i class="icon-sports-club"></i>
-                    <span class="menu-text">Ujian</span>
+                    <span class="menu-text">Halaman Ujian</span>
                 </a>
                 @endcan
                 {{-- <a href="{{ url('/profil') }}">
@@ -33,18 +33,18 @@
                 </a> --}}
 
                 {{-- @can('panitiaujian') --}}
-                <a href="{{ url('/master-soal') }}">
+                {{-- <a href="{{ url('/master-soal') }}">
                     <i class="icon-folder"></i>
                     <span class="menu-text">Master Soal</span>
-                </a>
+                </a> --}}
 
-                @can('examschedule.index')
+                {{-- @can('examschedule.index')
                 <a href="{{ url('/dashboard-ujian') }}" target="_blank">
 
                     <i class="icon-bookmark1"></i>
                     <span class="menu-text">Panitia Ujian</span>
                 </a>
-                @endcan
+                @endcan --}}
                 {{-- @endcan --}}
 
             </li>

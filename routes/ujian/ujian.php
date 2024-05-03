@@ -5,9 +5,9 @@ namespace App\Http\Controllers\ujian\uts;
 use App\Http\Controllers\ujian\DasboardujianController;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(DasboardujianController::class)->group(function () {
-    Route::get('/dashboard-ujian', 'index');
-});
+// Route::controller(DasboardujianController::class)->group(function () {
+//     Route::get('/dashboard-ujian', 'index');
+// });
 
 Route::controller(SettingtimeUjianController::class)->group(function () {
     Route::get('/time-setting', 'index')->name('time-setting');
@@ -18,65 +18,65 @@ Route::controller(SettingtimeUjianController::class)->group(function () {
 });
 
 // UJIAN master soal
-Route::controller(UjianController::class)->group(function () {
-    Route::get('/master-soal', 'index')->name('master-soal');
-    Route::get('/uts-soal/{id}', 'index_uts');
-    Route::get('/uts-soal-show/{id}', 'show');
-    Route::get('/uts-create-pilih/{id}', 'create_pilih_uts');
-    Route::get('/uts-create-essay/{id}', 'create_essay_uts');
-    Route::post('/store/pilih-uts', 'store_pilihan_uts');
-    Route::post('/store/essay-uts', 'store_essay_uts');
-    Route::get('/detail/soal-show-uts/{id}', 'show_detailsoal_uts');
-    Route::get('/edit-detail/soal-uts/{id}', 'edit_detalsoal_uts');
-    Route::get('/edit-essay/soal-uts/{id}', 'edit_detalessay_uts');
-    Route::get('/essay/soal-show-uts/{id}', 'show_detalessay_uts');
-    Route::delete('/delete-soal-uts', 'destroy');
-    Route::delete('/delete-soal-essay-uts', 'destroy_essay');
+// Route::controller(UjianController::class)->group(function () {
+//     Route::get('/master-soal', 'index')->name('master-soal');
+//     Route::get('/uts-soal/{id}', 'index_uts');
+//     Route::get('/uts-soal-show/{id}', 'show');
+//     Route::get('/uts-create-pilih/{id}', 'create_pilih_uts');
+//     Route::get('/uts-create-essay/{id}', 'create_essay_uts');
+//     Route::post('/store/pilih-uts', 'store_pilihan_uts');
+//     Route::post('/store/essay-uts', 'store_essay_uts');
+//     Route::get('/detail/soal-show-uts/{id}', 'show_detailsoal_uts');
+//     Route::get('/edit-detail/soal-uts/{id}', 'edit_detalsoal_uts');
+//     Route::get('/edit-essay/soal-uts/{id}', 'edit_detalessay_uts');
+//     Route::get('/essay/soal-show-uts/{id}', 'show_detalessay_uts');
+//     Route::delete('/delete-soal-uts', 'destroy');
+//     Route::delete('/delete-soal-essay-uts', 'destroy_essay');
 
 
-    Route::get('/kirim-soal-uts/{kirim}', 'kirimSoalUts')->name('kirim.soal.uts');
-    Route::get('/kirim-soalessay-uts/{kirim}', 'kirimSoalEssayUts')->name('kirim.soalessay.uts');
+//     Route::get('/kirim-soal-uts/{kirim}', 'kirimSoalUts')->name('kirim.soal.uts');
+//     Route::get('/kirim-soalessay-uts/{kirim}', 'kirimSoalEssayUts')->name('kirim.soalessay.uts');
 
 
-    Route::patch('/uts-pilih/update/{detailsoal_ujian}', 'update_soalpilih_uts');
-    Route::patch('/uts-essay/update/{detailSoalEssay_ujian}', 'update_essay_uts');
-    Route::post('/upload-soalpg-ujian', 'storeData_SoalPg');
-    Route::post('/upload-soalessay-ujian', 'storeData_SoalEssay');
+//     Route::patch('/uts-pilih/update/{detailsoal_ujian}', 'update_soalpilih_uts');
+//     Route::patch('/uts-essay/update/{detailSoalEssay_ujian}', 'update_essay_uts');
+//     Route::post('/upload-soalpg-ujian', 'storeData_SoalPg');
+//     Route::post('/upload-soalessay-ujian', 'storeData_SoalEssay');
 
-    Route::post('/hapus-soal', 'hapus')->name('soal.hapus');
-    Route::post('/dosen/download-data-pg', 'downloadDataPgdosen')->name('download.datapg.dosen');
-});
+//     Route::post('/hapus-soal', 'hapus')->name('soal.hapus');
+//     Route::post('/dosen/download-data-pg', 'downloadDataPgdosen')->name('download.datapg.dosen');
+// });
 // master ujian baak
-Route::controller(MastersoalController::class)->group(function () {
-    Route::get('/soal/master-baak', 'index')->name('master-soal');
-    Route::get('/soal/ujian-baak/{id}', 'index_uts');
-    Route::get('/baak/uts-soal-show/{id}', 'show');
+// Route::controller(MastersoalController::class)->group(function () {
+//     Route::get('/soal/master-baak', 'index')->name('master-soal');
+//     Route::get('/soal/ujian-baak/{id}', 'index_uts');
+//     Route::get('/baak/uts-soal-show/{id}', 'show');
 
-    Route::get('/baak/uts-create-pilih/{id}', 'create_pilih_uts');
-    Route::get('/baak/uts-create-essay/{id}', 'create_essay_uts');
-    Route::post('/baak/store/pilih-uts', 'store_pilihan_uts');
-    Route::post('/baak/store/essay-uts', 'store_essay_uts');
+//     Route::get('/baak/uts-create-pilih/{id}', 'create_pilih_uts');
+//     Route::get('/baak/uts-create-essay/{id}', 'create_essay_uts');
+//     Route::post('/baak/store/pilih-uts', 'store_pilihan_uts');
+//     Route::post('/baak/store/essay-uts', 'store_essay_uts');
 
-    Route::get('/baak/detail/soal-show-uts/{id}', 'show_detailsoal_uts');
-    Route::get('/baak/edit-detail/soal-uts/{id}', 'edit_detalsoal_uts');
-    Route::get('/baak/edit-essay/soal-uts/{id}', 'edit_detalessay_uts');
-    Route::get('/baak/essay/soal-show-uts/{id}', 'show_detalessay_uts');
+//     Route::get('/baak/detail/soal-show-uts/{id}', 'show_detailsoal_uts');
+//     Route::get('/baak/edit-detail/soal-uts/{id}', 'edit_detalsoal_uts');
+//     Route::get('/baak/edit-essay/soal-uts/{id}', 'edit_detalessay_uts');
+//     Route::get('/baak/essay/soal-show-uts/{id}', 'show_detalessay_uts');
 
-    Route::patch('/baak/uts-pilih/update/{detailsoal_ujian}', 'update_soalpilih_uts');
-    Route::patch('/baak/uts-essay/update/{detailSoalEssay_ujian}', 'update_essay_uts');
+//     Route::patch('/baak/uts-pilih/update/{detailsoal_ujian}', 'update_soalpilih_uts');
+//     Route::patch('/baak/uts-essay/update/{detailSoalEssay_ujian}', 'update_essay_uts');
 
-    Route::post('/baak/singkron-mtkuji', 'singmtkuji');
-    Route::post('/baak/upload-soalpg-ujian', 'storeData_SoalPg');
-    Route::post('/baak/upload-soalessay-ujian', 'storeData_SoalEssay');
-});
+//     Route::post('/baak/singkron-mtkuji', 'singmtkuji');
+//     Route::post('/baak/upload-soalpg-ujian', 'storeData_SoalPg');
+//     Route::post('/baak/upload-soalessay-ujian', 'storeData_SoalEssay');
+// });
 
-Route::controller(ApproveController::class)->group(function () {
-    Route::post('/prodi/aprov-soal', 'approveKaprodi')->name('kaprodi.approve');
-    Route::post('/prodi/aprov-soal-essay', 'approveKaprodiessay')->name('kaprodi.approve.essay');
-    Route::post('/baak/aprov-soal', 'approveBaak')->name('baak.approve');
-    Route::post('/baak/aprov-soal-essay', 'approveBaakEssay')->name('approveBaakEssay');
-    Route::post('/baak/download-data-pg', 'downloadDataPg')->name('download.datapg');
-});
+// Route::controller(ApproveController::class)->group(function () {
+//     Route::post('/prodi/aprov-soal', 'approveKaprodi')->name('kaprodi.approve');
+//     Route::post('/prodi/aprov-soal-essay', 'approveKaprodiessay')->name('kaprodi.approve.essay');
+//     Route::post('/baak/aprov-soal', 'approveBaak')->name('baak.approve');
+//     Route::post('/baak/aprov-soal-essay', 'approveBaakEssay')->name('approveBaakEssay');
+//     Route::post('/baak/download-data-pg', 'downloadDataPg')->name('download.datapg');
+// });
 
 Route::controller(JadwalujianController::class)->group(function () {
     Route::get('/jadwal-uji-baak','index');

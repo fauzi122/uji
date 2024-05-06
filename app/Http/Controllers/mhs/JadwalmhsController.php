@@ -32,7 +32,7 @@ class JadwalmhsController extends Controller
      */
     public function index(Request $request)
     {
-
+        echo "ada";
         $lastPasswordUpdate = Auth::user()->password_update;
 
         if ($lastPasswordUpdate === null || now()->diffInYears($lastPasswordUpdate) >= 1) {

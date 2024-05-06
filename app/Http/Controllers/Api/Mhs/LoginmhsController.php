@@ -14,7 +14,7 @@ use App;
 class LoginmhsController extends Controller
 {
 
-    public function redirectToUjian()
+    public function redirectToUjian(Request $request)
     {
         $user = auth()->user();
 
@@ -44,6 +44,24 @@ class LoginmhsController extends Controller
         // Redirect ke sistem ujian online dengan token sebagai parameter
         return redirect()->away("{$examSystemUrl}?token={$token}");
     }
+
+    // public function redirectToUjian(Request $request)
+    // {
+    //     $user = auth()->user();
+
+    //     if (!$user) {
+    //         return response()->json(['error' => 'User not authenticated'], 401);
+    //     }
+
+    //     $customClaims = ['sub' => $user->username];
+    //     $token = JWTAuth::claims($customClaims)->fromUser($user);
+
+    //     if (!$token) {
+    //         return response()->json(['error' => 'Could not generate token'], 500);
+    //     }
+
+    //     return response()->json(['token' => $token]);
+    // }
 
     public function index(Request $request)
     {

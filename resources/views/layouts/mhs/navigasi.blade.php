@@ -19,6 +19,11 @@
                     <i class="icon-sports-club"></i>
                     <span class="menu-text">Ujian</span>
                 </a>
+                <!-- <a href="#" id="triggerUjian">
+                    <i class="icon-sports-club"></i>
+                    <span class="menu-text">Ujian</span>
+                </a> -->
+
 
 
             </li>

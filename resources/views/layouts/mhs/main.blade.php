@@ -303,6 +303,43 @@
 		@endif
 		@endif
 	</script>
+	<!-- <script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const appEnvironment = "{{ app()->environment() }}";
+			const examSystemUrl = appEnvironment === 'production' ?
+				'https://ujiankampusa.bsi.ac.id/authenticate' :
+				'http://127.0.0.1:8001/authenticate';
+
+			document.getElementById('triggerUjian').addEventListener('click', function(e) {
+				e.preventDefault(); // Menghentikan aksi default link
+
+				fetch('{{ route("Ujian.redirect") }}', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+						}
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.token) {
+							// Simpan token ke local storage
+							localStorage.setItem('auth_token', data.token);
+							// Redirect ke dashboard
+							window.location.href = 'http://127.0.0.1:8001/dashboard';
+						} else {
+							console.error('Failed to retrieve token:', data.error);
+							alert('Failed to retrieve token from the first application.');
+						}
+					})
+					.catch(error => {
+						console.error('Error fetching token:', error);
+						alert('Error communicating with the first application.');
+					});
+			});
+		});
+	</script> -->
+
 	@stack('scripts')
 </body>
 

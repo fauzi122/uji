@@ -34,7 +34,6 @@ class JadwalmhsController extends Controller
     {
 
         $lastPasswordUpdate = Auth::user()->password_update;
-        dd($lastPasswordUpdate);
         if ($lastPasswordUpdate === null || now()->diffInYears($lastPasswordUpdate) >= 1) {
 
             return redirect('/profile')->with('info', ' Update Password Anda dan Pastikan Email Anda Aktif.');
@@ -56,6 +55,7 @@ class JadwalmhsController extends Controller
         // echo $cek_ajar['328']->pertemuan;
         // die;
         // dd($cek_ajar_praktek['894']->pertemuan);
+        dd($lastPasswordUpdate);
 
         // $cek_ajar = app('App\Models\mhs\Jadwalmhs')->jadwal($request->user()->kode,$request->user()->username);
         return view('mhs.jadwal.index', compact('schedule', 'praktek', 'kampus_merdeka', 'kampus_merdeka_praktek'));

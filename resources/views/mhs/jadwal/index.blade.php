@@ -1,8 +1,23 @@
 @extends('layouts.mhs.main')
 @section('content')
 @php
-
+use Carbon\Carbon;
+$now = Carbon::now();
+$hariList = [
+'Sunday' => 'Minggu',
+'Monday' => 'Senin',
+'Tuesday' => 'Selasa',
+'Wednesday' => 'Rabu',
+'Thursday' => 'Kamis',
+'Friday' => 'Jumat',
+'Saturday' => 'Sabtu'
+];
+$hariIndo = $hariList[$now->englishDayOfWeek]; // Dapatkan nama hari dalam bahasa Indonesia
+$tanggal = $now->toDateString(); // Mendapatkan tanggal
+$waktu = $now->format('H:i'); // Mendapatkan waktu
 @endphp
+
+
 <div class="content-wrapper">
 
     <!-- Row start -->
@@ -12,8 +27,9 @@
             @foreach ($kampus_merdeka->get() as $jad)
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="pricing-plan">
-                    <div class="pricing-header @php if ($dayList[$day]<>$jad->hari_t) { echo " secondary"; } @endphp ">
-                    <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
+                    <div class="pricing-header @if ($hariList[$now->englishDayOfWeek] !== $jad->hari_t) secondary @endif">
+
+                        <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
 
                         <div class="pricing-save">{{$jad->hari_t}} - {{$jad->jam_t}}</div>
                     </div>
@@ -76,8 +92,8 @@
             @foreach ($schedule->get() as $jad)
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="pricing-plan">
-                    <div class="pricing-header @php if ($dayList[$day]<>$jad->hari_t) { echo " secondary"; } @endphp ">
-                    <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
+                    <div class="pricing-header @if ($hariList[$now->englishDayOfWeek] !== $jad->hari_t) secondary @endif">
+                        <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
 
                         <div class="pricing-save">{{$jad->hari_t}} - {{$jad->jam_t}}</div>
                     </div>
@@ -129,8 +145,9 @@
             @foreach ($praktek->get() as $jad)
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="pricing-plan">
-                    <div class="pricing-header @php if ($dayList[$day]<>$jad->hari_t) { echo " secondary"; } @endphp ">
-                    <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
+                    <div class="pricing-header @if ($hariList[$now->englishDayOfWeek] !== $jad->hari_t) secondary @endif">
+
+                        <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
 
                         <div class="pricing-save">{{$jad->hari_t}} - {{$jad->jam_t}}</div>
                     </div>
@@ -184,8 +201,9 @@
             @foreach ($kampus_merdeka->get() as $jad)
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="pricing-plan">
-                    <div class="pricing-header @php if ($dayList[$day]<>$jad->hari_t) { echo " secondary"; } @endphp ">
-                    <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
+                    <div class="pricing-header @if ($hariList[$now->englishDayOfWeek] !== $jad->hari_t) secondary @endif">
+
+                        <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
 
                         <div class="pricing-save">{{$jad->hari_t}} - {{$jad->jam_t}}</div>
                     </div>
@@ -244,8 +262,9 @@
     @foreach ($kampus_merdeka_praktek->get() as $jad)
     <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="pricing-plan">
-            <div class="pricing-header @php if ($dayList[$day]<>$jad->hari_t) { echo " secondary"; } @endphp ">
-                    <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
+            <div class="pricing-header @if ($hariList[$now->englishDayOfWeek] !== $jad->hari_t) secondary @endif">
+
+                <h6 class=" pricing-title">{{$jad->nm_mtk}}</h6>
 
                 <div class="pricing-save">{{$jad->hari_t}} - {{$jad->jam_t}}</div>
             </div>

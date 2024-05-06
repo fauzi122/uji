@@ -55,7 +55,7 @@ class JadwalmhsController extends Controller
         // echo $cek_ajar['328']->pertemuan;
         // die;
         // dd($cek_ajar_praktek['894']->pertemuan);
-        dd($lastPasswordUpdate);
+        // dd($lastPasswordUpdate);
 
         // $cek_ajar = app('App\Models\mhs\Jadwalmhs')->jadwal($request->user()->kode,$request->user()->username);
         return view('mhs.jadwal.index', compact('schedule', 'praktek', 'kampus_merdeka', 'kampus_merdeka_praktek'));

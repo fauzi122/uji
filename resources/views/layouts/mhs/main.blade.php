@@ -301,6 +301,14 @@
 			confirmButtonText: 'Ok'
 		});
 		@endif
+		@if($_GET['alert'] == 'belumbayar')
+		Swal.fire({
+			title: 'Peringatan!',
+			text: 'Anda Kurang Bayar',
+			icon: 'warning',
+			confirmButtonText: 'Ok'
+		});
+		@endif
 		@endif
 	</script>
 	<!-- <script>

@@ -22,9 +22,14 @@ class LoginmhsController extends Controller
             // Handle case where there is no authenticated user
             return response()->json(['error' => 'User not authenticated'], 401);
         }
-
+        $now = Carbon::now();
         // Create a custom claim with the user's email
-        $customClaims = ['sub' => $user->username]; // Use 'email' instead of 'id' for the 'sub' claim
+        $customClaims = [
+            'sub' => $user->username, // Your subject identifier
+            'iat' => $now->timestamp, // Issued at: assign current time
+            'nbf' => $now->timestamp, // Not before: token is valid immediately
+            'exp' => $now->addHours(2)->timestamp // Expiration time: 2 hours from now
+        ];
 
         // Generate a token with the custom claims
         $token = JWTAuth::claims($customClaims)->fromUser($user);

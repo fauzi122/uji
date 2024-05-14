@@ -23,28 +23,28 @@ class UserController extends Controller
     {
         $users = User::where('utype', 'ADM')->get();
         return view('admin.user.index', compact('users'));
-        
+
         //return view('admin.user.index');
-      
+
     }
 
 
 
     public function staffjson()
-	{
-		return Datatables::of(User::where('utype', 'ADM'))->make(true);
-	}
+    {
+        return Datatables::of(User::where('utype', 'ADM'))->make(true);
+    }
 
 
     public function mhsuser()
-    {   
+    {
         return view('admin.user.mhsuser');
     }
 
     public function jsonusermhs()
-	{
-		return Datatables::of(User::where('utype', 'MHS'))->make(true);
-	}
+    {
+        return Datatables::of(User::where('utype', 'MHS'))->make(true);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -54,8 +54,8 @@ class UserController extends Controller
     public function create()
     {
         // $roles = Role::latest()->get();
-        $roles = Role::where('id','<>','1')->get();
-        return view('admin.user.create',compact('roles'));
+        $roles = Role::where('id', '<>', '1')->get();
+        return view('admin.user.create', compact('roles'));
     }
 
     /**
@@ -64,7 +64,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-   
+
     /**
      * Display the specified resource.
      *
@@ -84,7 +84,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::where('id','<>','1')->get();
+        $roles = Role::where('id', '=', '1')->get();
         return view('admin.user.edit', compact('user', 'roles'));
     }
 
@@ -108,14 +108,14 @@ class UserController extends Controller
             $user->update([
                 'name'      => $request->input('name'),
                 'email'     => $request->input('email')
-               
+
             ]);
         } else {
             $user->update([
                 'name'      => $request->input('name'),
                 'email'     => $request->input('email'),
                 'password'  => bcrypt($request->input('password'))
-                
+
 
             ]);
         }
@@ -125,11 +125,10 @@ class UserController extends Controller
 
         if ($user) {
             //redirect dengan pesan sukses
-            return redirect('/user')->with('status','Data Berhasil Ditambah');
+            return redirect('/user')->with('status', 'Data Berhasil Ditambah');
+        } else {
+            return redirect('/user')->with('error', 'Gagal Ditambah');
         }
-            else{
-                return redirect('/user')->with('error','Gagal Ditambah');
-            }
     }
     /**
      * Remove the specified resource from storage.
@@ -139,11 +138,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $cek= User::where([
-            'id'       =>$user->id
-            ])->first();
+        $cek = User::where([
+            'id'       => $user->id
+        ])->first();
         User::destroy($user->id);
-        return redirect('/user')->with('status','Data Berhasil Dihapus');
-  
+        return redirect('/user')->with('status', 'Data Berhasil Dihapus');
     }
 }

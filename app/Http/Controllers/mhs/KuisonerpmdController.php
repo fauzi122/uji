@@ -27,7 +27,30 @@ class KuisonerpmdController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi request input sesuai kebutuhan Anda di sini, jika diperlukan
+        // Validasi request input
+        $request->validate([
+            'nim' => 'required|string',
+            'name' => 'required|string',
+            'nip_dosen' => 'required|string',
+            'mtk' => 'required|string',
+            'kelas' => 'required|string',
+            'prodi' => 'required|string',
+            'upps' => 'required|string',
+            'periode' => 'required|string',
+            'cf31' => 'required|string',
+            'cf32' => 'required|string',
+            'cf33' => 'required|string',
+            'cf34' => 'required|string',
+            'cf41' => 'required|string',
+            'cf42' => 'required|string',
+            'cf43' => 'required|string',
+            'cf44' => 'required|string',
+            'cf51' => 'required|string',
+            'cf52' => 'required|string',
+            'cf53' => 'required|string',
+            'cf54' => 'required|string',
+            'cf6' => 'required|string|min:10', // Menambahkan validasi minimal 10 karakter
+        ]);
     
         // Menggunakan metode create untuk membuat dan menyimpan model MhsModel
         $mhs = MhsModel::create([
@@ -63,5 +86,6 @@ class KuisonerpmdController extends Controller
             return redirect()->back()->with(['error' => 'Gagal disimpan']);
         }
     }
+    
     
 }

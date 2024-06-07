@@ -225,18 +225,11 @@ class JadwalmhsController extends Controller
 
     public function mhs_absen(Request $request)
     {
-        // 0 => "894"
-        // 1 => "DASAR PEMROGRAMAN "
-        // 2 => "GNB"
-        // 3 => "4"
-        // 4 => "DPG.19.1A.12.A"
-        // 5 => "Senin"
-        // 6 => "11:40-15:00"
-        // 7 => "201-G1"
         $pert = explode(",", Crypt::decryptString($request->pertemuan));
         $exp = explode(",", Crypt::decryptString($request->id));
         $w_cek = ['kel_praktek' => $exp[4], 'kd_mtk' => $exp[0]];
         $cek = Absen_ajar_praktek::where($w_cek)->count();
+    
         if ($cek > 0) {
             DB::table('absen_mhs')->insert([
                 'nip' => $pert[2],
@@ -251,7 +244,7 @@ class JadwalmhsController extends Controller
                 'status_hadir' => $pert[1]
             ]);
         } else {
-            $cek_teori   = Jadwal::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0]])->count();
+            $cek_teori = Jadwal::where(['kd_lokal' => $exp[4], 'kd_mtk' => $exp[0]])->count();
             if ($cek_teori > 0) {
                 DB::table('absen_mhs')->insert([
                     'nip' => $pert[2],
@@ -279,14 +272,14 @@ class JadwalmhsController extends Controller
                 ]);
             }
         }
-        if ($pert[3] == '1') {
-
+    
+        if (isset($pert[3]) && $pert[3] == '1') {
             return redirect('/absen-mhs-pengganti/' . $request->id);
         } else {
-
             return redirect('/absen-mhs/' . $request->id);
         }
     }
+    
     public function komentar_mhs(Request $request)
     {
         $pert = explode(",", Crypt::decryptString($request->pertemuan));

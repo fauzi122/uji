@@ -121,7 +121,7 @@
             </tr>
             <tr>
                 <td>2</td>
-                <td>Koneksi menggunakan wifi ruang kelas.</td>
+                <td>Koneksi menggunakan wifi/paket data pribadi</td>
             </tr>
             <tr>
                 <td>3</td>

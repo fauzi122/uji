@@ -93,7 +93,7 @@
                         </tr>
                         <tr>
                             <td><h4>2</h4></td>
-                            <td><h4>Koneksi menggunakan wifi ruang kelas.</h4></td>
+                            <td><h4>Koneksi menggunakan wifi/paket data pribadi </h4></td>
                         </tr>
                         <tr>
                             <td><h4>3</h4></td>

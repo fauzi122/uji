@@ -66,6 +66,8 @@
 													<th>No Ruang</th>
 													<th>Status/Alasan</th>
 													<th class="text-center">Aksi</th>
+													<th>Creted_at</th>
+													<th>Updated_at</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -120,6 +122,8 @@
 														</div></div>
 														@endif
 													</td>
+													<td>{{$kp->created_at}}</td>
+													<td>{{$kp->updated_at}}</td>
 												</tr>
 												@endforeach
 												<tbody>

@@ -66,7 +66,7 @@
 													<th>No Ruang</th>
 													<th>Status/Alasan</th>
 													<th class="text-center">Aksi</th>
-													<th>Creted_at</th>
+													<th>created_at</th>
 													<th>Updated_at</th>
 												</tr>
 												</thead>

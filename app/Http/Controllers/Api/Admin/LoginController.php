@@ -43,7 +43,7 @@ class LoginController extends Controller
         if (app()->environment('production')) {
             $examSystemUrl = 'https://question.bsi.ac.id/authenticate';
         } else {
-            $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
+            $examSystemUrl = 'http://127.0.0.1:8002/authenticate';
         }
         // URL sistem ujian online
 

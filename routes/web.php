@@ -34,7 +34,8 @@ use App\Http\Controllers\baak\{
     KrsmhsController,
     UserujianController,
     MbkmController,
-    DosenpenggantiController
+    DosenpenggantiController,
+    RekapabsenController
 };
 
 use App\Http\Controllers\adminbti\{
@@ -425,7 +426,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/form-komentar/{id}', [DiskusiController::class, 'komentar']);
             Route::post('/send-komentar', [DiskusiController::class, 'store_komen']);
             //Rekap Absen Praktek
-            Route::get('/rekap-absen', [Rekap_absenController::class, 'index']);
+            Route::get('-all', [Rekap_absenController::class, 'index']);
             Route::post('/rekap-praktek', [Rekap_absenController::class, 'store_praktek']);
             Route::post('/detail-rekap-praktek', [Rekap_absenController::class, 'detail_praktek']);
             Route::post('/bap_praktek', [Rekap_absenController::class, 'bap_praktek']);
@@ -493,6 +494,15 @@ Route::middleware('auth')->group(function () {
 
             //mtk baak
             Route::get('/mtk', [MtkController::class, 'index']);
+
+            //Rekap Absen Baak
+            Route::get('/rekap-absen-all', [RekapabsenController::class, 'index']);
+            Route::get('/rekap-absen-mhs/json', [RekapabsenController::class, 'getRekapAbsenMhsJson']);
+            Route::get('/rekap-absen/kd-mtk', [RekapabsenController::class, 'getKdMtk']);
+            Route::get('/rekap-absen/kd-lokal', [RekapabsenController::class, 'getKdLokal']);
+            Route::get('/rekap-absen/kd-lokal', [RekapabsenController::class, 'getKdLokal']);
+            Route::get('rekap-absen/kd-mtk-by-lokal', [RekapabsenController::class, 'getMtkByKdLokal']);
+
 
 
             //administrasi usermhs dan dosen

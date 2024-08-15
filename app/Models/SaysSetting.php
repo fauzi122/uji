@@ -27,8 +27,7 @@ class SaysSetting extends Model
         'mysimliz_tutup',
         'status_setting',
 
-        
-         
+
+
     ];
 }
-

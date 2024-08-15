@@ -34,15 +34,15 @@
 
                 {{-- @can('panitiaujian') --}}
                 {{-- <a href="{{ url('/master-soal') }}">
-                    <i class="icon-folder"></i>
-                    <span class="menu-text">Master Soal</span>
+                <i class="icon-folder"></i>
+                <span class="menu-text">Master Soal</span>
                 </a> --}}
 
                 {{-- @can('examschedule.index')
                 <a href="{{ url('/dashboard-ujian') }}" target="_blank">
 
-                    <i class="icon-bookmark1"></i>
-                    <span class="menu-text">Panitia Ujian</span>
+                <i class="icon-bookmark1"></i>
+                <span class="menu-text">Panitia Ujian</span>
                 </a>
                 @endcan --}}
                 {{-- @endcan --}}
@@ -299,6 +299,9 @@
                 </li>
 
                 @endcan
+                <li>
+                    <a href="{{ url('/rekap-absen-all') }}">Rekap Absen MHS </a>
+                </li>
 
 
             </ul>

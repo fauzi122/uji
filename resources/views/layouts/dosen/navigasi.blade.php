@@ -223,6 +223,23 @@
         </div>
         @endcan
     </li>
+    <li class="sidebar-dropdown">
+        @can('unit_layanan')
+        <a href="#">
+            <i class="icon-check"></i>
+            <span class="menu-text">Unit Layanan Mahasiswa</span>
+        </a>
+
+        <div class="sidebar-submenu">
+            <ul>
+                <li>
+                    <a href="{{ url('/rekap-absen-all') }}">Rekap Absen MHS </a>
+                </li>
+
+            </ul>
+        </div>
+        @endcan
+    </li>
 
     <li class="sidebar-dropdown">
         @can('baak.index')

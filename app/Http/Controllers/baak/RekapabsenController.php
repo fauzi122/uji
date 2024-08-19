@@ -10,6 +10,7 @@ class RekapabsenController extends Controller
 {
     public function __construct()
     {
+        $this->middleware(['permission:unit_layanan']);
         if (!$this->middleware('auth:sanctum')) {
             return redirect('/login');
         }

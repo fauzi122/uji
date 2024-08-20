@@ -504,7 +504,11 @@ Route::middleware('auth')->group(function () {
             Route::get('rekap-absen/kd-mtk-by-lokal', [RekapabsenController::class, 'getMtkByKdLokal']);
 
 
-
+            Route::get('/rekap-absen', [Rekap_absenController::class, 'index']);
+            Route::post('/rekap-praktek', [Rekap_absenController::class, 'store_praktek']);
+            Route::post('/detail-rekap-praktek', [Rekap_absenController::class, 'detail_praktek']);
+            Route::post('/bap_praktek', [Rekap_absenController::class, 'bap_praktek']);
+            
             //administrasi usermhs dan dosen
             Route::get('/search', [Select2SearchController::class, 'index']);
             Route::get('/ajax-autocomplete-search', [Select2SearchController::class, 'selectSearch']);

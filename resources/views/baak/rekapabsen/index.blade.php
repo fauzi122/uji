@@ -41,6 +41,8 @@
                                         <th>Jumlah Tidak Hadir</th>
                                         <th>Total Pertemuan</th>
                                         <th>Persentase Kehadiran</th>
+                                        <th>No.Hp/Telp</th>
+                                        <th>Email</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -177,6 +179,18 @@
                             render: function(data) {
                                 return (data !== null && !isNaN(data)) ? parseFloat(data).toFixed(2) + '%' : 'N/A';
                             }
+                        },
+                        {
+                            data: null, // Set null to indicate custom rendering
+                            name: 'no_telp_hp_telpon', // Give a unique name, this is not used for SQL queries
+                            render: function(data, type, row) {
+                                // Combine 'no_telp_hp' and 'telp' with a '/'
+                                return data.no_telp_hp + ' / ' + data.telp;
+                            }
+                        },
+                        {
+                            data: 'emailaddress',
+                            name: 'emailaddress'
                         },
                     ],
                     dom: 'Blfrtip',

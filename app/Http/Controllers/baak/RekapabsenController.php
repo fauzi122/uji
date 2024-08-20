@@ -10,7 +10,7 @@ class RekapabsenController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:unit_layanan']);
+        // $this->middleware(['permission:unit_layanan']);
         if (!$this->middleware('auth:sanctum')) {
             return redirect('/login');
         }
@@ -80,7 +80,7 @@ class RekapabsenController extends Controller
         $orderColumn = $request->input('columns.' . $orderColumnIndex . '.data') ?: 'a.kd_mtk';
         $orderDirection = $request->input('order.0.dir', 'asc');
 
-        $validColumns = ['k.kode_dosen', 'k.nama_dosen', 'a.kd_mtk', 'm.nama_mtk', 'a.nim', 'b.nm_mhs', 'a.kd_lokal', 'jml_hadir', 'jml_absen', 'totalpertemuan', 'prosentase'];
+        $validColumns = ['k.kode_dosen', 'k.nama_dosen', 'a.kd_mtk', 'm.nama_mtk', 'a.nim', 'b.nm_mhs', 'a.kd_lokal', 'jml_hadir', 'jml_absen', 'totalpertemuan', 'prosentase', 'no_telp_hp', 'emailaddress', 'telp'];
         if (!in_array($orderColumn, $validColumns)) {
             $orderColumn = 'a.kd_mtk';
         }
@@ -96,6 +96,9 @@ class RekapabsenController extends Controller
                 'a.kd_lokal as kd_lokal',
                 'a.kel_praktek as kel_praktek',
                 'a.kd_gabung as kd_gabung',
+                'b.no_telp_hp as no_telp_hp',
+                'b.telp as telp',
+                'b.emailaddress as emailaddress',
                 DB::raw('SUM(IF(a.status_hadir = 1, 1, 0)) AS jml_hadir'),
                 DB::raw('IF(MAX(a.pertemuan) >= 9, MAX(a.pertemuan) - 1, MAX(a.pertemuan)) AS totalpertemuan'),
                 DB::raw('(IF(MAX(a.pertemuan) >= 9, MAX(a.pertemuan) - 1, MAX(a.pertemuan)) - SUM(IF(a.status_hadir = 1, 1, 0))) AS jml_absen'),

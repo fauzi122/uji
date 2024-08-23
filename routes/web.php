@@ -510,8 +510,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/bap_praktek', [Rekap_absenController::class, 'bap_praktek']);
             
             //administrasi usermhs dan dosen
-            Route::get('/search', [Select2SearchController::class, 'index']);
-            Route::get('/ajax-autocomplete-search', [Select2SearchController::class, 'selectSearch']);
+            // Route::get('/search', [Select2SearchController::class, 'index']);
+            // Route::get('/ajax-autocomplete-search', [Select2SearchController::class, 'selectSearch']);
             Route::get('/lecturer/users', [UserdosenController::class, 'index']);
             Route::post('/status/update/', [UserdosenController::class, 'updateStatus']);
             Route::get('/lecturer/edit/{user}', [UserdosenController::class, 'edit'])->name('user.edit');

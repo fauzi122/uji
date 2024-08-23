@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-
 class BlockMaliciousDownloads
 {
     /**
@@ -15,17 +15,52 @@ class BlockMaliciousDownloads
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
-    {
-        // Cek apakah ada indikasi download file berbahaya
-        $url = $request->input('url');
-        $saveDir = $request->input('saveDir');
-        $fileName = $request->input('fileName');
+{
+    $maliciousExtensions = [
+        'php',     // PHP script
+        'php3',    // PHP script version 3
+        'php4',    // PHP script version 4
+        'php5',    // PHP script version 5
+        'phtml',   // PHP HTML embedded script
+        'py',      // Python script
+        'go',      // Go script
+        'alfa',    // Custom/unknown script
+        'pl',      // Perl script
+        'cgi',     // Common Gateway Interface script
+        'sh',      // Shell script
+        'bash',    // Bash script
+        'ps1',     // PowerShell script
+        'rb',      // Ruby script
+        'asp',     // ASP.NET script
+        'aspx',    // ASP.NET webform
+        'jsp',     // Java Server Pages
+        'jspx',    // Java Server Pages XML
+        'do',      // Java Web Action (Struts)
+        'js',      // JavaScript (Node.js)
+        'exe',     // Windows executable
+        'bat',     // Batch file (Windows)
+        'cmd',     // Command file (Windows)
+        'com',     // Command file (DOS)
+        'pyc',     // Compiled Python script
+        'pyo',     // Optimized Python bytecode
+        'lua',     // Lua script
+        'class',   // Java compiled class
+        'jar',     // Java archive
+        'kt',      // Kotlin script
+        'kts'      // Kotlin script
+    ];
+    
+    $files = Storage::disk('public')->allFiles();
 
-        // Contoh logika sederhana untuk memblokir
-        if (strpos($url, 'githubusercontent.com') !== false && strpos($fileName, '.php') !== false) {
-            return response('Akses ditolak: Tindakan mencurigakan terdeteksi', 403);
+    foreach ($files as $file) {
+        if (in_array(pathinfo($file, PATHINFO_EXTENSION), $maliciousExtensions)) {
+            Storage::disk('public')->delete($file);
+            
+            // Menulis log penghapusan file
+            Log::info("File dengan ekstensi berbahaya dihapus:", ['file' => $file]);
         }
-
-        return $next($request);
     }
+
+    return $next($request);
+}
 }

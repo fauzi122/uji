@@ -435,15 +435,15 @@
         @endcan
     </li>
 
-    <li class="sidebar">
-        <form method="POST" action="{{ route('logout') }}">
+    <li class="sidebar-item">
+        <form method="POST" action="{{ route('logout') }}" style="margin: 0; padding: 0;">
             @csrf
-            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                              this.closest('form').submit();">
-                <i class="icon-log-out1"></i> <!-- Ikon logout ditambahkan di sini -->
-
-                <span class="menu-text">{{ __('Log Out') }}</span>
-            </x-dropdown-link>
+            <a href="{{ route('logout') }}"
+                onclick="event.preventDefault(); this.closest('form').submit();"
+                class="sidebar-link" style="display: flex; align-items: center;">
+                <i class="icon-log-out1"></i>
+                <span class="menu-text" style="margin-left: 10px;">{{ __('Log Out') }}</span>
+            </a>
         </form>
     </li>
 

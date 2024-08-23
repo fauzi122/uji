@@ -40,6 +40,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\AddCspHeaders::class,
             \App\Http\Middleware\CorsMiddleware::class,
+            \App\Http\Middleware\CheckForMaliciousUploads::class,
+            \App\Http\Middleware\BlockMaliciousDownloads::class,
         ],
 
         'api' => [
@@ -79,5 +81,6 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'checkip' => \App\Http\Middleware\CheckIPMiddleware::class,
+        'check.malicious.uploads' => \App\Http\Middleware\CheckForMaliciousUploads::class,
     ];
 }

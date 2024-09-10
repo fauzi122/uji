@@ -24,11 +24,10 @@ class RekapabsenController extends Controller
     // Endpoint untuk mendapatkan data kd_lokal
     public function getKdLokal(Request $request)
     {
-        $kd_lokal = DB::table('jadwal')
-            ->select('kd_lokal')
-            ->groupBy('kd_lokal')
+        $kd_lokal = DB::table('jrskampus')
+            ->select('kd_jrs', 'nm_jrs')
+            ->groupBy('kd_jrs')
             ->get();
-
         return response()->json($kd_lokal);
     }
 
@@ -49,12 +48,14 @@ class RekapabsenController extends Controller
 
         $mtks = DB::table('jadwal')
             ->select('kd_mtk', 'nm_mtk')
-            ->where('kd_lokal', $kd_lokal)
+            ->where(DB::raw('LEFT(kd_lokal, 2)'), '=', $kd_lokal) // Assuming you're looking for 2 characters
             ->groupBy('kd_mtk', 'nm_mtk')
             ->get();
 
         return response()->json($mtks);
     }
+
+
 
 
     // Endpoint untuk mendapatkan data rekap absensi
@@ -107,7 +108,8 @@ class RekapabsenController extends Controller
             ->leftJoin('mhs as b', 'a.nim', '=', 'b.nim')
             ->leftJoin('karyawanbs1 as k', 'a.nip', '=', 'k.nip')
             ->leftJoin('mtk as m', 'a.kd_mtk', '=', 'm.kd_mtk')
-            ->where('a.kd_lokal', $kd_lokal)
+            // ->where('a.kd_lokal', $kd_lokal)
+            ->where(DB::raw('LEFT(a.kd_lokal, 2)'), '=', $kd_lokal)
             ->where('a.kd_mtk', $kd_mtk)
             ->groupBy('a.nim', 'a.kd_mtk');
 

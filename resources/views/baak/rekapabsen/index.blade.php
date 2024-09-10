@@ -11,9 +11,9 @@
                 <div class="card-body">
                     <!-- Form untuk memilih Kd Lokal dan Kd MTK -->
                     <div class="form-group">
-                        <label for="kd_lokal">Pilih Kelas (Kd Lokal)</label>
+                        <label for="kd_lokal">Pilih Jurusan</label>
                         <select id="kd_lokal" class="form-control select2">
-                            <option value="">Pilih Kd Lokal</option>
+                            <option value="">Pilih Jurusan</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -69,9 +69,9 @@
             url: "{{ url('rekap-absen/kd-lokal') }}",
             method: 'GET',
             success: function(data) {
-                $('#kd_lokal').empty().append('<option value="">Pilih Kd Lokal</option>');
+                $('#kd_lokal').empty().append('<option value="">Pilih Jurusan</option>');
                 data.forEach(function(item) {
-                    $('#kd_lokal').append('<option value="' + item.kd_lokal + '">' + item.kd_lokal + '</option>');
+                    $('#kd_lokal').append('<option value="' + item.kd_jrs + '">' + item.kd_jrs + ' (' + item.nm_jrs + ')</option>');
                 });
             },
             error: function(xhr, status, error) {

@@ -94,9 +94,9 @@
                                         <tr>
                                           <th>NO</th>                               
                                           <th>Soal</th>                               
-                                          <th style="text-align: center;">Kunci</th>
+                                          
                                           <th style="text-align: center;">Score</th>
-                                          <th style="text-align: center;">Status</th>
+                                          
                                           <th style="text-align: center; width: 100px">Aksi</th>
                                         </tr>
                                        </thead>
@@ -107,33 +107,33 @@
                                        
                                      <tr>
                                      <td>{{ ++$no }}</td>
-                                     <td>{{strip_tags($soals->soal) }}</td>
-                                     <td><center>{{ $soals->kunci }}</center></td>
-                                     <td><center>{{ $soals->score }}</center></td>
-                                     <td>
-                                         @php
+                                     <td>{{strip_tags($soals->soal) }}
+                                     <p></p>
+                                                   @if ($soals->file!=null)
+                                                   <img src="{{ Storage::url('public/soal/'.$soals->file) }}" class="img-thumbnail" height="150" width="200"/>
+                                                    @endif
+                                              <br><B> Kunci : {{ $soals->kunci }}</B>
+                                              <br> A. {{ $soals->pila }}
+                                              <br> B. {{ $soals->pilb }}
+                                              <br> C. {{ $soals->pilc }}
+                                              <br> D. {{ $soals->pild }}
+                                              <br> E. {{ $soals->pile }}
+                                              <p></p> Status :
+                                              @php
                                       $detail=Crypt::encryptString($soals->id);                                    
                                       @endphp
                                        @if ($soals->status == 'Y')
-                                        <center><span class='badge badge-pill badge-light'>Tampil</span></center>
+                                       <span class='badge badge-pill badge-light'>Tampil</span>
                                            
                                        @else
-                                        <center><span class='badge badge-pill badge-secondary'>Tidak tampil</span></center>
+                                       <span class='badge badge-pill badge-secondary'>Tidak tampil</span>
                                            
                                        @endif
                                      
-                                     <p></p>
-                                       @if ($soals->file == '')
-                                        {{--  <center><span class='badge badge-pill badge-light'></span></center>  --}}
-                                           
-                                       @else
-                                        <center>
-                                        <a href="/detail/soal-show/{{$detail}}"> <span class='badge badge-pill badge-info'>audio/img</span>
-                                        </a>
-                                        </center>
-                                           
-                                       @endif
-                                     </td>
+                                     
+                                            </td>
+                                     <td><center>{{ $soals->score }}</center></td>
+
                                      <td>
                                   
                                        <a href="/edit-detail/soal/{{$detail}}" class="btn btn-sm btn-success">edit</a>

@@ -24,8 +24,8 @@ class UserujianImport implements ToModel, WithHeadingRow, SkipsOnError
             'username'      => $row['username'],
             'kode'          => $row['kode'],
             'email'         => $row['email'],
-            // 'password'      => bcrypt('mhs-2023'),
-            'password' => bcrypt('mhs-' . date('Y')),
+            'password'      => bcrypt('Mhs-1945'),
+            // 'password' => bcrypt('mhs-' . date('Y')),
             'utype'         => ('MHS'),
             'kondisi'       => $row['kondisi']
 

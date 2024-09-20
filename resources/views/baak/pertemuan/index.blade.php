@@ -136,6 +136,12 @@
                                                 <button type="submit" class="btn btn-info">Cari Data </button><br>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="2" style="text-align: right;">
+                                                <b>Jumlah record di tabel pertemuan: {{ $jumlahPertemuan }}</b>
+
+                                            </td>
+                                        </tr>
                                     </table>
                                 </form>
                             </div>

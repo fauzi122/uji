@@ -27,13 +27,14 @@ class PertemuanController extends Controller
     public function index()
     {
         $pertemuan = PertemuanBaak::first();
+        $jumlahPertemuan = DB::table('pertemuan')->count();
 
         $temu = DB::table('pertemuan')
             ->when(request()->q, function ($temu) {
                 $temu = $temu->where('kd_dosen', 'like', '%' . request()->q . '%');
             })->paginate(15);
 
-        return view('baak.pertemuan.index', compact('pertemuan', 'temu'));
+        return view('baak.pertemuan.index', compact('pertemuan', 'temu','jumlahPertemuan'));
     }
     public function datajson()
     {

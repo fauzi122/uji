@@ -19,12 +19,13 @@ class JadwaldosenController extends Controller
     }
     public function index()
     {
+        $jumlahPertemuan = DB::table('jadwal')->count();
         $jadwal = DB::table('jadwal')
             ->when(request()->q, function ($jadwal) {
                 $jadwal = $jadwal->where('kd_dosen', 'like', '%' . request()->q . '%');
             })->paginate(30);
 
-        return view('administrasi.jadwal.index', compact('jadwal'));
+        return view('administrasi.jadwal.index', compact('jadwal','jumlahPertemuan'));
     }
 
     public function edit($id)

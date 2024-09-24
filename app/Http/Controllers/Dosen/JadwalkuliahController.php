@@ -28,21 +28,21 @@ class JadwalkuliahController extends Controller
       // Cek apakah data jadwal sudah ada di Redis
       $cacheKey = "jadwal_kampus_$id";
       $datajadwal = Cache::remember($cacheKey, 60 * 60 * 24, function () use ($id, $namaHari) {
-        // return DB::table('jadwal')
-        //   ->select(
-        //     'jam_t',
-        //     'no_ruang',
-        //     DB::raw("SUBSTRING_INDEX(no_ruang, '-', 1) as no_ruangx"),
-        //     DB::raw("SUBSTRING_INDEX(kd_lokal, '-', 1) as kd_lokalx"), // Perbaikan di sini
-        //     'kel_praktek',
-        //     'nm_mtk',
-        //     'kd_dosen',
-        //     DB::raw("UPPER(nm_dosen) as nm_dosen")
-        //   )
-        //   ->where(DB::raw('RIGHT(no_ruang, 2)'), '=', $id)
-        //   ->where('hari_t', $namaHari)
-        //   ->orderByRaw('SUBSTRING(jam_t, 1, LOCATE("-", jam_t) - 1)')
-        //   ->get();
+        return DB::table('jadwal')
+          ->select(
+            'jam_t',
+            'no_ruang',
+            DB::raw("SUBSTRING_INDEX(no_ruang, '-', 1) as no_ruangx"),
+            DB::raw("SUBSTRING_INDEX(kd_lokal, '-', 1) as kd_lokalx"), // Perbaikan di sini
+            'kel_praktek',
+            'nm_mtk',
+            'kd_dosen',
+            DB::raw("UPPER(nm_dosen) as nm_dosen")
+          )
+          ->where(DB::raw('RIGHT(no_ruang, 2)'), '=', $id)
+          ->where('hari_t', $namaHari)
+          ->orderByRaw('SUBSTRING(jam_t, 1, LOCATE("-", jam_t) - 1)')
+          ->get();
       });
 
       // Konversi datajadwalharian ke JSON

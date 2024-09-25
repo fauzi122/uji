@@ -69,6 +69,7 @@ class AddCspHeaders
 
 
 
+
         return $response;
     }
 }

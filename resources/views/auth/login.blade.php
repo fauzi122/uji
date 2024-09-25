@@ -7,8 +7,8 @@
 	class="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
 	<div class="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
 		<div class="self-start hidden lg:flex flex-col text-gray-300">
-			<h1 class="my-3 font-semibold text-4xl">EL-NUSA</h1>
-			<p class="pr-3 text-sm opacity-75"><b>Elearning Universitas Nusa Mandiri</b></p>
+			<h1 class="my-3 font-semibold text-4xl">MyBest</h1>
+			<p class="pr-3 text-sm opacity-75"><b>Elearning Universitas Bina Sarana Informatika</b></p>
 			<p>
 				@php
 				$hari_ini = date('Y-m-d');

@@ -74,9 +74,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::controller(JadwalkuliahController::class)->group(function () {
-    Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
-});
+// Route::controller(JadwalkuliahController::class)->group(function () {
+//     Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
+// });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -508,7 +508,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/rekap-praktek', [Rekap_absenController::class, 'store_praktek']);
             Route::post('/detail-rekap-praktek', [Rekap_absenController::class, 'detail_praktek']);
             Route::post('/bap_praktek', [Rekap_absenController::class, 'bap_praktek']);
-            
+
             //administrasi usermhs dan dosen
             // Route::get('/search', [Select2SearchController::class, 'index']);
             // Route::get('/ajax-autocomplete-search', [Select2SearchController::class, 'selectSearch']);

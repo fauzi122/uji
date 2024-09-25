@@ -16,16 +16,16 @@ class InfoController extends Controller
      */
     public function index()
     {
-        $lastPasswordUpdate = Auth::user()->password_update;
+        // $lastPasswordUpdate = Auth::user()->password_update;
    
-        if ($lastPasswordUpdate === null || now()->diffInYears($lastPasswordUpdate) >= 1) {
+        // if ($lastPasswordUpdate === null || now()->diffInYears($lastPasswordUpdate) >= 1) {
        
-            return redirect('/profile')->with('info', ' Update Password Anda dan Pastikan Email Anda Aktif.');
-        }
+        //     return redirect('/profile')->with('info', ' Update Password Anda dan Pastikan Email Anda Aktif.');
+        // }
 
-        $info=DB::table('infos')->orderBy('id', 'DESC')->get();
+        // $info=DB::table('infos')->orderBy('id', 'DESC')->get();
         
-        return view('admin.dashboard',compact('info'));
+        return view('admin.dashboard');
     }
 
     public function download_file_info(Request $request)

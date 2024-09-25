@@ -1,7 +1,7 @@
 <!-- component -->
 <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 <div
-	class="absolute top-0 left-0 bg-gradient-to-br from-red-400 via-black to-blue-400 bottom-0 leading-5 h-full w-full overflow-hidden">
+	class="absolute top-0 left-0 bg-gradient-to-br from-yellow-200 via-black to-blue-400 bottom-0 leading-5 h-full w-full overflow-hidden">
 </div>
 <div
 	class="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
@@ -40,7 +40,7 @@
 						</svg>
 					</div>
 				</div>
-				{{-- <div class="space-y-6">
+				<div class="space-y-6">
 					<div class="mt-4">
 						<label for="captcha_answer" class="block text-sm font-medium text-gray-700">Jawab Pertanyaan Berikut:</label>
 						<div class="mt-1 w-full">
@@ -49,7 +49,7 @@
 							<p class="mt-2 text-sm text-red-600">{{ $errors->first('captcha_answer') }}</p>
 						</div>
 					</div>
-				</div> --}}
+				</div>
 				<div class="flex items-center justify-between">
 					<div class="text-sm ml-auto">
 						{{-- <a href="#" class="text-purple-700 hover:text-purple-600">

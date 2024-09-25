@@ -27,11 +27,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'username' => ['required', 'string', 'username'],
             'username' => ['required','numeric'],
-            'password' => ['required', 'string'],
-            // 'captcha_answer' => ['required', 'numeric', 'in:' . session('captcha_answer')],
-        ];
+             'password' => ['required', 'string'],
+             'captcha_answer' => ['required', 'numeric', 'in:' . session('captcha_answer')],
+         ];
     }
     public function messages(): array
     {

@@ -21,7 +21,7 @@
 	<div class="flex justify-center self-center z-10">
 		<div class="p-12 bg-white mx-auto rounded-3xl w-96">
 			<div class="mb-7">
-				<img src="{{ asset('assets/img/mynest_3.png') }}" alt="" height="70" class="me-1">
+				<img src="{{ asset('assets/img/mybest_3.png') }}" alt="" height="70" class="me-1">
 				<form method="POST" action="{{ route('login') }}">
 					@csrf
 			</div>

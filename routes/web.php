@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Dosen;
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Auth;
@@ -79,8 +79,13 @@ Route::get('/', function () {
 // });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::controller(ProfilController::class)->group(function () {
+        Route::get('/profil', 'index')->name('profil');
+        Route::patch('/profil/update', 'update');
+        Route::patch('/foto-profil/update', 'update_image');
+    });
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

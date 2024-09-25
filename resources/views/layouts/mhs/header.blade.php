@@ -24,7 +24,7 @@
                         <div class="header-user-profile">
                          
                         </div>
-                        <a href="{{ url('/profile') }}"><i class="icon-user1"></i> My Profile</a>
+                        <a href="{{ url('/profil') }}"><i class="icon-user1"></i> My Profile</a>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

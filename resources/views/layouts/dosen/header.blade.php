@@ -27,7 +27,7 @@
                          
                         </div>
 
-                        <a href="{{ url('/profile') }}"><i class="icon-settings1"></i> Account Settings</a>
+                        <a href="{{ url('/profil') }}"><i class="icon-settings1"></i> Account Settings</a>
 
                         
                             <form method="POST" action="{{ route('logout') }}">

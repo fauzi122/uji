@@ -40,7 +40,7 @@
 						</svg>
 					</div>
 				</div>
-				{{-- <div class="space-y-6">
+				<div class="space-y-6">
 					<div class="mt-4">
 						<label for="captcha_answer" class="block text-sm font-medium text-gray-700">Jawab Pertanyaan Berikut:</label>
 						<div class="mt-1 w-full">
@@ -49,7 +49,7 @@
 							<p class="mt-2 text-sm text-red-600">{{ $errors->first('captcha_answer') }}</p>
 						</div>
 					</div>
-				</div> --}}
+				</div>
 				<div class="flex items-center justify-between">
 					<div class="text-sm ml-auto">
 						{{-- <a href="#" class="text-purple-700 hover:text-purple-600">

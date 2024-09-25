@@ -30,7 +30,7 @@ class LoginRequest extends FormRequest
             // 'username' => ['required', 'string', 'username'],
             'username' => ['required','numeric'],
             'password' => ['required', 'string'],
-            'captcha_answer' => ['required', 'numeric', 'in:' . session('captcha_answer')],
+            // 'captcha_answer' => ['required', 'numeric', 'in:' . session('captcha_answer')],
         ];
     }
     public function messages(): array
@@ -48,7 +48,7 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-
+// dd(Auth::attempt($this->only('username', 'password'), $this->boolean('remember')));
         if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 

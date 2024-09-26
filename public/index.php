@@ -1,67 +1,55 @@
-<!DOCTYPE html>
-<html lang="id">
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Mode Pemeliharaan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Http\Request;
 
-        .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-        }
+define('LARAVEL_START', microtime(true));
 
-        h1 {
-            font-size: 3em;
-            color: #333;
-            margin-bottom: 20px;
-        }
+/*
+|--------------------------------------------------------------------------
+| Check If The Application Is Under Maintenance
+|--------------------------------------------------------------------------
+|
+| If the application is in maintenance / demo mode via the "down" command
+| we will load this file so that any pre-rendered content can be shown
+| instead of starting the framework, which could cause an exception.
+|
+*/
 
-        p {
-            font-size: 1.2em;
-            color: #666;
-        }
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
+}
 
-        .logo {
-            margin-bottom: 20px;
-        }
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| this application. We just need to utilize it! We'll simply require it
+| into the script here so we don't need to manually load our classes.
+|
+*/
 
-        .logo img {
-            width: 300px;
-        }
+require __DIR__.'/../vendor/autoload.php';
 
-        .contact {
-            margin-top: 20px;
-            font-size: 1em;
-            color: #888;
-        }
-    </style>
-</head>
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request using
+| the application's HTTP kernel. Then, we will send the response back
+| to this client's browser, allowing them to enjoy our application.
+|
+*/
 
-<body>
-    <div class="container">
-        <div class="logo">
-            <img src="https://www.binus.edu/wp-content/uploads/2018/04/Main_logo.png" alt="Logo">
-        </div>
-        <h1>Kami Akan Segera Kembali!</h1>
-        <p>Maaf atas ketidaknyamanannya, saat ini kami sedang melakukan pemeliharaan. Kami akan segera kembali online!</p>
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-    </div>
-</body>
+$kernel = $app->make(Kernel::class);
 
-</html>
+$response = $kernel->handle(
+    $request = Request::capture()
+)->send();
+
+$kernel->terminate($request, $response);

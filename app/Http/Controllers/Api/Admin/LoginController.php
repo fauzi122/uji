@@ -50,7 +50,7 @@ class LoginController extends Controller
         // Redirect ke sistem ujian online dengan token sebagai parameter
         return redirect()->away("{$examSystemUrl}?token={$token}");
     }
-
+    
     public function index(Request $request)
     {
         // set validasi

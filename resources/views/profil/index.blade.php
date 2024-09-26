@@ -26,7 +26,7 @@
     </div>
 </div>
 
-<h3><a href="/menu" class="btn btn-info"> Kembali ke Dashboard </a></h3>
+<h3><a href="" class="btn btn-info"> Segera Lakukan Perubahan Password </a></h3>
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -122,6 +122,15 @@
                                 <label>Nama</label>
                                 <input type="text" name="name" value="{{ old('name', $profil->name) }}" class="form-control @error('name') is-invalid @enderror" placeholder="Masukkan Nama" required>
                                 @error('name')
+                                <div class="invalid-feedback" style="display: block">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" name="email" value="{{ old('email', $profil->email) }}" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Nama" required>
+                                @error('email')
                                 <div class="invalid-feedback" style="display: block">
                                     {{ $message }}
                                 </div>

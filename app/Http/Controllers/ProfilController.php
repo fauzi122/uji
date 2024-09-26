@@ -66,7 +66,7 @@ class ProfilController extends Controller
 {
     $this->validate($request, [
         'name' => 'required',
-        // 'email' => 'required|email|unique:users,email,' . Auth::user()->id,
+        'email' => 'required|email|unique:users,email,' . Auth::user()->id,
         'profile_photo_path' => 'image|mimes:png,jpg,jpeg|max:2000',
     ]);
 
@@ -74,7 +74,7 @@ class ProfilController extends Controller
 
     // Update name and email
     $user->name = $request->input('name');
-    // $user->email = $request->input('email');
+    $user->email = $request->input('email');
     $user->save();
 
     // Update profile image if provided
@@ -94,7 +94,7 @@ class ProfilController extends Controller
     //     Alert::error('error', 'Gagal Di Update');
     // }
 
-    return redirect('/profil')->with('status', 'Password Berhasil Di Update');
+    return redirect('/profil')->with('status', ' Edit Profil Berhasil Di Update');
 }
 
 }

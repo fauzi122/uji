@@ -70,14 +70,14 @@ use App\Http\Controllers\Api\Admin\{
 use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
 
-Route::middleware('throttle:200,1')->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
-    Route::controller(JadwalkuliahController::class)->group(function () {
-        Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
-    });
+// Route::middleware('throttle:200,1')->group(function () {
+Route::get('/', function () {
+    return view('welcome');
 });
+Route::controller(JadwalkuliahController::class)->group(function () {
+    Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
+});
+// });
 
 
 

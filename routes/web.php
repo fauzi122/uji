@@ -70,9 +70,12 @@ use App\Http\Controllers\Api\Admin\{
 use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('throttle:30,1')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
 });
+
 
 // Route::controller(JadwalkuliahController::class)->group(function () {
 //     Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');

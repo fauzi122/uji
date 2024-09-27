@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\CorsMiddleware::class,
             \App\Http\Middleware\CheckForMaliciousUploads::class,
             // \App\Http\Middleware\BlockMaliciousDownloads::class,
-            'throttle:100,1',
+            'throttle:150,1',
 
         ],
 

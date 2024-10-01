@@ -79,7 +79,7 @@
 											<input type="hidden" name="nm_mtk" value="{{$jd->nm_mtk}}">
 											<input type="hidden" name="sks" value="{{$jd->sksajar}}">
 											@if($jd->kd_gabung != '')
-											<input type="hidden" name="kd_gabung" value="{{$jd->kd_gabung}}">
+											<input type="hidden" name="kd_lokal" value="{{$jd->kd_gabung}}">
 											@elseif($jd->kel_praktek != '')
 											<input type="hidden" name="kel_praktek" value="{{$jd->kel_praktek}}">
 											@else

@@ -131,6 +131,7 @@ Route::middleware('auth')->group(function () {
 
             //pengaturan user
             Route::get('/user', [UserController::class, 'index'])->name('user.index');
+            Route::get('/user', [UserController::class, 'ajaxUsers'])->name('ajax.users');
             Route::get('/adm/user', [UserController::class, 'adm']);
 
             //pengumuman

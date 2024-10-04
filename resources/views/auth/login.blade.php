@@ -20,6 +20,12 @@
 	</div>
 	<div class="flex justify-center self-center z-10">
 		<div class="p-12 bg-white mx-auto rounded-3xl w-96">
+			@if ($errors->has('username'))
+			<div class="text-red-600 text-sm mt-2">
+				{{ $errors->first('username') }}
+			</div>
+		@endif
+
 			<div class="mb-7">
 				<img src="{{ asset('assets/img/mybest_3.png') }}" alt="" height="70" class="me-1">
 				<form method="POST" action="{{ route('login') }}">

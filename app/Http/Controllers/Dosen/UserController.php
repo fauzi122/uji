@@ -21,10 +21,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('utype', 'ADM')->get();
-        return view('admin.user.index', compact('users'));
+        $users = User::where('utype', 'ADM')
+        ->where('kode', '!=', 'pkbn')
+        ->get();
 
-        //return view('admin.user.index');
+    return view('admin.user.index', compact('users'));
+    
+
 
     }
 

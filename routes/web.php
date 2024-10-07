@@ -130,7 +130,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/download-file-info', [InfoController::class, 'download_file_info']);
 
             //pengaturan user
-            Route::get('/user', [UserController::class, 'index'])->name('user.index');
+            Route::get('/userall', [UserController::class, 'index'])->name('user.index');
+            // Route::get('/user', [UserController::class, 'ajaxUsers'])->name('ajax.users');
             Route::get('/adm/user', [UserController::class, 'adm']);
 
             //pengumuman

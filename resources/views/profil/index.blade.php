@@ -1,4 +1,8 @@
-@extends('layouts.dosen.main')
+@php
+    $layout = Auth::user()->utype == 'ADM' ? 'layouts.dosen.main' : 'layouts.mhs.main';
+@endphp
+
+@extends($layout)
 
 @section('content')
 @if (session('status'))

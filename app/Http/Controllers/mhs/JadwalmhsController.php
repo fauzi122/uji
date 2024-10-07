@@ -175,7 +175,7 @@ class JadwalmhsController extends Controller
             ->whereRaw("jrskampus.kd_cab = SUBSTRING('" . Auth::user()->kode . "', -2, 2)")
             ->where('mhs.kondisi', 1)
             ->first();
-
+        // dd(Auth::user()->username);
         $user = Auth::user();
         $nim = $user->username; // Asumsi bahwa username adalah NIM
         $nip_dosen = $exp[2]; // Pastikan variabel ini sudah diatur sebelumnya
@@ -229,7 +229,7 @@ class JadwalmhsController extends Controller
         $exp = explode(",", Crypt::decryptString($request->id));
         $w_cek = ['kel_praktek' => $exp[4], 'kd_mtk' => $exp[0]];
         $cek = Absen_ajar_praktek::where($w_cek)->count();
-    
+
         if ($cek > 0) {
             DB::table('absen_mhs')->insert([
                 'nip' => $pert[2],
@@ -272,14 +272,14 @@ class JadwalmhsController extends Controller
                 ]);
             }
         }
-    
+
         if (isset($pert[3]) && $pert[3] == '1') {
             return redirect('/absen-mhs-pengganti/' . $request->id);
         } else {
             return redirect('/absen-mhs/' . $request->id);
         }
     }
-    
+
     public function komentar_mhs(Request $request)
     {
         $pert = explode(",", Crypt::decryptString($request->pertemuan));

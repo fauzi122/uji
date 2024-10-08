@@ -25,7 +25,7 @@ class UserController extends Controller
      {
          // Ambil semua user dengan tipe 'ADM', kecuali 'pkbn' dan 'AAU', dan muat data role mereka sekaligus
          $users = User::where('utype', 'ADM')
-             ->whereNotIn('kode', ['pkbn'])
+             ->whereNotIn('kode', ['pkbn','AAU'])
              ->with('roles') // Eager load roles
              ->get();
      
@@ -122,7 +122,7 @@ public function edit(User $user)
 
     // Cek role
     if (Auth::user()->kode == 'AAU') {
-        $roles = Role::where('id', '<>', '3')->get();
+        $roles = Role::where('id', '<>', '1')->get();
     } else {
         $roles = Role::where('id', '2')->get();
     }

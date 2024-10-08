@@ -90,7 +90,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>PASSWORD</label>
+                                        <label>PASSWORD *Minimal 8 Karakter</label>
                                         <input type="password" name="password" value="{{ old('password') }}"
                                             placeholder="Masukkan Password"
                                             class="form-control @error('password') is-invalid @enderror">
@@ -99,7 +99,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>PASSWORD</label>
+                                        <label>PASSWORD *Minimal 8 Karakter</label>
                                         <input type="password" name="password_confirmation"
                                             value="{{ old('password_confirmation') }}"
                                             placeholder="Masukkan Konfirmasi Password" class="form-control">
@@ -107,19 +107,7 @@
                                 </div>
                             </div>
     
-                            <div class="form-group">
-                                {{--  <label class="font-weight-bold">ROLE</label>  --}}
-                                <br>
-                                @foreach ($roles as $role)
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="role[]" value="{{ $role->name }}" hidden
-                                            id="check-{{ $role->id }}" {{ $user->roles->contains($role->id) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="check-{{ $role->id }}" >
-                                            
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
+                            
     
                             <button class="btn btn-primary mr-1 btn-submit" type="submit"><i class="fa fa-paper-plane"></i>
                                 UPDATE</button>

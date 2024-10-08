@@ -106,13 +106,13 @@ class UsermhsController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::where('id', '=', '')->get();
-        return view('administrasi.mhs.edit', compact('user', 'roles'));
+        // $roles = Role::where('id', '=', '')->get();
+        return view('administrasi.mhs.edit', compact('user'));
     }
     public function edit_baak(User $user)
     {
-        $roles = Role::where('id', '=', '')->get();
-        return view('baak.mhs.edit', compact('user', 'roles'));
+        // $roles = Role::where('id', '=', '')->get();
+        return view('baak.mhs.edit', compact('user'));
     }
 
     /**
@@ -163,7 +163,8 @@ class UsermhsController extends Controller
             'username'  => 'required',
             'name'      => 'required',
             'kode'      => 'required',
-            'email'     => 'required'
+            'email'     => 'required',
+            'password'  => 'nullable|min:8'
         ]);
         // dd($request->input('kode'));
         $user = User::findOrFail($user->id);

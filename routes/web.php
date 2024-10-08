@@ -130,7 +130,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/download-file-info', [InfoController::class, 'download_file_info']);
 
             //pengaturan user
-            Route::get('/userall', [UserController::class, 'index'])->name('user.index');
+            Route::get('/user', [UserController::class, 'index'])->name('user.index');
+            Route::get('/user/request-password/{id}', [UserController::class, 'showPasswordForm'])->name('user.request-password');
+
+            Route::post('/user/check-password', [UserController::class, 'checkPassword'])->name('check-password');
+
             // Route::get('/user', [UserController::class, 'ajaxUsers'])->name('ajax.users');
             Route::get('/adm/user', [UserController::class, 'adm']);
 
@@ -143,7 +147,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/muser/json', [UserController::class, 'jsonusermhs'])->name('user.index');
             Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
             Route::post('/user', [UserController::class, 'store'])->name('user.index');
-            Route::get('/user/edit/{user}', [UserController::class, 'edit'])->name('user.edit');
+            Route::get('/user/edit/{user}', [UserController::class, 'edit'])->name('user-admin.edit');
             Route::patch('/user/update/{user}', [UserController::class, 'update']);
             Route::delete('/hapus-user/{user}', [UserController::class, 'destroy']);
 

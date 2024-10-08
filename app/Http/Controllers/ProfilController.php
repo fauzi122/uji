@@ -34,7 +34,7 @@ class ProfilController extends Controller
             'confirmed',
             'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_-])[A-Za-z\d@$!%*?&#_-]+$/'
         ],
-            'current_password' => 'required|min:8',
+            'current_password' => 'required',
         ],
         [
             'password.regex' => 'Password harus mengandung setidaknya satu huruf kecil, satu huruf besar, satu angka, dan satu karakter khusus.'

@@ -48,7 +48,7 @@
                         @method('patch')
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Password Lama</label>
+                                <label>Password Lama </label>
                                 <div class="input-group">
                                     <input type="password" name="current_password" id="current_password" placeholder="Masukkan Password Lama"
                                            class="form-control @error('current_password') is-invalid @enderror">
@@ -66,7 +66,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Password Baru</label>
+                                <label>Password Baru *minimal 8 karakter</label>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror"
                                            placeholder="Password Baru" oninput="updatePasswordStrength()">

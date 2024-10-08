@@ -28,12 +28,12 @@ class ProfilController extends Controller
     public function update(Request $request)
     {
         $this->validate($request, [
-            'password' => [
-                'required',
-                'min:8',
-                'confirmed',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/'
-            ],
+        'password' => [
+            'required',
+            'min:8',
+            'confirmed',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_-])[A-Za-z\d@$!%*?&#_-]+$/'
+        ],
             'current_password' => 'required|min:8',
         ],
         [

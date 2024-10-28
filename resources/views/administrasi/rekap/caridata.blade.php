@@ -26,9 +26,9 @@
                                                     <tr>
                                                         <th>NO</th>
                                                         <th>NIP</th>
-                                                        <th>Kd_dosen</th>
-                                                        <th>kd_lokal</th>
-                                                        <th>No_Ruang</th>
+                                                        <th>kode</th>
+                                                        <th>kelas</th>
+                                                        <th>ruang</th>
                                                         <th>jam_masuk</th>
                                                         <th>jam_keluar</th>
                                                         <th>Tanggal</th>
@@ -36,6 +36,7 @@
                                                         <th>sks</th>
                                                         <th>temu</th>
                                                         <th>sts</th>
+                                                        <th>created_at</th>
                                                        
                                                     </tr>
                                                 </thead>
@@ -54,6 +55,7 @@
                                                             <td>{{ $jadwal->sks }}</td>
                                                             <td>{{ $jadwal->pertemuan }}</td>
                                                             <td>{{ $jadwal->sts_ajar }}</td>
+                                                            <td>{{ $jadwal->created_at }}</td>
                                                            
                                                         </tr>
                                                     @endforeach

@@ -49,10 +49,11 @@
 <body>
     <div class="container">
         <h1>429</h1>
-        <h2>Terlalu Banyak Permintaan</h2>
-        <p>Anda telah mengirim terlalu banyak permintaan dalam waktu singkat. Silakan tunggu sebentar dan coba lagi (Refresh Tekan F5).</p>
+        <h2>Website Sedang Penuh Akses</h2>
+        <p>Maaf, saat ini website sedang penuh. Silakan tunggu sebentar dan coba refresh halaman setiap 5 detik (Tekan F5).</p>
         <p><a href="{{ url('/') }}">Kembali ke Beranda</a></p>
     </div>
+
 </body>
 
 </html>

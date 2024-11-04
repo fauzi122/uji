@@ -70,19 +70,19 @@ use App\Http\Controllers\Api\Admin\{
 use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
 
-// Route::middleware('throttle:200,1')->group(function () {
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('throttle:user-agent-based')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    Route::controller(JadwalkuliahController::class)->group(function () {
+        Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
+    });
 });
-Route::controller(JadwalkuliahController::class)->group(function () {
-    Route::get('/jadwalkuliah/{id}',  'index')->name('jadwalkuliah');
-});
-// });
 
 
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     Route::controller(ProfilController::class)->group(function () {
         Route::get('/profil', 'index')->name('profil');
         Route::patch('/profil/update', 'update');
@@ -93,7 +93,7 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     Route::group(['middleware' => 'cekadmin'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 
@@ -575,7 +575,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     Route::group(['middleware' => 'cekopd'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
 use App\Models\ThrottledIp;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
@@ -39,16 +40,23 @@ class AppServiceProvider extends ServiceProvider
 
             // Cek apakah sudah melebihi batas
             if (RateLimiter::tooManyAttempts($identifier, 1000)) {
-                Log::info('IP melebihi batas: ' . $request->ip());
+                $cacheKey = 'throttled_ip_' . $request->ip();
 
-                ThrottledIp::firstOrCreate(
-                    ['ip_address' => $request->ip()], // Cek berdasarkan IP
-                    [
-                        'user_id' => $request->user() ? $request->user()->id : null,
-                        'user_agent' => $request->header('User-Agent'),
-                        'throttled_at' => now(),
-                    ]
-                );
+                // Cek apakah IP sudah tersimpan dalam cache
+                if (!Cache::has($cacheKey)) {
+                    // Simpan IP ke database hanya jika belum ada dalam cache
+                    ThrottledIp::firstOrCreate(
+                        ['ip_address' => $request->ip()],
+                        [
+                            'user_id' => $request->user() ? $request->user()->id : null,
+                            'user_agent' => $request->header('User-Agent'),
+                            'throttled_at' => now(),
+                        ]
+                    );
+
+                    // Simpan ke cache selama 5 menit untuk mencegah penyimpanan berulang
+                    Cache::put($cacheKey, true, now()->addMinutes(5));
+                }
             }
 
             return $limit;

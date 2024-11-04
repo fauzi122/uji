@@ -21,7 +21,7 @@ class RekaptoefController extends Controller
 {
     public function __construct()
     {
-
+        $this->middleware(['permission:toef.jadwal']);
         if (!$this->middleware('auth:sanctum')) {
             return redirect('/login');
         }

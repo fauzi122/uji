@@ -17,7 +17,7 @@ class ToefMhsDosenController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware(['permission:toef.tambah.mhs |toef.edit.hapus.mhs']);
+        $this->middleware(['permission:toef.tambah.mhs |toef.edit.hapus.mhs']);
         if (!$this->middleware('auth:sanctum')) {
             return redirect('/login');
         }

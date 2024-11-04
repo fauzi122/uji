@@ -39,11 +39,12 @@ class ToefujianController extends Controller
     public function index()
     {
         $userKode = Auth::user()->kode;
-
-        if (
-            $userKode == 'AAU' || $userKode == 'MMZ' || $userKode == 'AGP' || $userKode == 'YAA'
-            || $userKode == 'ANB' || $userKode == 'RRG'
-        ) {
+    
+        // Get list of codes from `toef_dosen` table
+        $userKodeList = DB::table('toef_dosen')->pluck('kd_dosen'); 
+    
+        if ($userKodeList->contains($userKode)) {
+            // If user code is in the list, get all soals with the specified joins
             $soals = Soal::leftJoin('mtk', 'soals.kd_mtk', '=', 'mtk.kd_mtk')
                 ->leftJoin('toef_materi', 'soals.id', '=', 'toef_materi.id_soal')
                 ->select(
@@ -55,10 +56,8 @@ class ToefujianController extends Controller
                 ->where('soals.toef', 1)
                 ->orderBy('soals.id', 'asc')
                 ->get();
-            // $soal = Soal::find(1);
-            // $jumlahDetailSoal = $soal->detailSoal()->count();
-            // dd($detailsoal[20]);
         } else {
+            // If user code is not in the list, filter `soals` by `kd_dosen`
             $soals = Soal::leftJoin('mtk', 'soals.kd_mtk', '=', 'mtk.kd_mtk')
                 ->leftJoin('toef_materi', 'soals.id', '=', 'toef_materi.id_soal')
                 ->select(
@@ -71,10 +70,14 @@ class ToefujianController extends Controller
                 ->where('soals.toef', 1)
                 ->get();
         }
+    
+        // Fetch detail soal information
         $detailsoal = app('App\Models\Soal')->jml_soal();
-
+    
+        // Return view with `soals` and `detailsoal` data
         return view('admin.latihanujian.toef.index', compact('soals', 'detailsoal'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -83,13 +86,15 @@ class ToefujianController extends Controller
      */
     public function create()
     {
+        $kategori = DB::table('toef_kategori')->get();
         // $materis = Jadwal::where('kd_dosen', Auth::user()->kode)
         //     ->groupBy('kd_mtk')
         //     ->get();
-        return view('admin.latihanujian.toef.create');
+        return view('admin.latihanujian.toef.create',compact('kategori'));
     }
     public function create_pilih($id)
     {
+        
         $pecah = explode(',', Crypt::decryptString($id));
         $soal = Soal::where([
             'soals.id'      => $pecah[0]
@@ -143,6 +148,7 @@ class ToefujianController extends Controller
             'toef'              => 1,
             'tgl_ujian'         => $request->input('tgl_ujian') . ' ' . $request->input('jam_mulai_ujian'),
             'tgl_selsai_ujian'  => $request->input('tgl_selsai_ujian') . ' ' . $request->input('jam_selsai_ujian'),
+            'toef_kategori'       => $request->input('nm_kategori'),
 
         ]);
 
@@ -369,6 +375,8 @@ class ToefujianController extends Controller
      */
     public function show($id, Request $request)
     {
+        $userKode = Auth::user()->kode;
+        $userKodeList = DB::table('toef_dosen')->pluck('kd_dosen'); 
 
         $pecah = explode(',', Crypt::decryptString($id));
         if (Auth::user()->utype == 'ADM') {
@@ -391,7 +399,7 @@ class ToefujianController extends Controller
                     'soals.id'      => $pecah[0]
                 ])->first();
 
-            if (Auth::user()->kode == 'AAU' || Auth::user()->kode == 'MMZ' || Auth::user()->kode == 'YAA' || Auth::user()->kode == 'AGP') {
+                if ($userKodeList->contains($userKode)) {
                 $kelas = DB::table('toef_mhs')
                     ->select(
                         'toef_mhs.kd_lokal',
@@ -476,6 +484,7 @@ class ToefujianController extends Controller
      */
     public function edit($id)
     {
+        $kategori = DB::table('toef_kategori')->get();
         $pecah = explode(',', Crypt::decryptString($id));
 
         $materis = Jadwal::where('kd_dosen', Auth::user()->kode)
@@ -485,7 +494,7 @@ class ToefujianController extends Controller
         $editjadwal = Soal::where([
             'id'   => $pecah[0]
         ])->first();
-        return view('admin.latihanujian.toef.editjadwal', compact('editjadwal', 'id', 'materis'));
+        return view('admin.latihanujian.toef.editjadwal', compact('editjadwal', 'id', 'materis','kategori'));
     }
 
     public function edit_detalsoal($id)
@@ -539,6 +548,7 @@ class ToefujianController extends Controller
             'jml_soal'          => $request->input('jml_soal'),
             'tgl_ujian'         => $request->input('tgl_ujian'),
             'tgl_selsai_ujian'  => $request->input('tgl_selsai_ujian'),
+            'toef_kategori'       => $request->input('nm_kategori'),
         ]);
 
         if ($soal) {

@@ -32,6 +32,27 @@
                                 
 										</div>
 									</div>
+
+                                    <div class="form-group row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">Kategori</label>
+                                        <div class="col-sm-10">
+                                            <select name="nm_kategori" class="form-control" style="text-transform: uppercase;">
+                                                {{--  <option value="">Pilih Matakuliah</option>  --}}
+                                                @foreach($kategori as $materi)
+                                                    <option value="{{ $materi->nm_kategori }}">{{ strtoupper($materi->nm_kategori) }}</option>
+                                                @endforeach
+                                                {{-- <option value="0315">TOEFL PREPARATION</option> --}}
+                                            </select>
+                                    
+                                            @error('soal')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                    
 								
                   
                                         <div class="form-group row">

@@ -114,16 +114,11 @@ class RekaptoefController extends Controller
 
 
         $mahasiswa = app('App\Models\Hasiltoeflujian')->mhs($pecah[1]);
-
-        // dd($mahasiswa);
-
         $nilai_mhs = app('App\Models\Hasiltoeflujian')->nilai($pecah[0], $pecah[1]);
 
         $nilai_mhs_essay = app('App\Models\Hasiltoeflujian')->nilai_essay($pecah[0], $pecah[1]);
 
         $nilai_mhs_pg = app('App\Models\Hasiltoeflujian')->nilai_pg($pecah[0], $pecah[1]);
-
-
         return view('admin.latihanujian.rekap_toef.nilaiall', compact(
             'nilai_mhs',
             'mahasiswa',
@@ -135,27 +130,27 @@ class RekaptoefController extends Controller
 
     public function show_mhs_uji($id)
     {
+        // Memecah dan mendekripsi `$id`
         $pecah = explode(',', Crypt::decryptString($id));
-
-
+    
+        // Mengambil profil mahasiswa dengan join tabel `users` dan `toef_mhs`
         $profil = User::join('toef_mhs', 'users.username', '=', 'toef_mhs.nim')
             ->select('toef_mhs.*', 'users.*')
             ->where([
                 'users.username'     => $pecah[1],
                 'toef_mhs.kd_lokal'  => $pecah[2]
             ])->first();
-        // dd($profil);
-
-        // jawaban pilihan ganda
-        $jawab = jawab::join('detailsoals', 'jawabs.no_soal_id', '=', 'detailsoals.id')
+    
+        // Mengambil jawaban pilihan ganda dengan join tabel `jawabs` dan `detailsoals`
+        $jawab = Jawab::join('detailsoals', 'jawabs.no_soal_id', '=', 'detailsoals.id')
             ->select('jawabs.*', 'detailsoals.soal')
             ->where([
                 'jawabs.id_soal'  => $pecah[0],
                 'jawabs.id_user'  => $pecah[1],
                 'jawabs.id_kelas' => $pecah[2]
             ])->get();
-
-        // jawaban essay 
+    
+        // Mengambil jawaban esai dengan join tabel `jawab_esays` dan `detail_soal_esays`
         $jawab_essay = JawabEsay::join('detail_soal_esays', 'jawab_esays.id_detail_soal_esay', '=', 'detail_soal_esays.id')
             ->select('jawab_esays.*', 'detail_soal_esays.soal')
             ->where([
@@ -163,10 +158,11 @@ class RekaptoefController extends Controller
                 'jawab_esays.id_user'  => $pecah[1],
                 'jawab_esays.id_kelas' => $pecah[2]
             ])->get();
-
-        // dd($jawab_essay);
+    
+        // Mengirim data ke tampilan `jawabmhs`
         return view('admin.latihanujian.rekap_toef.jawabmhs', compact('id', 'jawab', 'profil', 'jawab_essay'));
     }
+    
 
     public function simpanScore(Request $request)
     {

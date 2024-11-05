@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dosen;
 
+use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
@@ -108,17 +109,28 @@ class RekaptoefController extends Controller
         return view('admin.latihanujian.rekap_toef.listujian', compact('id', 'rekap', 'jml_essay'));
     }
 
+
     public function hasil_nilai_all($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-
-
-        $mahasiswa = app('App\Models\Hasiltoeflujian')->mhs($pecah[1]);
-        $nilai_mhs = app('App\Models\Hasiltoeflujian')->nilai($pecah[0], $pecah[1]);
-
-        $nilai_mhs_essay = app('App\Models\Hasiltoeflujian')->nilai_essay($pecah[0], $pecah[1]);
-
-        $nilai_mhs_pg = app('App\Models\Hasiltoeflujian')->nilai_pg($pecah[0], $pecah[1]);
+    
+        // Menggunakan caching selama 1 jam untuk setiap kombinasi id soal dan kd lokal
+        $mahasiswa = Cache::remember("mahasiswa_{$pecah[1]}", 3600, function () use ($pecah) {
+            return app('App\Models\Hasiltoeflujian')->mhs($pecah[1]);
+        });
+    
+        $nilai_mhs = Cache::remember("nilai_mhs_{$pecah[0]}_{$pecah[1]}", 3600, function () use ($pecah) {
+            return app('App\Models\Hasiltoeflujian')->nilai($pecah[0], $pecah[1]);
+        });
+    
+        $nilai_mhs_essay = Cache::remember("nilai_mhs_essay_{$pecah[0]}_{$pecah[1]}", 3600, function () use ($pecah) {
+            return app('App\Models\Hasiltoeflujian')->nilai_essay($pecah[0], $pecah[1]);
+        });
+    
+        $nilai_mhs_pg = Cache::remember("nilai_mhs_pg_{$pecah[0]}_{$pecah[1]}", 3600, function () use ($pecah) {
+            return app('App\Models\Hasiltoeflujian')->nilai_pg($pecah[0], $pecah[1]);
+        });
+    
         return view('admin.latihanujian.rekap_toef.nilaiall', compact(
             'nilai_mhs',
             'mahasiswa',
@@ -127,6 +139,7 @@ class RekaptoefController extends Controller
             'nilai_mhs_pg'
         ));
     }
+    
 
     public function show_mhs_uji($id)
     {

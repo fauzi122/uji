@@ -79,9 +79,6 @@ Route::middleware('throttle:user-agent-based')->group(function () {
     });
 });
 
-
-
-
 Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     Route::controller(ProfilController::class)->group(function () {
         Route::get('/profil', 'index')->name('profil');

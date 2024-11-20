@@ -1,5 +1,6 @@
 <!-- component -->
-<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
+
 <div
 	class="absolute top-0 left-0 bg-gradient-to-br from-yellow-200 via-black to-blue-400 bottom-0 leading-5 h-full w-full overflow-hidden">
 </div>

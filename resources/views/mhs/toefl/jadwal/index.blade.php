@@ -9,21 +9,26 @@
       </div>
     @endif
 <div class="row gutters">
-    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card-header badge-primary">
 							
             <h4 class="m-b-0 text-white">List Pemblajaran dan Kuis</h4>
         </div>
-     
+
         <div class="card">
             <div class="card-body p-0">
                 <div class="invoice-container">
                     <div class="invoice-body">
+                        <div class="alert">
+                            {{-- <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> --}}
+                            Download materi terlebih dahulu untuk memulai UJIAN
+                          </div> 
                         <a href="{{ Storage::url('public/Panduan Kuis MyBest Mahasiswa.pdf') }}" target="_blank" class="btn btn-info btn-lg">
                             <i class="icon-file-text"></i>
                             Panduan Kuis Online 
                         </a>
                         <!-- Row start -->
+
                         <div class="row gutters">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="table-responsive">
@@ -32,6 +37,7 @@
                                           <tr>
                                             <th><center>No</center></th>
                                             <th>Kode Mtk</th>
+                                            <th>Kategori</th>
                                             <th>Materi</th>
                                             <th>Judul Materi</th>
                                             <th>Dosen</th>
@@ -45,17 +51,18 @@
                                         @if ($pakets!=null)
                                         @foreach ($pakets as $id_soal => $soal)
                                         @php
-                                        $id=Crypt::encryptString($soal->ids.','.$soal->kd_mtk);                                    
+                                        $id=Crypt::encryptString($soal->id.','.$soal->kd_mtk);                                    
                                         @endphp
                                          <tr>
                                              <td><center>{{ $loop->iteration }}</center></td>
                                              <td><b>{{ $soal->kd_mtk }}</b> - {{ $soal->nm_mtk }} </td>
-                                             
+                                             <td style="text-transform: uppercase;"><b>{{ $soal->toef_kategori }}</b></td>
+
                                              <td>
                                              <form id="downloadForm" action="/download-file-toef" method="post" onsubmit="startDownload()">
                                             <div class="task-desc readmore">
                                                 @csrf
-                                                <input type="hidden" name="id" value="{{$soal->ids}}">
+                                                <input type="hidden" name="id" value="{{$soal->id}}">
                                                 <input type="hidden" name="file" value="{{$soal->file_path}}">
                                                 <button type="submit" class="badge badge-info"><i class="icon-download"></i> Unduh File</button>
                                             </div>
@@ -71,6 +78,7 @@
 
                                               </td>
                                              <td>{{ $soal->judul }}</td>
+                                            
                                              <td>{{ $soal->kd_dosen }}</td>
                                              <td><b>{{ $soal->waktu }}</b> menit</td>
                                              <td>{{ $soal->tgl_ujian }}</td>
@@ -113,7 +121,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+    {{-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
 
         <div class="row gutters">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-4">
@@ -144,8 +152,30 @@
             
         </div>
 
-    </div>
+    </div> --}}
 </div>
+<style>
+    .alert {
+      padding: 20px;
+      background-color: #f44336;
+      color: white;
+    }
+    
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 30px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .closebtn:hover {
+      color: black;
+    }
+    </style>
 @endsection
 @push('scripts')
 <script src="{{ url('js/toefl-jquery-ujian.js?v=6') }}"></script>

@@ -50,7 +50,7 @@ class ToeflUjianmhsController extends Controller
     $pakets = app('App\Models\Hasiltoeflujian')->soals();
     $hasil_ujian = app('App\Models\Hasiltoeflujian')->hasil_ujian();
     $readMateri = app('App\Models\Hasiltoeflujian')->readMateri();
-    // dd($pakets);
+    // dd($readMateri);
     return view('mhs.toefl.jadwal.index', compact('pakets', 'hasil_ujian', 'readMateri'));
   }
 

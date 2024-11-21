@@ -51,7 +51,8 @@
                                         @if ($pakets!=null)
                                         @foreach ($pakets as $id_soal => $soal)
                                         @php
-                                        $id=Crypt::encryptString($soal->id.','.$soal->kd_mtk);                                    
+                                        $id=Crypt::encryptString($soal->id_soal.','.$soal->kd_mtk); 
+                                                                   
                                         @endphp
                                          <tr>
                                              <td><center>{{ $loop->iteration }}</center></td>
@@ -62,7 +63,7 @@
                                              <form id="downloadForm" action="/download-file-toef" method="post" onsubmit="startDownload()">
                                             <div class="task-desc readmore">
                                                 @csrf
-                                                <input type="hidden" name="id" value="{{$soal->id}}">
+                                                <input type="hidden" name="id" value="{{$soal->id_soal}}">
                                                 <input type="hidden" name="file" value="{{$soal->file_path}}">
                                                 <button type="submit" class="badge badge-info"><i class="icon-download"></i> Unduh File</button>
                                             </div>

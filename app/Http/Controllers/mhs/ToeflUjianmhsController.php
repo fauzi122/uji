@@ -362,6 +362,7 @@ class ToeflUjianmhsController extends Controller
       $existingRecord = Read_materi::where('id_soal', $request->id)
         ->where('nim', auth()->user()->username)
         ->first();
+        echo $existingRecord;
       if (!$existingRecord) {
         Read_materi::firstOrCreate([
           'id_soal' => $request->id,

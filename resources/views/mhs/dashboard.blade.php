@@ -180,4 +180,47 @@
 </div>
 
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Informasi Penting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><h5>
+                    
+                    {{-- Yth. Bapak/Ibu, Mohon bantuan Bapak/Ibu untuk menyampaikan informasi kepada para Mahasiswa. Terima kasih atas perhatian dan kerjasamanya.     --}}
+                </h5></p>
+                <br>
+                <a href="{{ Storage::url('public/info/v3E3TN8DtZ9YAcV9ebtvtIhxnCQAkWLk2Tmo9HRr.pdf') }}" target="_blank" class="btn btn-primary btn-block">
+                    <h4>
+                        <i class="icon-file-text"></i> Pengumuman Pembayaran Kuliah Smt. Genap 2024-2024 - UBSI (6 Des 24)
+                    </h4>
+                </a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#exampleModal').modal('show');
+    });
+</script>
+</div>
+
 @endsection
+<!-- Bootstrap CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

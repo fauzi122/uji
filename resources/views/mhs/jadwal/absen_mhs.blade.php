@@ -262,7 +262,7 @@
                                 <div class="mb-8 row">
                                     <label class="col-sm-4 col-form-label" for="inputPassword"><b> F2-2 </b>Periode</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="staticEmail" type="text" name="periode" readonly="" value="Genap 2023/2024">
+                                        <input class="form-control" id="staticEmail" type="text" name="periode" readonly="" value="Ganjil 2024/2025">
                                     </div>
                                 </div>
                                 <hr>

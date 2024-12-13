@@ -69,11 +69,11 @@
                     </ul>
                 </div>
             </li>
-            <li class="sidebar">
+            {{-- <li class="sidebar">
                 <a href="{{ url('toefl') }}">
                     <i class="icon-calendar"></i><span class="menu-text">TOEFL</span>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="sidebar">
                 <form method="POST" action="{{ route('logout') }}">

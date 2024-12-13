@@ -90,7 +90,7 @@ Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'throttle:user-agent-based','check.malicious.uploads'])->group(function () {
+Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     Route::group(['middleware' => 'cekadmin'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 

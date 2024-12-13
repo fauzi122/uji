@@ -70,7 +70,7 @@ use App\Http\Controllers\Api\Admin\{
 use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
 
-Route::middleware('throttle:user-agent-based','check.malicious.uploads')->group(function () {
+Route::middleware('throttle:user-agent-based')->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
@@ -625,7 +625,7 @@ Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
             Route::get('/cetak-ujian-pdf/{id}', [LatihanUjianmhsController::class, 'cetak_pdf']);
 
             // Toefl
-            Route::get('/toefl', [ToeflUjianmhsController::class, 'index']);
+            // Route::get('/toefl', [ToeflUjianmhsController::class, 'index']);
             Route::get('/toefl-show/{id}', [ToeflUjianmhsController::class, 'show']);
             Route::post('/toefl-jawaban', [ToeflUjianmhsController::class, 'jawab']);
             Route::get('/toefl-penomoran', [ToeflUjianmhsController::class, 'getNomor']);

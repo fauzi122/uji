@@ -21,14 +21,14 @@
                 <i class="icon-log-out1"></i><span class="menu-text">S A Y S</span>
 
                 </a>
+                <a href="{{ route('Says2.redirect') }}">
+                    <i class="icon-sports-club"></i>
+                    <span class="menu-text">SAYS V2</span>
+                </a>
                 {{-- @can('users.index') --}}
                 <a href="{{ route('Banksoal.redirect') }}">
                     <i class="icon-sports-club"></i>
                     <span class="menu-text">Halaman Ujian</span>
-                </a>
-                <a href="{{ route('Says2.redirect') }}">
-                    <i class="icon-sports-club"></i>
-                    <span class="menu-text">SAYS V2</span>
                 </a>
                 {{-- @endcan --}}
                 {{-- <a href="{{ url('/profil') }}">

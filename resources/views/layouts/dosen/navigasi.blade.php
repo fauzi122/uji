@@ -26,6 +26,10 @@
                     <i class="icon-sports-club"></i>
                     <span class="menu-text">Halaman Ujian</span>
                 </a>
+                <a href="{{ route('Says2.redirect') }}">
+                    <i class="icon-sports-club"></i>
+                    <span class="menu-text">SAYS V2</span>
+                </a>
                 {{-- @endcan --}}
                 {{-- <a href="{{ url('/profil') }}">
                 <i class="icon-account_circle"></i>

@@ -568,6 +568,7 @@ Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
             Route::post('/alasan-prodi', [RekapajardosenController::class, 'alasan_prodi_praktek']);
             Route::post('/alasan-prodi-teori', [RekapajardosenController::class, 'alasan_prodi_teori']);
             Route::get('/bank-ujian', [LoginController::class, 'redirectToUjian'])->name('Banksoal.redirect');
+            Route::get('/says-2', [LoginController::class, 'redirectToSays'])->name('Says2.redirect');
         });
     });
 });

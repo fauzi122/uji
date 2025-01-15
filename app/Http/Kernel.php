@@ -84,5 +84,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'checkip' => \App\Http\Middleware\CheckIPMiddleware::class,
         'check.malicious.uploads' => \App\Http\Middleware\CheckForMaliciousUploads::class,
+        'user-agent-based' => \App\Http\Middleware\UserAgentThrottle::class,
     ];
 }

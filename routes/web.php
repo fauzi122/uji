@@ -70,7 +70,7 @@ use App\Http\Controllers\Api\Admin\{
 use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
 
-Route::middleware('throttle:user-agent-based')->group(function () {
+Route::middleware('user-agent-based')->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
@@ -79,7 +79,7 @@ Route::middleware('throttle:user-agent-based')->group(function () {
     });
 });
 
-Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
+Route::middleware(['auth', 'user-agent-based'])->group(function () {
     Route::controller(ProfilController::class)->group(function () {
         Route::get('/profil', 'index')->name('profil');
         Route::patch('/profil/update', 'update');
@@ -90,7 +90,7 @@ Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
+Route::middleware(['auth', 'user-agent-based'])->group(function () {
     Route::group(['middleware' => 'cekadmin'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 
@@ -573,7 +573,7 @@ Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
     });
 });
 
-Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
+Route::middleware(['auth', 'user-agent-based'])->group(function () {
     Route::group(['middleware' => 'cekopd'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 
@@ -584,7 +584,7 @@ Route::middleware(['auth', 'throttle:user-agent-based'])->group(function () {
                 Route::get('/kuisoner-mpd', 'index');
                 Route::post('/store/kuisoner-mpd', 'store');
             });
-            Route::middleware('throttle:60,1')->group(function () {
+            Route::middleware('60,1')->group(function () {
                 Route::get('/halaman-ujian', [LoginmhsController::class, 'redirectToUjian'])->name('Ujian.redirect');
             });
             //materi dan tugas

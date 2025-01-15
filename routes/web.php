@@ -94,7 +94,7 @@ Route::middleware(['auth', 'user-agent-based'])->group(function () {
     Route::group(['middleware' => 'cekadmin'], function () {
         Route::group(['middleware' => 'checksinglesession'], function () {
 
-            include __DIR__ . '/ujian/ujian.php';
+            // include __DIR__ . '/ujian/ujian.php';
             include __DIR__ . '/ujian/toefl.php';
 
             // mengawas ujian di dosen

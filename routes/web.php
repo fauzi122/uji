@@ -584,9 +584,9 @@ Route::middleware(['auth', 'user-agent-based'])->group(function () {
                 Route::get('/kuisoner-mpd', 'index');
                 Route::post('/store/kuisoner-mpd', 'store');
             });
-            Route::middleware('60,1')->group(function () {
-                Route::get('/halaman-ujian', [LoginmhsController::class, 'redirectToUjian'])->name('Ujian.redirect');
-            });
+            // Route::middleware('60,1')->group(function () {
+            Route::get('/halaman-ujian', [LoginmhsController::class, 'redirectToUjian'])->name('Ujian.redirect');
+            // });
             //materi dan tugas
             Route::get('/sch', [JadwalmhsController::class, 'index']);
             Route::get('/learning/{id}', [MaterimhsController::class, 'index'])->name('mhs.materi.index');

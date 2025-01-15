@@ -14,7 +14,7 @@ class UserAgentThrottle
         $key = Str::slug($userAgent) . '|' . $request->ip();
         // dd($key);
         // Throttle logic
-        if (RateLimiter::tooManyAttempts($key, 500)) {
+        if (RateLimiter::tooManyAttempts($key, 300)) {
             return response()->json(['message' => 'Too many requests'], 429);
         }
 

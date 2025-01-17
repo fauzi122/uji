@@ -3,6 +3,9 @@
 @section('content')
 <div class="main-container">
 
+    <p class="alert alert-warning" style="font-size: 1.5em;">
+       <b>Info Penting: Selama UAS dari tanggal 20 - 26, menu rekap absen akan ditutup.</b>
+    </p>
     <!-- Content wrapper start -->
     <div class="content-wrapper">
 
@@ -13,6 +16,7 @@
                         <div class="account-settings">
                             <div class="user-profile">
                                 <div>
+                                    
                                  {{--  <img src="{{ Storage::url('public/icon/profile.png') }}" alt="..." class="img-thumbnail">  --}}
                                     
                 {{-- <img src="http://api.bsi.ac.id/v2/index.php/manage/foto-dosen/{{ Auth::user()->username }}"> --}}

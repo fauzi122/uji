@@ -4,7 +4,7 @@
 <div class="main-container">
 
     <p class="alert alert-warning" style="font-size: 1.5em;">
-       <b>Info Penting: Selama UAS dari tanggal 20 - 26, menu rekap absen akan ditutup.</b>
+       <b>Info Penting: Selama UAS mulai tanggal 20 - 26 Januari 2025, menu rekap absen akan ditutup.</b>
     </p>
     <!-- Content wrapper start -->
     <div class="content-wrapper">

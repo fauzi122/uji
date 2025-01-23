@@ -40,7 +40,13 @@ class LoginmhsController extends Controller
         }
         // dd(App::environment('production'));
         if (app()->environment('production')) {
-            $examSystemUrl = 'https://ujiankampusa.bsi.ac.id/authenticate';
+            $nimPrefix = substr($user->username, 0, 2);
+            // Determine the correct exam system URL based on the NIM prefix
+            if (in_array($nimPrefix, ['64'])) {
+                $examSystemUrl = 'https://ujiankampusa.bsi.ac.id/authenticate';
+            } else {
+                $examSystemUrl = 'https://ujiankampusb.bsi.ac.id/authenticate'; // Replace with the correct URL
+            }
         } else {
             $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
         }

@@ -54,7 +54,6 @@ class LoginController extends Controller
         // Gunakan urlencode untuk memastikan token aman di URL
         return redirect()->away("{$examSystemUrl}?token=" . urlencode($token));
     }
-    
     public function redirectToSays()
     {
         $user = Auth::user();

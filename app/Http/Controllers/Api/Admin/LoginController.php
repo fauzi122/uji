@@ -132,42 +132,7 @@ class LoginController extends Controller
         // Redirect ke sistem ujian online dengan token sebagai parameter
         return redirect()->away("{$examSystemUrl}?token={$token}");
     }
-    // public function redirectToUjian()
-    // {
-    //     $user = auth()->user();
-
-    //     if (!$user) {
-    //         // Handle case where there is no authenticated user
-    //         return response()->json(['error' => 'User not authenticated'], 401);
-    //     }
-
-    //     $now = Carbon::now();
-    //     // Create a custom claim with the user's email
-    //     $customClaims = [
-    //         'sub' => $user->username, // Your subject identifier
-    //         'iat' => $now->timestamp, // Issued at: assign current time
-    //         'nbf' => $now->timestamp, // Not before: token is valid immediately
-    //         'exp' => $now->addHours(2)->timestamp // Expiration time: 2 hours from now
-    //     ];
-
-    //     // Generate a token with the custom claims
-    //     $token = JWTAuth::claims($customClaims)->fromUser($user);
-
-    //     if (!$token) {
-    //         // Handle case where the token couldn't be created
-    //         return response()->json(['error' => 'Could not generate token'], 500);
-    //     }
-    //     // dd(App::environment('production'));
-    //     if (app()->environment('production')) {
-    //         $examSystemUrl = 'https://question.bsi.ac.id/authenticate';
-    //     } else {
-    //         $examSystemUrl = 'http://127.0.0.1:8002/authenticate';
-    //     }
-    //     // URL sistem ujian online
-
-    //     // Redirect ke sistem ujian online dengan token sebagai parameter
-    //     return redirect()->away("{$examSystemUrl}?token={$token}");
-    // }
+    
 
     public function index(Request $request)
     {

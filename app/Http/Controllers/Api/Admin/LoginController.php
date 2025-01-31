@@ -44,8 +44,8 @@ class LoginController extends Controller
 
         // Tentukan URL berdasarkan environment
         if (app()->environment('production')) {
-            // $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
-            $examSystemUrl = 'https://question.bsi.ac.id/authenticate';
+            $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
+            // $examSystemUrl = 'https://question.bsi.ac.id/authenticate';
         } else {
             // $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
             $examSystemUrl = 'http://127.0.0.1:8001/authenticate';

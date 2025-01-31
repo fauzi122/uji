@@ -13,8 +13,49 @@ use App;
 
 class LoginmhsController extends Controller
 {
+    public function redirectToUjian()
+    {
+        $user = Auth::user();
 
-    public function redirectToUjian(Request $request)
+        if (!$user) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+
+        $now = Carbon::now();
+        $data = [
+            'username' => $user->username,
+            'timestamp' => $now->timestamp,
+            'exp' => $now->addHours(2)->timestamp, // Expire setelah 2 jam
+        ];
+
+        // Kunci enkripsi rahasia (harus sama dengan aplikasi tujuan)
+        $encryption_key = env('APP_ENCRYPTION_KEY');
+
+        // Inisialisasi IV (Initialization Vector) 16 byte
+        $iv = random_bytes(16);
+
+        // Enkripsi data menggunakan AES-256-CBC
+        $encryptedData = openssl_encrypt(json_encode($data), 'AES-256-CBC', $encryption_key, 0, $iv);
+
+        // Gabungkan IV dan data terenkripsi, lalu encode ke base64
+        $token = base64_encode($iv . $encryptedData);
+
+        // Tentukan URL berdasarkan environment
+        if (app()->environment('production')) {
+            // $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
+            $examSystemUrl = 'https://ujiankampusa.bsi.ac.id/authenticate';
+        } else {
+            // $examSystemUrl = 'https://saysv2.bsi.ac.id/authenticate';
+
+            // $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
+            $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
+        }
+
+        // Gunakan urlencode untuk memastikan token aman di URL
+        return redirect()->away("{$examSystemUrl}?token=" . urlencode($token));
+    }
+
+    public function redirectToUjianx(Request $request)
     {
         $user = auth()->user();
 

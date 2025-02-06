@@ -3,9 +3,9 @@
 @section('content')
 <div class="main-container">
 
-    <p class="alert alert-warning" style="font-size: 1.5em;">
+    {{-- <p class="alert alert-warning" style="font-size: 1.5em;">
        <b>Info Penting: Selama UAS mulai tanggal 20 - 26 Januari 2025, menu rekap absen akan ditutup.</b>
-    </p>
+    </p> --}}
     <!-- Content wrapper start -->
     <div class="content-wrapper">
 

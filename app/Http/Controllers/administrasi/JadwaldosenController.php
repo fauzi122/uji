@@ -21,12 +21,33 @@ class JadwaldosenController extends Controller
     {
         $jumlahPertemuan = DB::table('jadwal')->count();
         $jadwal = DB::table('jadwal')
-            ->when(request()->q, function ($jadwal) {
-                $jadwal = $jadwal->where('kd_dosen', 'like', '%' . request()->q . '%');
-            })->paginate(30);
+        ->when(request()->q, function ($jadwal) {
+            $jadwal = $jadwal->where('kd_dosen', 'like', '%' . request()->q . '%');
+        })->paginate(30);
 
-        return view('administrasi.jadwal.index', compact('jadwal','jumlahPertemuan'));
+        $jadwal_kampus = DB::table('jadwal')->join('user_adm', 'jadwal.nm_kampus', '=', 'user_adm.kampus')
+        ->select('jadwal.*', 'user_adm.nip')
+        ->where('user_adm.nip', auth()->user()->username)
+        ->when(request()->q, function ($jadwal) {
+            $jadwal = $jadwal->where('jadwal.kd_dosen', 'like', '%' . request()->q . '%');
+        })->paginate(20);
+
+        $hari_ini = hari_ini(date('Y-m-d'));
+        
+        $jadwal_htoday = DB::table('jadwal')
+        ->join('user_adm', 'jadwal.nm_kampus', '=', 'user_adm.kampus')
+        ->select('jadwal.*', 'user_adm.nip')
+        ->where('user_adm.nip', auth()->user()->username)
+        ->where('jadwal.hari_t', $hari_ini)
+        ->when(request()->q, function ($query) {
+            $query->where('jadwal.kd_dosen', 'like', '%' . request()->q . '%');
+        })
+        ->paginate(20);
+    
+        return view('administrasi.jadwal.index', compact('jadwal','jumlahPertemuan','jadwal_kampus','jadwal_htoday'));
     }
+
+
 
     public function edit($id)
     {
@@ -144,5 +165,30 @@ class JadwaldosenController extends Controller
         $result = $query->get();
 
         return view('administrasi.jadwal.cari', compact('result', 'kd_lokal', 'kd_dosen'));
+    }
+
+    
+    public function hari_ini($tanggal)
+    {
+        $hari = date("D", strtotime($tanggal));
+
+        switch ($hari) {
+            case 'Sun':
+                return "Minggu";
+            case 'Mon':
+                return "Senin";
+            case 'Tue':
+                return "Selasa";
+            case 'Wed':
+                return "Rabu";
+            case 'Thu':
+                return "Kamis";
+            case 'Fri':
+                return "Jumat";
+            case 'Sat':
+                return "Sabtu";
+            default:
+                return "Tidak Diketahui";
+        }
     }
 }

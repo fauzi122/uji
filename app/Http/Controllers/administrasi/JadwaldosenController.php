@@ -20,31 +20,45 @@ class JadwaldosenController extends Controller
     public function index()
     {
         $jumlahPertemuan = DB::table('jadwal')->count();
+      
+        // jadwal all
         $jadwal = DB::table('jadwal')
         ->when(request()->q, function ($jadwal) {
             $jadwal = $jadwal->where('kd_dosen', 'like', '%' . request()->q . '%');
         })->paginate(30);
 
+        // jadwal per kampus
         $jadwal_kampus = DB::table('jadwal')->join('user_adm', 'jadwal.nm_kampus', '=', 'user_adm.kampus')
-        ->select('jadwal.*', 'user_adm.nip')
+        ->select('jadwal.*', 'user_adm.nip as nip_adm')
         ->where('user_adm.nip', auth()->user()->username)
         ->when(request()->q, function ($jadwal) {
             $jadwal = $jadwal->where('jadwal.kd_dosen', 'like', '%' . request()->q . '%');
-        })->paginate(20);
+        });
+    
+        // Menghitung total baris sebelum pagination
+        $totalperkampus = $jadwal_kampus->count();
+        $jadwal_kampus = $jadwal_kampus->paginate(20);
 
+
+        // Hari ini
         $hari_ini = hari_ini(date('Y-m-d'));
         
-        $jadwal_htoday = DB::table('jadwal')
-        ->join('user_adm', 'jadwal.nm_kampus', '=', 'user_adm.kampus')
-        ->select('jadwal.*', 'user_adm.nip')
-        ->where('user_adm.nip', auth()->user()->username)
-        ->where('jadwal.hari_t', $hari_ini)
-        ->when(request()->q, function ($query) {
-            $query->where('jadwal.kd_dosen', 'like', '%' . request()->q . '%');
-        })
-        ->paginate(20);
+        // Buat query tanpa memanggil paginate terlebih dahulu
+        $jadwal_query = DB::table('jadwal')
+            ->join('user_adm', 'jadwal.nm_kampus', '=', 'user_adm.kampus')
+            ->select('jadwal.*', 'user_adm.nip as nip_adm')
+            ->where('user_adm.nip', auth()->user()->username)
+            ->where('jadwal.hari_t', $hari_ini)
+            ->when(request()->q, function ($query) {
+                $query->where('jadwal.kd_dosen', 'like', '%' . request()->q . '%');
+            });
+        
+        $totalCount = $jadwal_query->count();
+        
+        $jadwal_htoday = $jadwal_query->paginate(20);
+        
     
-        return view('administrasi.jadwal.index', compact('jadwal','jumlahPertemuan','jadwal_kampus','jadwal_htoday'));
+        return view('administrasi.jadwal.index', compact('jadwal','jumlahPertemuan','jadwal_kampus','jadwal_htoday','totalCount','totalperkampus'));
     }
 
 

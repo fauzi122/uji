@@ -14,10 +14,10 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             
             <li class="nav-item">
-                <a class="nav-link active" id="today-tab" data-toggle="tab" href="#today" role="tab" aria-controls="today" aria-selected="true">Jadwal Hari Ini Perkampus</a>
+                <a class="nav-link active" id="today-tab" data-toggle="tab" href="#today" role="tab" aria-controls="today" aria-selected="true">Jadwal Hari Ini Perkampus <i>({{ $totalCount }})</i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">Jadwal Perkampus</a>
+                <a class="nav-link" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">Jadwal Perkampus <i>({{ $totalperkampus }})</i></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="campus-tab" data-toggle="tab" href="#campus" role="tab" aria-controls="campus" aria-selected="false">Semua Jadwal <i>({{ $jumlahPertemuan }})</i></a>
@@ -53,6 +53,7 @@
                 <thead>
                 <tr style="background-color: #d22375" class="text-white">
                     <th scope="col" style="width: 10%">NIP</th>
+                    <th scope="col" style="width: 10%">kode</th>
                     <th scope="col" style="width: 10%">KELAS</th>
                     <th scope="col" style="width: 10%">HARI</th>
                     <th scope="col" style="width: 10%">JAM</th>
@@ -63,7 +64,7 @@
                     <th scope="col" style="width: 10%">KEL PRAKTEK</th>
                     <th scope="col" style="width: 10%">kampus</th>
                     @can('jadwal_edit.adm') 
-                    <th scope="col" style="width: 5%">AKSI</th>
+                    {{-- <th scope="col" style="width: 5%">AKSI</th> --}}
                     @endcan
                 </tr>
                 </thead>
@@ -71,9 +72,10 @@
                 @foreach ($jadwal_htoday as $role)
                 <tr>
                     <td>{{ $role->nip }}
-                        <br>{{ $role->kd_dosen }}
+                        
                     </td>
               
+                    <td>{{ $role->kd_dosen }}</td>
                     <td>{{ $role->kd_lokal }}</td>
                     <td>{{ $role->hari_t }}</td>
                     <td>{{ $role->jam_t }}</td>
@@ -106,14 +108,17 @@
                     @endphp
             
                     @can('jadwal_edit.adm') 
-                    <td>
+                    {{-- <td>
                         <a href="" class="btn btn-sm btn-info">i</a>
-                    </td>
+                    </td> --}}
                     @endcan
                 </tr>
                 @endforeach
                 </tbody>
             </table>
+            <div style="text-align: center">
+                {{$jadwal_htoday->links("vendor.pagination.bootstrap-4")}}
+            </div>
             </div>
 
             <!-- All Schedules Tab -->
@@ -122,7 +127,7 @@
                 <thead>
                 <tr style="background-color: #1e7fe0" class="text-white">
                     <th scope="col" style="width: 10%">NIP</th>
-                    <th scope="col" style="width: 10%">AKRONIM</th>
+                    <th scope="col" style="width: 10%">kode</th>
                     <th scope="col" style="width: 10%">KELAS</th>
                     <th scope="col" style="width: 10%">HARI</th>
                     <th scope="col" style="width: 10%">JAM</th>
@@ -133,7 +138,7 @@
                     <th scope="col" style="width: 10%">KEL PRAKTEK</th>
                     <th scope="col" style="width: 10%">kampus</th>
                     @can('jadwal_edit.adm') 
-                    <th scope="col" style="width: 5%">AKSI</th>
+                    {{-- <th scope="col" style="width: 5%">AKSI</th> --}}
                     @endcan
                 </tr>
                 </thead>
@@ -174,23 +179,26 @@
                     @endphp
             
                     @can('jadwal_edit.adm') 
-                    <td>
+                    {{-- <td>
                         <a href="/lecturer/schedule/edit/{{ $id }}" class="btn btn-sm btn-info">Edit</a>
-                    </td>
+                    </td> --}}
                     @endcan
                 </tr>
                 @endforeach
                 </tbody>
             </table>
+            <div style="text-align: center">
+                {{$jadwal_kampus->links("vendor.pagination.bootstrap-4")}}
+            </div>
             </div>
 
             <!-- Campus Schedules Tab -->
             <div class="tab-pane fade" id="campus" role="tabpanel" aria-labelledby="campus-tab">
                 <table class="table table-striped table-bordered table-hover text-center">
                     <thead>
-                    <tr style="background-color: #a09fad" class="text-white">
+                    <tr style="background-color: #6b2121" class="text-white">
                         <th scope="col" style="width: 10%">NIP</th>
-                        <th scope="col" style="width: 10%">AKRONIM</th>
+                        <th scope="col" style="width: 10%">kode</th>
                         <th scope="col" style="width: 10%">KELAS</th>
                         <th scope="col" style="width: 10%">HARI</th>
                         <th scope="col" style="width: 10%">JAM</th>
@@ -201,7 +209,7 @@
                         <th scope="col" style="width: 10%">KEL PRAKTEK</th>
                         <th scope="col" style="width: 10%">kampus</th>
                         @can('jadwal_edit.adm') 
-                        <th scope="col" style="width: 5%">AKSI</th>
+                        {{-- <th scope="col" style="width: 5%">AKSI</th> --}}
                         @endcan
                     </tr>
                     </thead>
@@ -242,14 +250,17 @@
                         @endphp
                 
                         @can('jadwal_edit.adm') 
-                        <td>
+                        {{-- <td>
                             <a href="/lecturer/schedule/edit/{{ $id }}" class="btn btn-sm btn-info">Edit</a>
-                        </td>
+                        </td> --}}
                         @endcan
                     </tr>
                     @endforeach
                     </tbody>
                 </table>
+                <div style="text-align: center">
+                    {{$jadwal->links("vendor.pagination.bootstrap-4")}}
+                </div>
     </div>
 </div>
 @endsection

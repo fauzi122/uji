@@ -180,7 +180,7 @@
 </div>
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -192,7 +192,7 @@
             <div class="modal-body">
                 <p><h5>
                     
-                    {{-- Yth. Bapak/Ibu, Mohon bantuan Bapak/Ibu untuk menyampaikan informasi kepada para Mahasiswa. Terima kasih atas perhatian dan kerjasamanya.     --}}
+                    Yth. Bapak/Ibu, Mohon bantuan Bapak/Ibu untuk menyampaikan informasi kepada para Mahasiswa. Terima kasih atas perhatian dan kerjasamanya.    
                 </h5></p>
                 <br>
                 <a href="{{ Storage::url('public/info/v3E3TN8DtZ9YAcV9ebtvtIhxnCQAkWLk2Tmo9HRr.pdf') }}" target="_blank" class="btn btn-primary btn-block">
@@ -213,7 +213,7 @@
         $('#exampleModal').modal('show');
     });
 </script>
-</div>
+</div> --}}
 
 @endsection
 <!-- Bootstrap CSS -->

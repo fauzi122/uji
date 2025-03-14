@@ -4,7 +4,7 @@
 <div class="main-container">
     <div class="table-container">
         <div class="alert alert-info" role="alert">
-            <h4 class="alert-heading">Rekap Ajar Per Kampus Per Hari</h4>
+            <h4 class="alert-heading">Rekap Ajar Teori & Kelas Gabungan </h4>
         </div>
         <a href="/rekap/day" class="btn btn-primary float-right">Kembali</a>
 
@@ -12,10 +12,10 @@
             <div class="table-responsive">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="rekap-kampus-tab" data-toggle="tab" href="#rekap-kampus" role="tab" aria-controls="rekap-kampus" aria-selected="true">Rekap Ajar Per Kampus Per Hari</a>
+                        <a class="nav-link active" id="rekap-kampus-tab" data-toggle="tab" href="#rekap-kampus" role="tab" aria-controls="rekap-kampus" aria-selected="true">Rekap Ajar Teori & Kelas Gabungan Per Kampus Per Hari</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="rekap-teori-tab" data-toggle="tab" href="#rekap-teori" role="tab" aria-controls="rekap-teori" aria-selected="false">Rekap Ajar Teori Per Hari</a>
+                        <a class="nav-link" id="rekap-teori-tab" data-toggle="tab" href="#rekap-teori" role="tab" aria-controls="rekap-teori" aria-selected="false">Rekap Ajar Teori & Kelas Gabungan Per Hari Semua Kampus</a>
                     </li>
                 </ul>
 
@@ -24,7 +24,7 @@
                         <!-- Konten untuk Rekap Ajar Per Kampus Per Hari -->
                         <table id="myTable5" class="table custom-table">
                             <thead>
-                                <tr style="background-color: #a16983" class="text-white">
+                                <tr style="background-color: #073258" class="text-white">
                                 
                                 <th scope="col" style="width: 10%">NIP</th>
                                 <th scope="col">kd</th>

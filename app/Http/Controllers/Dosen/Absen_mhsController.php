@@ -170,194 +170,70 @@ class Absen_mhsController extends Controller
             'rangkuman' => 'required',
             'bap' => 'required',
             'file' => 'required|file|mimes:pdf,jpeg,jpg,doc,docx|max:2000',
-        ]);
 
-        // Dekripsi ID dan ekstrak informasi
+        ]);
         $exp = explode(",", Crypt::decryptString($request->id));
-
-        $w_bap = [
-            'nip' => Auth::user()->username,
-            'kd_lokal' => $request->kd_lokal,
-            'kd_mtk' => $exp[0],
-            'tgl_ajar_masuk' => date('Y-m-d'),
-            'jam_t' => $exp[6]
-        ];
-
-        // Ambil data file lama dari database
-        $bap = Absen_ajar::select('file_ajar', 'created_at')->where($w_bap)->first();
-        $fileLama = $bap ? $bap->file_ajar : null;
-        $tahun = $bap ? date('Y', strtotime($bap->created_at)) : date('Y'); // Ambil tahun dari created_at
-
-        // Ambil file baru dari request
+        // dd($exp);
+        $w_bap = ['nip' => Auth::user()->username, 'kd_lokal' => $request->kd_lokal, 'kd_mtk' => $exp[0], 'tgl_ajar_masuk' => date('Y-m-d'), 'jam_t' => $exp[6]];
+        $bap = Absen_ajar::select('file_ajar')
+            ->where($w_bap)->first();
+        // dd($w_bap);
+        Storage::delete('public/ajar/' . $bap->file_ajar);
         $file = $request->file('file');
-
-        // Jika file lama ada, gunakan API updateFile, jika tidak ada gunakan API uploadFile
-        if ($fileLama) {
-            $url = '/update'; // Endpoint update
-            $uploadResponse = $this->api->put($url, [
-                'file' => $file,
-                'filename_lama' => $fileLama,
-                'tahun' => $tahun
+        $file->storeAs('public/ajar', $file->hashName());
+        // dd($file->storeAs('public/storage/ajar', $file->hashName()));
+        $simpan = Absen_ajar::where($w_bap)
+            ->update([
+                'rangkuman' => $request->rangkuman,
+                'berita_acara' => $request->bap,
+                'file_ajar' => $file->hashName()
             ]);
-        } else {
-            $url = '/'; // Endpoint upload baru
-            $uploadResponse = $this->api->post($url, [
-                'file' => $file
-            ]);
-        }
-
-        // Cek apakah upload/update berhasil
-        if (!isset($uploadResponse['status']) || $uploadResponse['status'] !== 'success') {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengunggah file ke API BAP'
-            ], 503);
-        }
-
-        // Ambil nama file dari API
-        $filenameDariApi = $uploadResponse['data']['filename'] ?? null;
-        if (!$filenameDariApi) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mendapatkan nama file dari API'
-            ], 504);
-        }
-
-        $destinationPath = storage_path('app/public/ajar');
-
-        // Hapus file lama jika ada
-        if ($fileLama && file_exists($destinationPath . '/' . $fileLama)) {
-            unlink($destinationPath . '/' . $fileLama);
-        }
-
-        // Buat folder jika belum ada
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0777, true);
-        }
-
-        // Simpan file baru
-        if (!$file->move($destinationPath, $filenameDariApi)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal menyimpan file ke server Laravel'
-            ], 500);
-        }
-
-        // Simpan ke database dengan nama file dari API
-        $simpan = Absen_ajar::where($w_bap)->update([
-            'rangkuman' => $request->rangkuman,
-            'berita_acara' => $request->bap,
-            'file_ajar' => $filenameDariApi
-        ]);
-
-        // Redirect dengan flash message
-        $redirectUrl = ($request->pengganti == '1') ? "/ajar-gabung-pengganti/" : "/ajar-gabung/";
+        // dd($w_bap);
         if ($simpan) {
             session()->flash('status', 'Ditambahkan');
         } else {
             session()->flash('error', 'Gagal Ditambahkan');
         }
-
-        return redirect($redirectUrl . $request->id);
+        if ($request->pengganti == '1') {
+            return redirect('/ajar-gabung-pengganti/' . $request->id);
+        } else {
+            return redirect('/ajar-gabung/' . $request->id);
+        }
     }
-
 
     public function bap_teori(Request $request)
     {
         $request->validate([
             'rangkuman' => 'required',
             'bap' => 'required',
-            'file' => 'required|file|mimes:pdf,jpeg,jpg,doc,docx|max:2000',
+            'file' => 'required|file|mimes:pdf,jpeg,jpg,doc,docx,|max:2000',
         ]);
-
-        // Dekripsi ID dan ekstrak informasi
         $exp = explode(",", Crypt::decryptString($request->id));
-        $w_bap = [
-            'nip' => Auth::user()->username,
-            'kd_lokal' => $request->kd_lokal,
-            'kd_mtk' => $exp[0],
-            'tgl_ajar_masuk' => date('Y-m-d'),
-            'jam_t' => $exp[6]
-        ];
-
-        // Ambil data file lama dari database
-        $bap = Absen_ajar::select('file_ajar', 'created_at')->where($w_bap)->first();
-        $fileLama = $bap ? $bap->file_ajar : null;
-        $tahun = $bap ? date('Y', strtotime($bap->created_at)) : date('Y'); // Ambil tahun dari created_at
-
-        // Ambil file baru dari request
+        $w_bap = ['nip' => Auth::user()->username, 'kd_lokal' => $request->kd_lokal, 'kd_mtk' => $exp[0], 'tgl_ajar_masuk' => date('Y-m-d'), 'jam_t' => $exp[6]];
+        $bap = Absen_ajar::select('file_ajar')
+            ->where($w_bap)->first();
+        // dd($bap->file_ajar);
+        Storage::delete('public/ajar/' . $bap->file_ajar);
         $file = $request->file('file');
-
-        // Jika file lama ada, gunakan API updateFile, jika tidak ada gunakan API uploadFile
-        if ($fileLama) {
-            $url = '/update'; // Endpoint update
-            $uploadResponse = $this->api->put($url, [
-                'file' => $file,
-                'filename_lama' => $fileLama,
-                'tahun' => $tahun
+        $file->storeAs('public/ajar', $file->hashName());
+        // dd($w_bap);
+        $simpan = Absen_ajar::where($w_bap)
+            ->update([
+                'rangkuman' => $request->rangkuman,
+                'berita_acara' => $request->bap,
+                'file_ajar' => $file->hashName()
             ]);
-        } else {
-            $url = '/'; // Endpoint upload baru
-            $uploadResponse = $this->api->post($url, [
-                'file' => $file
-            ]);
-        }
-
-        // Cek apakah upload/update berhasil
-        if (!isset($uploadResponse['status']) || $uploadResponse['status'] !== 'success') {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengunggah file ke API BAP'
-            ], 503);
-        }
-
-        // Ambil nama file dari API
-        $filenameDariApi = $uploadResponse['data']['filename'] ?? null;
-        if (!$filenameDariApi) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mendapatkan nama file dari API'
-            ], 504);
-        }
-
-        $destinationPath = storage_path('app/public/ajar');
-
-        // Hapus file lama jika ada
-        if ($fileLama && file_exists($destinationPath . '/' . $fileLama)) {
-            unlink($destinationPath . '/' . $fileLama);
-        }
-
-        // Buat folder jika belum ada
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0777, true);
-        }
-
-        // Simpan file baru
-        if (!$file->move($destinationPath, $filenameDariApi)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal menyimpan file ke server Laravel'
-            ], 500);
-        }
-
-        // Simpan ke database dengan nama file dari API
-        $simpan = Absen_ajar::where($w_bap)->update([
-            'rangkuman' => $request->rangkuman,
-            'berita_acara' => $request->bap,
-            'file_ajar' => $filenameDariApi
-        ]);
-
-        // Redirect dengan flash message
-        $redirectUrl = ($request->pengganti == '1') ? "/ajar-teori-pengganti/" : "/ajar-teori/";
         if ($simpan) {
             session()->flash('status', 'Ditambahkan');
         } else {
             session()->flash('error', 'Gagal Ditambahkan');
         }
-
-        return redirect($redirectUrl . $request->id);
+        if ($request->pengganti == '1') {
+            return redirect('/ajar-teori-pengganti/' . $request->id);
+        } else {
+            return redirect('/ajar-teori/' . $request->id);
+        }
     }
-
     public function bap_praktek(Request $request)
     {
         // 0 => "0008"
@@ -369,100 +245,43 @@ class Absen_mhsController extends Controller
         // 6 => "14:10-17:30"
         // 7 => "305-F1"
         // 8 => "3"
-        // Validasi input
         $request->validate([
             'rangkuman' => 'required',
             'bap' => 'required',
-            'file' => 'required|file|mimes:pdf,jpeg,jpg,doc,docx|max:2000',
-        ]);
+            'file' => 'required|file|mimes:pdf,jpeg,jpg,doc,docx,|max:2000',
 
-        // Dekripsi ID dan ekstrak informasi
+        ]);
         $exp = explode(",", Crypt::decryptString($request->id));
-        $w_pert = [
-            'nip' => Auth::user()->username,
-            'kel_praktek' => $exp[4],
-            'kd_mtk' => $exp[0],
-            'tgl_ajar_masuk' => date('Y-m-d'),
-            'jam_t' => $exp[6]
-        ];
-
-        // Ambil data file lama dari database (termasuk tahun dari created_at)
-        $bap = Absen_ajar_praktek::select('file_ajar', 'created_at')->where($w_pert)->first();
-        $fileLama = $bap ? $bap->file_ajar : null;
-        $tahun = $bap ? date('Y', strtotime($bap->created_at)) : date('Y'); // Ambil tahun dari created_at
-
-        // Ambil file dari request
+        $w_pert = ['nip' => Auth::user()->username, 'kel_praktek' => $exp[4], 'kd_mtk' => $exp[0], 'tgl_ajar_masuk' => date('Y-m-d'), 'jam_t' => $exp[6]];
+        $bap = Absen_ajar_praktek::select('file_ajar')
+            ->where($w_pert)->first();
+        // dd($exp);
+        Storage::delete('public/ajar/' . $bap->file_ajar);
         $file = $request->file('file');
-
-        // Jika file lama ada, gunakan API updateFile, jika tidak ada gunakan API uploadFile
-        if ($fileLama) {
-
-            $url = '/update'; // Endpoint untuk update
-            $uploadResponse = $this->api->put($url, [
-                'file' => $file,
-                'filename_lama' => $fileLama,
-                'tahun' => $tahun
+        $file->storeAs('public/ajar', $file->hashName());
+        // $w_bap = ['nip'=>Auth::user()->username,'kel_praktek'=>$request->kd_lokal,'tgl_ajar_masuk'=>date('Y-m-d')];
+        // dd($w_bap);
+        $simpan = Absen_ajar_praktek::where($w_pert)
+            ->update([
+                'rangkuman' => $request->rangkuman,
+                'berita_acara' => $request->bap,
+                'file_ajar' => $file->hashName()
             ]);
-            // dd($uploadResponse);
+        if ($request->id_ke == '1') {
+            if ($simpan) {
+                session()->flash('status', 'Ditambahkan');
+            } else {
+                session()->flash('error', 'Gagal Ditambahkan');
+            }
+            return redirect('/ajar-praktek-pengganti/' . $request->id);
         } else {
-            $url = '/'; // Endpoint untuk upload baru
-            $uploadResponse = $this->api->post($url, [
-                'file' => $file
-            ]);
+            if ($simpan) {
+                session()->flash('status', 'Ditambahkan');
+            } else {
+                session()->flash('error', 'Gagal Ditambahkan');
+            }
+            return redirect('/ajar-praktek/' . $request->id);
         }
-
-        // Cek apakah upload/update ke API berhasil
-        if (!isset($uploadResponse['status']) || $uploadResponse['status'] !== 'success') {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengunggah file ke API BAP'
-            ], 503);
-        }
-
-        // **Ambil nama file dari API**
-        $filenameDariApi = $uploadResponse['data']['filename'] ?? null;
-        if (!$filenameDariApi) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mendapatkan nama file dari API'
-            ], 504);
-        }
-        $destinationPath = storage_path('app/public/ajar');
-
-        // Hapus file lama jika ada
-        if ($fileLama && file_exists($destinationPath . '/' . $fileLama)) {
-            unlink($destinationPath . '/' . $fileLama);
-        }
-
-        // Buat folder jika belum ada
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0777, true);
-        }
-
-        // Simpan file baru
-        if (!$file->move($destinationPath, $filenameDariApi)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal menyimpan file ke server Laravel'
-            ], 500);
-        }
-
-        // Simpan ke database dengan nama file dari API
-        $simpan = Absen_ajar_praktek::where($w_pert)->update([
-            'rangkuman' => $request->rangkuman,
-            'berita_acara' => $request->bap,
-            'file_ajar' => $filenameDariApi
-        ]);
-
-        // Redirect dengan flash message
-        $redirectUrl = ($request->id_ke == '1') ? "/ajar-praktek-pengganti/" : "/ajar-praktek/";
-        if ($simpan) {
-            session()->flash('status', 'Ditambahkan');
-        } else {
-            session()->flash('error', 'Gagal Ditambahkan');
-        }
-
-        return redirect($redirectUrl . $request->id);
     }
 
     /**

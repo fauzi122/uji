@@ -16,7 +16,7 @@ class APIBap
     private function httpOptions()
     {
         return [
-            'verify' => App::environment('production') // Hanya verifikasi SSL jika di mode production
+            'verify' => false // Hanya verifikasi SSL jika di mode production
         ];
     }
 

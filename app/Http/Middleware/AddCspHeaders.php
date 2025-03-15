@@ -63,7 +63,7 @@ class AddCspHeaders
                 "img-src 'self' https://ytimg.com http://localhost:5173;" .
                 "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net;" .
                 "frame-src 'self' https://www.youtube.com https://youtube.com;" .
-                "connect-src 'self' ws://localhost:5173 http://127.0.0.1:8001 http://127.0.0.1:8000 https://127.0.0.1:8000;" // Menambahkan http dan https di port 8000
+                "connect-src 'self' ws://localhost:5173 http://127.0.0.1:8001 http://127.0.0.1:8000 https://127.0.0.1:8000 https://apibap.bsi.ac.id;" // Menambahkan http dan https di port 8000
         );
 
 

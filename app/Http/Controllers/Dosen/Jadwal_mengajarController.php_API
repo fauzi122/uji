@@ -13,6 +13,7 @@ use App\Models\Absen_ajar_praktek;
 use App\Models\Dosen_pengganti;
 use App\Models\Dosen_praktisi;
 use App\Models\Ip_absen;
+use App\Library\APIBap;
 
 
 
@@ -24,11 +25,13 @@ class Jadwal_mengajarController extends Controller
      * @return \Illuminate\Http\Response
      * 
      */
+    protected $api;
     public function __construct()
     {
         if (!$this->middleware('auth:sanctum')) {
             return redirect('/login');
         }
+        $this->api = new APIBap();
     }
     function get_client_ip_2()
     {
@@ -462,18 +465,53 @@ class Jadwal_mengajarController extends Controller
 
     public function download_file_ajar(Request $request)
     {
-        $files = public_path() . '/storage/ajar/' . $request->file; //Mencari file dari model yang sudah dicari
-        if (file_exists($files)) {
-            return response()->download($files, $request->file);
-        } else {
-            echo "kosong";
+        $request->validate([
+            'file' => 'required|string'
+        ]);
+
+        // CARI DI TABEL absen_ajar_praktek
+        $fileData = Absen_ajar_praktek::where('file_ajar', $request->file)->first();
+        // JIKA TIDAK ADA, CARI DI TABEL absen_ajar
+        if (!$fileData) {
+            $fileData = Absen_ajar::where('file_ajar', $request->file)->first();
         }
 
-        // dd($file);
-        // $model_file = Absen_ajar::findOrFail($id); //Mencari model atau objek yang dicari
+        // JIKA MASIH TIDAK ADA, GUNAKAN TAHUN SEKARANG
+        $tahun = $fileData ? date('Y', strtotime($fileData->created_at)) : date('Y');
+
+        // Panggil API untuk mendapatkan URL file
+        $fileResponse = $this->api->get('/get', [
+            'filename' => $request->file,
+            'tahun' => $tahun
+        ]);
+        // dd($fileResponse);
+
+        if (!$fileResponse || isset($fileResponse['error'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal mendapatkan file dari API',
+                'debug' => $fileResponse
+            ], 503);
+        }
+
+        // Ambil URL file dari API
+        $fileUrl = $fileResponse['data']['url'] ?? null;
+
+        if (!$fileUrl) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'URL file tidak ditemukan dalam response API',
+                'debug' => $fileResponse
+            ], 504);
+        }
+        // **Download file langsung dari API**
+        return response()->streamDownload(function () use ($fileUrl) {
+            echo file_get_contents($fileUrl);
+        }, $request->file);
     }
     public function download_file_ajarr(Request $request)
     {
+        dd($request);
         $files = public_path() . '/storage/materi/' . $request->file; //Mencari file dari model yang sudah dicari
         if (file_exists($files)) {
             return response()->download($files, $request->file);

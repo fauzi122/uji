@@ -537,6 +537,8 @@ Route::middleware(['auth', 'user-agent-based'])->group(function () {
             Route::get('/cari-lecturer/schedule', [JadwaldosenController::class, 'search']);
             Route::get('/lecturer/schedule/edit/{id}', [JadwaldosenController::class, 'edit']);
             Route::put('/lecturer/schedule/update/{id}', [JadwaldosenController::class, 'update'])->name('jadwal.update');
+            Route::get('/jadwal/download', [JadwaldosenController::class, 'downloadJadwal'])->name('jadwal.download');
+
             Route::get('/rekap/day', [RekapdosenController::class, 'index']);
             Route::get('/rekap/praktek-day', [RekapdosenController::class, 'praktek']);
             Route::get('/rekap/teori-day', [RekapdosenController::class, 'teori']);

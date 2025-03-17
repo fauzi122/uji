@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use App\Exports\JadwalExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class JadwaldosenController extends Controller
 {
@@ -19,6 +22,7 @@ class JadwaldosenController extends Controller
     }
     public function index()
     {
+        $kampus_list = DB::table('jadwal')->select('nm_kampus')->distinct()->get();
         $jumlahPertemuan = DB::table('jadwal')->count();
       
         // jadwal all
@@ -58,10 +62,9 @@ class JadwaldosenController extends Controller
         $jadwal_htoday = $jadwal_query->paginate(20);
         
     
-        return view('administrasi.jadwal.index', compact('jadwal','jumlahPertemuan','jadwal_kampus','jadwal_htoday','totalCount','totalperkampus'));
+        return view('administrasi.jadwal.index', compact('jadwal','jumlahPertemuan','jadwal_kampus',
+        'jadwal_htoday','totalCount','totalperkampus','kampus_list'));
     }
-
-
 
     public function edit($id)
     {
@@ -205,4 +208,49 @@ class JadwaldosenController extends Controller
                 return "Tidak Diketahui";
         }
     }
+
+
+    public function downloadJadwal(Request $request)
+    {
+        $kampus = $request->input('kampus');
+    
+        // Query jadwal berdasarkan kampus yang dipilih
+        $jadwal = DB::table('jadwal')
+            ->join('user_adm', 'jadwal.nm_kampus', '=', 'user_adm.kampus')
+            ->select(
+                'jadwal.no_j_klh',
+                'jadwal.nip',
+                'jadwal.kd_dosen',
+                'jadwal.kd_dosen2',
+                'jadwal.nip_aslab',
+                'jadwal.nip_aslab2',
+                'jadwal.kd_lokal',
+                'jadwal.kel_praktek',
+                'jadwal.nohari',
+                'jadwal.hari_t',
+                'jadwal.jam_t',
+                'jadwal.no_ruang',
+                'jadwal.nm_mtk',
+                'jadwal.kd_mtk',
+                'jadwal.sks',
+                'jadwal.sksajar',
+                'jadwal.status_ajar',
+                'jadwal.cek',
+                'jadwal.mulai',
+                'jadwal.selesai',
+                'jadwal.nm_kampus',
+                'jadwal.kd_gabung',
+                'jadwal.jml_pertemuan',
+                'jadwal.nm_dosen'
+            )
+            ->when($kampus, function ($query, $kampus) {
+                return $query->where('jadwal.nm_kampus', $kampus);
+            })
+            ->get();
+    
+        // Menggunakan Excel export untuk mendownload data dalam format Excel
+        return Excel::download(new JadwalExport($jadwal), 'jadwal.xlsx');
+    }
+    
+
 }

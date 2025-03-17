@@ -44,7 +44,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach ($rekapajar_praktek as $no => $role)
+                                @foreach ($rekaperkampus_praktek as $no => $role)
                                 <tr>
                                     
                                     <td>{{ $role->nip }}</td>

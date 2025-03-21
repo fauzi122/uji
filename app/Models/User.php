@@ -37,6 +37,8 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'kode',
         'password_update',
+        'is_online',
+        'last_seen'
     ];
 
     /**
@@ -68,6 +70,12 @@ class User extends Authenticatable implements JWTSubject
     protected $appends = [
         'profile_photo_url',
     ];
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo_path
+            ? asset('storage/' . $this->profile_photo_path)
+            : asset('default-profile.png');
+    }
 
     public function getJWTIdentifier()
     {
@@ -80,5 +88,15 @@ class User extends Authenticatable implements JWTSubject
     public function getRoleNamesAttribute()
     {
         return $this->roles->pluck('name');
+    }
+
+    public function lastMessage()
+    {
+        // Menggunakan hasMany karena pengguna dapat memiliki banyak pesan
+        return $this->hasMany(PrivateMessage::class, 'sender_id')
+            ->where('receiver_id', $this->id)  // Pesan yang dikirim ke user ini
+            ->orWhere('receiver_id', $this->id) // Pesan yang diterima oleh user ini
+            ->latest('created_at')  // Ambil pesan terakhir berdasarkan waktu terbaru
+            ->limit(1);  // Batasi hanya 1 pesan terakhir
     }
 }

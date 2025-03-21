@@ -80,6 +80,157 @@
 			margin: 0;
 		}
 	</style>
+	<style>
+		/* Styling untuk ikon chat */
+		.chat-icon {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			cursor: pointer;
+			z-index: 1000;
+		}
+
+		/* Ukuran ikon chat */
+		.chat-icon img {
+			width: 80px;
+			transition: transform 0.3s ease-in-out;
+			/* Efek animasi saat hover */
+		}
+
+		/* Efek animasi saat hover di ikon chat */
+		.chat-icon img:hover {
+			transform: scale(1.1);
+			/* Membesar saat hover */
+		}
+
+		/* Styling untuk chat badge (jumlah pesan) */
+		.chat-badge {
+			position: absolute;
+			top: -5px;
+			right: -5px;
+			background: red;
+			color: white;
+			font-size: 14px;
+			font-weight: bold;
+			width: 20px;
+			height: 20px;
+			text-align: center;
+			line-height: 20px;
+			border-radius: 50%;
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+		}
+
+		/* Styling untuk chat box */
+		.chat-box,
+		.private-chat {
+			position: fixed;
+			bottom: 80px;
+			right: 20px;
+			width: 300px;
+			background: white;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px gray;
+			display: none;
+			z-index: 1000;
+		}
+
+		/* Styling header chat box */
+		.chat-header {
+			background: #007bff;
+			color: white;
+			padding: 10px;
+			display: flex;
+			justify-content: space-between;
+			border-radius: 10px 10px 0 0;
+			/* Membulatkan sudut atas */
+		}
+
+		/* Styling body chat box */
+		.chat-body {
+			max-height: 300px;
+			overflow-y: auto;
+			padding: 10px;
+		}
+
+		/* Styling footer chat box */
+		.chat-footer {
+			padding: 10px;
+			display: flex;
+			align-items: center;
+		}
+
+		/* Styling input pesan */
+		.chat-footer input {
+			flex: 1;
+			padding: 5px;
+			border-radius: 5px;
+			/* Membulatkan sudut input */
+			border: 1px solid #ccc;
+			margin-right: 10px;
+			font-size: 14px;
+		}
+
+		/* Styling tombol kirim */
+		.chat-footer button {
+			background: #007bff;
+			color: white;
+			border: none;
+			padding: 5px 15px;
+			cursor: pointer;
+			border-radius: 5px;
+			/* Membulatkan sudut tombol */
+			transition: background 0.3s ease;
+		}
+
+		/* Efek hover pada tombol kirim */
+		.chat-footer button:hover {
+			background: #0056b3;
+		}
+
+		/* Efek fokus pada input pesan */
+		.chat-footer input:focus {
+			outline: none;
+			border-color: #007bff;
+		}
+
+		/* Styling untuk tombol Chat */
+		.chat-button {
+			background-color: #007bff;
+			/* Warna biru tombol */
+			color: white;
+			/* Warna teks putih */
+			padding: 6px 12px;
+			/* Padding lebih kecil */
+			border-radius: 4px;
+			/* Sudut membulat lebih kecil */
+			border: none;
+			/* Menghilangkan border default */
+			font-size: 12px;
+			/* Ukuran font lebih kecil */
+			cursor: pointer;
+			/* Menunjukkan bahwa ini adalah elemen yang bisa diklik */
+			transition: background-color 0.3s ease, transform 0.3s ease;
+			/* Efek transisi saat hover */
+			margin-top: 5px;
+			/* Memberikan sedikit jarak atas */
+		}
+
+		/* Efek hover pada tombol Chat */
+		.chat-button:hover {
+			background-color: #0056b3;
+			/* Ubah warna saat hover menjadi biru gelap */
+			transform: translateY(-2px);
+			/* Efek sedikit terangkat saat hover */
+		}
+
+		/* Efek focus saat tombol diklik */
+		.chat-button:focus {
+			outline: none;
+			/* Menghilangkan border biru default saat klik */
+			box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+			/* Memberikan efek glow biru */
+		}
+	</style>
 
 </head>
 
@@ -87,10 +238,10 @@
 
 	<!-- Loading starts -->
 	{{-- <div id="loading-wrapper">
-			<div class="spinner-border" role="status">
-				<span class="sr-only">Loading...</span>
-			</div>
-		</div> --}}
+		<div class="spinner-border" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div> --}}
 	<!-- Loading ends -->
 
 
@@ -119,7 +270,8 @@
 			<div class="page-header">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item">Elearning Universitas Bina Sarana Informatika </li>
-					{{-- <h5 class="btn btn-lg btn-info"> <b>*SEGERA LAKUKAN PERUBAHAN PASSWORD DEMI KEAMANAN AKUN ANDA. <a href="/user/profile">KLIK DI SINI</a></b></h5>  --}}
+					{{-- <h5 class="btn btn-lg btn-info"> <b>*SEGERA LAKUKAN PERUBAHAN PASSWORD DEMI KEAMANAN AKUN ANDA.
+							<a href="/user/profile">KLIK DI SINI</a></b></h5> --}}
 					{{-- <li class="breadcrumb-item active">Account Settings</li> --}}
 				</ol>
 
@@ -139,100 +291,6 @@
 			<div class="main-container">
 				@yield('content')
 			</div>
-			{{-- <div class="main-container">
-
-					<!-- Row start -->
-					<div class="row gutters">
-						<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-							<div class="card h-100">
-								<div class="card-body">
-									<div class="account-settings">
-										<div class="user-profile">
-											<div class="user-avatar">
-												<img src="img/user.png" alt="Wafi Admin" />
-											</div>
-											<h5 class="user-name">Zyan Ferris</h5>
-											<h6 class="user-email">zyanferris@wafi.com</h6>
-										</div>
-										<div class="setting-links">
-											<a href="chat.html">
-												<i class="icon-chat"></i>
-												Messages
-											</a>
-											<a href="tasks.html">
-												<i class="icon-date_range"></i>
-												Tasks
-											</a>
-											<a href="documents.html">
-												<i class="icon-file-text"></i>
-												Documents
-											</a>
-											<a href="faq.html">
-												<i class="icon-info"></i>
-												FAQ's
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-							<div class="card h-100">
-								<div class="card-header">
-									<div class="card-title">Update Profile</div>
-								</div>
-								<div class="card-body">
-									<div class="row gutters">
-										<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-											<div class="form-group">
-												<label for="fullName">Full Name</label>
-												<input type="text" class="form-control" id="fullName" placeholder="Enter full name">
-											</div>
-											<div class="form-group">
-												<label for="eMail">Email</label>
-												<input type="email" class="form-control" id="eMail" placeholder="Enter email ID">
-											</div>
-											<div class="form-group">
-												<label for="phone">Phone</label>
-												<input type="text" class="form-control" id="phone" placeholder="Enter phone number">
-											</div>
-											<div class="form-group">
-												<label for="website">Website URL</label>
-												<input type="url" class="form-control" id="website" placeholder="Website url">
-											</div>
-										</div>
-										<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-											<div class="form-group">
-												<label for="addRess">Address</label>
-												<input type="text" class="form-control" id="addRess" placeholder="Enter Address">
-											</div>
-											<div class="form-group">
-												<label for="ciTy">City</label>
-												<input type="name" class="form-control" id="ciTy" placeholder="Enter City">
-											</div>
-											<div class="form-group">
-												<label for="sTate">State</label>
-												<input type="text" class="form-control" id="sTate" placeholder="Enter State">
-											</div>
-											<div class="form-group">
-												<label for="zIp">ZIP</label>
-												<input type="number" class="form-control" id="zIp" placeholder="Website ZIP">
-											</div>
-										</div>
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-											<div class="text-right">
-												<button type="button" id="submit" name="submit" class="btn btn-dark">Cancel</button>
-												<button type="button" id="submit" name="submit" class="btn btn-success">Submit Form</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Row end -->
-
-				</div>  --}}
 			<!-- Main container end -->
 
 		</div>
@@ -240,14 +298,41 @@
 
 	</div>
 	<!-- Page wrapper end -->
+	<!-- Floating Chat Icon -->
+	{{-- <div id="chat-icon" class="chat-icon">
+		<div class="chat-user">
+			<img src="{{ asset('assets/img/MyBest-chat.png') }}" alt="Chat">
+			<span id="chat-user-count" class="chat-badge">0</span>
+		</div>
+	</div>
 
-	<!--**************************
-			**************************
-				**************************
-							Required JavaScript Files
-				**************************
-			**************************
-		**************************-->
+	<!-- Chat Box -->
+	<!-- Chat Box -->
+	<div id="chat-box" class="chat-box hidden">
+		<div class="chat-header">
+			<h5>Users Online</h5>
+			<button id="close-chat" class="close">&times;</button>
+		</div>
+		<div class="chat-body">
+			<ul id="chat-user-list"></ul> <!-- Daftar user online -->
+		</div>
+	</div>
+
+	<!-- Private Chat Window -->
+	<div id="private-chat" class="private-chat hidden">
+		<div class="chat-header">
+			<h5 id="private-chat-title">Chat</h5>
+			<button id="close-private-chat" class="close">&times;</button>
+		</div>
+		<div class="chat-body" id="private-chat-messages"></div>
+		<div class="chat-footer">
+			<input type="text" id="private-message" placeholder="Ketik pesan...">
+			<button onclick="sendPrivateMessage()">Kirim</button>
+		</div>
+	</div> --}}
+
+
+	**************************-->
 	<!-- Required jQuery first, then Bootstrap Bundle JS -->
 	<script src="{{asset('/js/jquery-ui.min.js') }}"></script>
 	<script src="{{asset('assets/js/jquery.min.js')}}"></script>
@@ -347,6 +432,130 @@
 			});
 		});
 	</script> -->
+	<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+	<script>
+		let selectedUserId = null;
+
+    document.getElementById("chat-icon").addEventListener("click", function () {
+        let chatBox = document.getElementById("chat-box");
+        chatBox.style.display = (chatBox.style.display === "block") ? "none" : "block"; // Toggle chat box
+        fetchOnlineUsers(); // Saat ikon diklik, ambil daftar user online
+    });
+
+    document.getElementById("close-chat").addEventListener("click", function () {
+        document.getElementById("chat-box").style.display = "none"; // Tutup daftar user online
+    });
+
+    document.getElementById("close-private-chat").addEventListener("click", function () {
+        document.getElementById("private-chat").style.display = "none"; // Tutup private chat
+    });
+
+    // Ambil user online dari backend
+    function fetchOnlineUsers() {
+        fetch('/users-online')
+            .then(response => response.json())
+            .then(users => {
+                console.log("Users Online:", users); // Debugging: cek apakah user online muncul
+
+                let userList = document.getElementById("chat-user-list");
+                if (!userList) {
+                    console.error("chat-user-list tidak ditemukan!");
+                    return;
+                }
+
+                userList.innerHTML = "";
+                users.forEach(user => {
+                    let li = document.createElement("li");
+                    li.innerHTML = `<strong>${user.name}</strong>
+                        <button class="chat-button" data-user-id="${user.id}" data-user-name="${user.name}">Chat</button>`;
+                    userList.appendChild(li);
+                });
+
+                document.getElementById("chat-user-count").innerText = users.length;
+
+                // Tambahkan event listener untuk semua tombol Chat setelah elemen dibuat
+                document.querySelectorAll(".chat-button").forEach(button => {
+                    button.addEventListener("click", function () {
+                        let userId = this.getAttribute("data-user-id");
+                        let userName = this.getAttribute("data-user-name");
+                        openPrivateChat(userId, userName);
+                    });
+                });
+            })
+            .catch(error => console.error("Error fetching users:", error));
+    }
+
+    // Membuka private chat dengan user tertentu
+    function openPrivateChat(userId, userName) {
+        selectedUserId = userId;
+        console.log(`Membuka chat dengan ${userName} (ID: ${userId})`);
+
+        let chatBox = document.getElementById("private-chat");
+        let chatTitle = document.getElementById("private-chat-title");
+
+        if (!chatBox || !chatTitle) {
+            console.error("private-chat atau private-chat-title tidak ditemukan!");
+            return;
+        }
+
+        chatTitle.innerText = `Chat dengan ${userName}`;
+        chatBox.style.display = "block"; // Tampilkan chat box
+		fetchOldMessages(userId);
+    }
+	function fetchOldMessages(userId) {
+    fetch(`/get-messages/${userId}`)
+        .then(response => response.json())
+        .then(messages => {
+            let chatBox = document.getElementById("private-chat-messages");
+            chatBox.innerHTML = ""; // Kosongkan chat lama sebelum menampilkan pesan baru
+
+            messages.forEach(message => {
+                let sender = (message.sender_id == "{{ Auth::id() }}") ? "Anda" : "User";
+                chatBox.innerHTML += `<p><strong>${sender}:</strong> ${message.message}</p>
+				<br><small>${message.created_at}</small><hr>`;
+            });
+        })
+        .catch(error => console.error("Error fetching messages:", error));
+}
+    // Kirim pesan privat
+    function sendPrivateMessage() {
+        let message = document.getElementById("private-message").value;
+
+        if (!selectedUserId) {
+            alert("Pilih user terlebih dahulu!");
+            return;
+        }
+
+        fetch('/send-private-message', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ receiver_id: selectedUserId, message })
+        })
+            .then(response => response.json())
+            .then(data => {
+                let chatBox = document.getElementById("private-chat-messages");
+                chatBox.innerHTML += `<p><strong>Anda:</strong> ${message}</p>`;
+                document.getElementById("private-message").value = "";
+            })
+            .catch(error => console.error("Error sending message:", error));
+    }
+
+    // Realtime dengan Pusher untuk menerima pesan
+    Echo.channel('private-chat')
+        .listen('PrivateMessageSent', (e) => {
+            console.log("Pesan diterima:", e.message);
+
+            if (e.message.receiver_id == selectedUserId) {
+                let chatBox = document.getElementById("private-chat-messages");
+                chatBox.innerHTML += `<p><strong>${e.message.sender.name}:</strong> ${e.message.message}</p>`;
+            }
+        });
+
+	</script>
+
 
 	@stack('scripts')
 </body>

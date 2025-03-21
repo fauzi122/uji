@@ -20,7 +20,8 @@ use App\Http\Controllers\mhs\{
     JadwalpenggantiController,
     LatihanUjianmhsController,
     ToeflUjianmhsController,
-    KuisonerpmdController
+    KuisonerpmdController,
+    PrivateChatController
 };
 
 use App\Http\Controllers\baak\{
@@ -69,8 +70,41 @@ use App\Http\Controllers\Api\Admin\{
 };
 use App\Http\Controllers\ujian\uts\KomplainController;
 use App\Jobs\JobapiPenilaian;
+use App\Models\User;
+use App\Models\PrivateMessage;
+use Illuminate\Support\Facades\DB;
 
 Route::middleware('user-agent-based')->group(function () {
+    Route::post('/send-private-message', [PrivateChatController::class, 'sendPrivateMessage']);
+
+    Route::get('/get-messages/{user_id}', function ($user_id) {
+        $messages = PrivateMessage::where(function ($query) use ($user_id) {
+            // Ambil pesan yang dikirim oleh user yang sedang login ke user yang dituju
+            $query->where('sender_id', Auth::id())
+                ->where('receiver_id', $user_id);
+        })
+            ->orWhere(function ($query) use ($user_id) {
+                // Ambil pesan yang diterima oleh user yang sedang login dari user yang dituju
+                $query->where('sender_id', $user_id)
+                    ->where('receiver_id', Auth::id());
+            })
+            ->orderBy('created_at', 'asc')  // Urutkan berdasarkan waktu
+            ->get()
+            ->map(function ($message) {
+                // Menambahkan data pengirim dan penerima ke pesan
+                $message->sender_name = $message->sender->name;  // Ambil nama pengirim dari relasi
+                $message->receiver_name = $message->receiver->name;  // Ambil nama penerima dari relasi
+
+                return $message;
+            });
+
+        return response()->json($messages);
+    });
+
+
+
+    Route::get('/users-online', [PrivateChatController::class, 'getUsersOnline']);
+
     Route::get('/', function () {
         return view('welcome');
     });

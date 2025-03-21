@@ -6,6 +6,10 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
+use App\Models\User;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -25,7 +29,31 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        parent::boot();
+
+        // Saat user login, update status is_online menjadi true
+        Event::listen(Login::class, function ($event) {
+            if ($event->user) {
+                $event->user->update([
+                    'is_online' => true,
+                    'last_seen' => now()
+                ]);
+
+                broadcast(new \App\Events\UserOnlineStatus($event->user));
+            }
+        });
+
+        // Saat user logout, update status is_online menjadi false
+        Event::listen(Logout::class, function ($event) {
+            if ($event->user) {
+                $event->user->update([
+                    'is_online' => false,
+                    'last_seen' => now()
+                ]);
+
+                broadcast(new \App\Events\UserOnlineStatus($event->user));
+            }
+        });
     }
 
     /**

@@ -38,7 +38,7 @@
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="exam-tile">
                         <i class="icon-filter_frames exam-icon"></i>
-                        <h3><a href="/rekap/teori-all" class="exam-link">Rekap Ajar Praktek</a></h3>
+                        <h3><a href="/rekap/praktek-all" class="exam-link">Rekap Ajar Praktek</a></h3>
                     </div>
                 </div>
             </div>

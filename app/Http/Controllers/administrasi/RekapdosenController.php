@@ -88,6 +88,7 @@ class RekapdosenController extends Controller
 
         //     $rekapajarall = DB::table('absen_ajars')
         //    ->get();
+        // $kampus_list = DB::table('jadwal')->select('nm_kampus')->groupBy('nm_kampus')->get();
 
         $rekapajarall = DB::table('absen_ajars')
             ->when(request()->q, function ($rekapajarall) {
@@ -111,18 +112,34 @@ class RekapdosenController extends Controller
         $kd_dosen = $request->input('kd_dosen');
         $tgl_awal = $request->input('tgl_awal');
         $tgl_akhir = $request->input('tgl_akhir');
-
+        $kampus = $request->input('kampus');
+    
         $rekapData = Absen_ajar::query();
-
+    
         if ($kd_dosen) {
+            // Jika mencari berdasarkan dosen, rentang tanggal wajib
+            if ($tgl_awal && $tgl_akhir) {
+                $rekapData->whereBetween('tgl_ajar_masuk', [$tgl_awal, $tgl_akhir]);
+            } else {
+                return redirect()->back()->with('error', 'Tanggal wajib diisi saat mencari berdasarkan dosen.');
+            }
             $rekapData->where('kd_dosen', $kd_dosen);
+        } else {
+            // Jika tidak menggunakan filter dosen
+            if ($kampus) {
+                $rekapData->where('nm_kampus', $kampus);
+            }
+            
+            if ($tgl_awal && $tgl_akhir) {
+                $rekapData->whereBetween('tgl_ajar_masuk', [$tgl_awal, $tgl_akhir]);
+            }
         }
-
-        $rekapData->whereBetween('tgl_ajar_masuk', [$tgl_awal, $tgl_akhir]);
+    
         $rekapData = $rekapData->get();
-
-        return view('administrasi.rekap.caridata', compact('rekapData', 'tgl_awal', 'tgl_akhir'));
+    
+        return view('administrasi.rekap.caridata', compact('rekapData', 'tgl_awal', 'tgl_akhir', 'kampus'));
     }
+    
 
     public function cariDataRekapp(Request $request)
     {

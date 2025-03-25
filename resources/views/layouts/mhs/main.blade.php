@@ -554,20 +554,30 @@
 		// Membuka private chat dengan user tertentu
 		function openPrivateChat(userId, userName) {
 			selectedUserId = userId;
-			console.log(`Membuka chat dengan ${userName} (ID: ${userId})`);
+			privateMessageOffset = 0;
+			allPrivateLoaded = false;
 
 			let chatBox = document.getElementById("private-chat");
 			let chatTitle = document.getElementById("private-chat-title");
+			let chatMessages = document.getElementById("private-chat-messages");
 
-			if (!chatBox || !chatTitle) {
-				console.error("private-chat atau private-chat-title tidak ditemukan!");
-				return;
+			// ✅ Benar-benar hapus isi chat sebelumnya
+			if (chatMessages) {
+				chatMessages.innerHTML = '';
 			}
 
-			chatTitle.innerText = `Chat dengan ${userName}`;
-			chatBox.style.display = "block"; // Tampilkan chat box
-			fetchOldMessages(userId);
+			// Tampilkan nama user tujuan
+			if (chatTitle) {
+				chatTitle.innerText = `Chat dengan ${userName}`;
+			}
+
+			// Tampilkan chat box
+			chatBox.style.display = "block";
+
+			// Ambil pesan untuk user baru
+			fetchOldMessages(userId, true);
 		}
+
 
 		function fetchOldMessages(userId, isReset = true) {
 			if (privateLoading || allPrivateLoaded) return;
@@ -576,42 +586,47 @@
 			if (isReset) {
 				privateMessageOffset = 0;
 				allPrivateLoaded = false;
-				document.getElementById("private-chat-messages").innerHTML = "";
 			}
+
+			const currentUserLock = selectedUserId;
 
 			fetch(`/get-messages/${userId}?offset=${privateMessageOffset}&limit=${privateMessageLimit}`)
 				.then(response => response.json())
 				.then(messages => {
+					// ✅ Cek: apakah masih chat dengan user yang sama?
+					if (currentUserLock !== selectedUserId) {
+						console.warn("User berubah saat pesan datang, abaikan.");
+						privateLoading = false;
+						return;
+					}
+
 					if (messages.length < privateMessageLimit) {
 						allPrivateLoaded = true;
 					}
 
 					const chatBox = document.getElementById("private-chat-messages");
 
-					const previousScrollHeight = chatBox.scrollHeight;
-
 					messages.forEach(message => {
-						let sender = (message.sender_id == "{{ Auth::id() }}") ? "Anda" : "User";
+						let sender = (message.sender_id == "{{ Auth::id() }}") ? "Anda" : message.sender_name;
 						const p = document.createElement("p");
-						p.innerHTML = `<strong>${sender}:</strong> ${message.message}<br><small>${message.created_at}</small><hr>`;
-						chatBox.prepend(p); // Tambahkan ke atas
+						p.innerHTML = `<strong>${sender}:</strong> ${escapeHtml(message.message)}<br><small>${message.created_at}</small><hr>`;
+						chatBox.appendChild(p); // atau prepend jika kamu pakai scroll atas
 					});
-
-					// Scroll tetap di posisi sebelumnya
-					if (!isReset) {
-						chatBox.scrollTop = chatBox.scrollHeight - previousScrollHeight;
-					} else {
-						chatBox.scrollTop = chatBox.scrollHeight;
-					}
 
 					privateMessageOffset += privateMessageLimit;
 					privateLoading = false;
+
+					// Scroll ke bawah setelah pesan masuk (opsional)
+					if (isReset) {
+						chatBox.scrollTop = chatBox.scrollHeight;
+					}
 				})
 				.catch(error => {
 					console.error("Error fetching messages:", error);
 					privateLoading = false;
 				});
 		}
+
 
 		// Kirim pesan privat
 		function sendPrivateMessage() {
@@ -692,6 +707,11 @@
 				fetchOnlineUsers();
 			}
 		});
+		function escapeHtml(text) {
+			const div = document.createElement("div");
+			div.innerText = text;
+			return div.innerHTML;
+		}
 
 		// Realtime dengan Pusher untuk menerima pesan
 		Echo.channel('private-chat')

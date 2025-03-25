@@ -94,12 +94,17 @@ class PrivateChatController extends Controller
                 $query->where('sender_id', $userId)
                     ->where('receiver_id', Auth::id());
             })
-            ->orderBy('created_at', 'desc') // Load dari terbaru
+            ->orderBy('created_at', 'desc') // Ambil dari terbaru ke lama dulu
             ->offset($offset)
             ->limit($limit)
             ->get()
-            ->reverse() // supaya tampil dari yang lama ke baru
-            ->values();
+            ->reverse() // Tampilkan dari lama ke baru
+            ->values()
+            ->map(function ($message) {
+                $message->sender_name = $message->sender->name;
+                $message->receiver_name = $message->receiver->name;
+                return $message;
+            });
 
         return response()->json($messages);
     }

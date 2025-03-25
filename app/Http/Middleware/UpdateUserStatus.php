@@ -13,7 +13,7 @@ class UpdateUserStatus
     {
         if (Auth::check()) {
             Cache::put('user-is-online-' . Auth::id(), true, now()->addMinutes(5));
-            Auth::user()->update(['is_online' => true, 'last_seen' => now()]);
+            // Auth::user()->update(['is_online' => true, 'last_seen' => now()]);
         }
 
         return $next($request);

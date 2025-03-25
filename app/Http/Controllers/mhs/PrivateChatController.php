@@ -16,12 +16,26 @@ class PrivateChatController extends Controller
     {
         $request->validate([
             'receiver_id' => 'required|exists:users,id',
-            'message' => 'required'
+            'message' => 'required|string'
         ]);
 
+        $senderId = Auth::id();
+        $receiverId = $request->receiver_id;
+
+        // Ambil pesan terakhir user
+        $lastMessage = PrivateMessage::where('sender_id', $senderId)
+            ->orderByDesc('created_at')
+            ->first();
+
+        if ($lastMessage && $lastMessage->created_at->diffInSeconds(now()) < 10) {
+            return response()->json([
+                'error' => 'Tunggu 10 detik sebelum mengirim pesan berikutnya.'
+            ], 429);
+        }
+
         $message = PrivateMessage::create([
-            'sender_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
+            'sender_id' => $senderId,
+            'receiver_id' => $receiverId,
             'message' => $request->message
         ]);
 
@@ -30,22 +44,63 @@ class PrivateChatController extends Controller
         return response()->json(['message' => $message]);
     }
 
-    public function getUsersOnline()
+
+    public function getUsersOnline(Request $request)
     {
-        // Mengambil user yang online dan pesan terakhir mereka
-        $users = DB::table('users')
+        $limit = $request->input('limit', 20);
+        $offset = $request->input('offset', 0);
+        $search = $request->input('search');
+
+        $query = DB::table('users')
+            ->where('users.is_online', true)
+            ->where('users.utype', 'MHS')
+            ->where('users.username', '<>', Auth::user()->username);
+
+        if ($search) {
+            $query->where('users.name', 'LIKE', '%' . $search . '%');
+        }
+
+        $total = $query->count(); // total semua user online
+
+        $data = $query
             ->leftJoin('private_messages', function ($join) {
-                // Menggabungkan tabel users dengan private_messages berdasarkan sender_id dan receiver_id
                 $join->on('users.id', '=', 'private_messages.sender_id')
                     ->orOn('users.id', '=', 'private_messages.receiver_id');
             })
-            ->where('users.is_online', true)
             ->select('users.*', 'private_messages.created_at as message_time', 'private_messages.message')
-            ->orderByDesc('private_messages.created_at')  // Urutkan berdasarkan pesan terbaru
-            ->groupBy('users.id')  // Kelompokkan berdasarkan user.id untuk mengambil data user yang unik
+            ->orderByDesc('private_messages.created_at')
+            ->groupBy('users.id')
+            ->offset($offset)
+            ->limit($limit)
             ->get();
 
-        // Mengembalikan data dalam format JSON
-        return response()->json($users);
+        return response()->json([
+            'users' => $data,
+            'total' => $total
+        ]);
+    }
+
+
+    public function getMessages($userId, Request $request)
+    {
+        $limit = $request->input('limit', 20);
+        $offset = $request->input('offset', 0);
+
+        $messages = PrivateMessage::where(function ($query) use ($userId) {
+            $query->where('sender_id', Auth::id())
+                ->where('receiver_id', $userId);
+        })
+            ->orWhere(function ($query) use ($userId) {
+                $query->where('sender_id', $userId)
+                    ->where('receiver_id', Auth::id());
+            })
+            ->orderBy('created_at', 'desc') // Load dari terbaru
+            ->offset($offset)
+            ->limit($limit)
+            ->get()
+            ->reverse() // supaya tampil dari yang lama ke baru
+            ->values();
+
+        return response()->json($messages);
     }
 }

@@ -134,7 +134,20 @@
 			z-index: 1000;
 		}
 
-		/* Styling header chat box */
+		.chatx-box {
+			position: fixed;
+			bottom: 80px;
+			right: 20px;
+			width: 300px;
+			height: 400px;
+			background: white;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px gray;
+			display: none;
+			z-index: 1000;
+			overflow: hidden;
+		}
+
 		.chatx-header {
 			background: #007bff;
 			color: white;
@@ -142,15 +155,17 @@
 			display: flex;
 			justify-content: space-between;
 			border-radius: 10px 10px 0 0;
-			/* Membulatkan sudut atas */
 		}
 
-		/* Styling body chat box */
+		/* HANYA bagian ini yang boleh scroll */
 		.chatx-body {
-			max-height: 300px;
+			height: calc(100% - 50px);
+			/* sisa tinggi dari header */
 			overflow-y: auto;
 			padding: 10px;
+			box-sizing: border-box;
 		}
+
 
 		/* Styling footer chat box */
 		.chatx-footer {
@@ -193,42 +208,43 @@
 			border-color: #007bff;
 		}
 
-		/* Styling untuk tombol Chat */
-		.chatx-button {
-			background-color: #007bff;
-			/* Warna biru tombol */
-			color: white;
-			/* Warna teks putih */
-			padding: 6px 12px;
-			/* Padding lebih kecil */
-			border-radius: 4px;
-			/* Sudut membulat lebih kecil */
-			border: none;
-			/* Menghilangkan border default */
-			font-size: 12px;
-			/* Ukuran font lebih kecil */
+		/* Styling untuk nama user yang bisa diklik */
+		.chatx-user-link {
 			cursor: pointer;
-			/* Menunjukkan bahwa ini adalah elemen yang bisa diklik */
-			transition: background-color 0.3s ease, transform 0.3s ease;
-			/* Efek transisi saat hover */
-			margin-top: 5px;
-			/* Memberikan sedikit jarak atas */
+			display: block;
+			padding: 6px 0;
+			color: #007bff;
+			transition: color 0.3s ease;
 		}
 
-		/* Efek hover pada tombol Chat */
-		.chatx-button:hover {
-			background-color: #0056b3;
-			/* Ubah warna saat hover menjadi biru gelap */
-			transform: translateY(-2px);
-			/* Efek sedikit terangkat saat hover */
+		.chatx-user-link:hover {
+			text-decoration: underline;
+			color: #0056b3;
 		}
 
-		/* Efek focus saat tombol diklik */
-		.chatx-button:focus {
-			outline: none;
-			/* Menghilangkan border biru default saat klik */
-			box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-			/* Memberikan efek glow biru */
+		.chatx-search-input {
+			width: 100%;
+			padding: 6px 10px;
+			margin-bottom: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			font-size: 14px;
+		}
+
+		#chat-user-scroll {
+			max-height: 300px;
+			overflow-y: auto;
+		}
+
+		#private-chat-messages {
+			height: 300px;
+			overflow-y: auto;
+			padding: 10px;
+		}
+
+		#private-message:disabled::placeholder {
+			color: #888;
+			font-style: italic;
 		}
 	</style>
 
@@ -299,22 +315,22 @@
 	</div>
 	<!-- Page wrapper end -->
 	<!-- Floating Chat Icon -->
-	{{-- <div id="chat-icon" class="chatx-icon">
+	<div id="chat-icon" class="chatx-icon">
 		<div class="chatx-user">
 			<img src="{{ asset('assets/img/MyBest-chat.png') }}" alt="Chat">
-	<span id="chat-user-count" class="chatx-badge">0</span>
-	</div>
+			<span id="chat-user-count" class="chatx-badge">0</span>
+		</div>
 	</div>
 
 	<!-- Chat Box -->
-	<!-- Chat Box -->
-	<div id="chat-box" class="chatx-box hidden">
+	<div id="chat-box" class="chatx-box">
 		<div class="chatx-header">
 			<h5>Users Online</h5>
 			<button id="close-chat" class="close">&times;</button>
 		</div>
-		<div class="chatx-body">
-			<ul id="chat-user-list"></ul> <!-- Daftar user online -->
+		<div class="chatx-body" id="chat-user-scroll">
+			<input type="text" id="search-user" placeholder="Cari user..." class="chatx-search-input">
+			<ul id="chat-user-list"></ul>
 		</div>
 	</div>
 
@@ -329,7 +345,7 @@
 			<input type="text" id="private-message" placeholder="Ketik pesan...">
 			<button onclick="sendPrivateMessage()">Kirim</button>
 		</div>
-	</div> --}}
+	</div>
 
 
 	**************************-->
@@ -436,10 +452,15 @@
 	<script>
 		let selectedUserId = null;
 
-		document.getElementById("chat-icon").addEventListener("click", function() {
+		document.getElementById("chat-icon").addEventListener("click", function () {
 			let chatBox = document.getElementById("chat-box");
-			chatBox.style.display = (chatBox.style.display === "block") ? "none" : "block"; // Toggle chat box
-			fetchOnlineUsers(); // Saat ikon diklik, ambil daftar user online
+			chatBox.style.display = (chatBox.style.display === "block") ? "none" : "block";
+
+			if (chatBox.style.display === "block") {
+				offset = 0;
+				allLoaded = false;
+				fetchOnlineUsers(true); // reset data saat buka chat box
+			}
 		});
 
 		document.getElementById("close-chat").addEventListener("click", function() {
@@ -449,41 +470,86 @@
 		document.getElementById("close-private-chat").addEventListener("click", function() {
 			document.getElementById("private-chat").style.display = "none"; // Tutup private chat
 		});
-
+		function toTitleCase(str) {
+			return str.toLowerCase().split(' ').map(word => 
+				word.charAt(0).toUpperCase() + word.slice(1)
+			).join(' ');
+		}
 		// Ambil user online dari backend
-		function fetchOnlineUsers() {
-			fetch('/users-online')
-				.then(response => response.json())
-				.then(users => {
-					console.log("Users Online:", users); // Debugging: cek apakah user online muncul
+		let offset = 0;
+		const limit = 20;
+		let isLoading = false;
+		let allLoaded = false;
+		let searchKeyword = "";
+		let isSearching = false;
+		let lastSendTime = 0;
+		const sendCooldown = 10; // dalam detik
+		let privateMessageOffset = 0;
+		const privateMessageLimit = 20;
+		let privateLoading = false;
+		let allPrivateLoaded = false;
 
-					let userList = document.getElementById("chat-user-list");
-					if (!userList) {
-						console.error("chat-user-list tidak ditemukan!");
-						return;
+
+
+		function fetchOnlineUsers(reset = false) {
+			if (isLoading || (!isSearching && allLoaded)) return;
+
+			if (reset) {
+				offset = 0;
+				allLoaded = false;
+				document.getElementById("chat-user-list").innerHTML = "";
+			}
+
+			isLoading = true;
+
+			let url = isSearching
+				? `/users-online?search=${encodeURIComponent(searchKeyword)}`
+				: `/users-online?limit=${limit}&offset=${offset}`;
+
+			fetch(url)
+				.then(response => response.json())
+				.then(response => {
+					const users = response.users || response; // fallback untuk non-paginated response
+					const total = response.total || users.length;
+
+					// ✅ Update badge total user online
+					document.getElementById("chat-user-count").innerText = total;
+
+					if (!isSearching && users.length < limit) {
+						allLoaded = true;
 					}
 
-					userList.innerHTML = "";
+					const userList = document.getElementById("chat-user-list");
+
 					users.forEach(user => {
 						let li = document.createElement("li");
-						li.innerHTML = `<strong>${user.name}</strong>
-                        <button class="chatx-button" data-user-id="${user.id}" data-user-name="${user.name}">Chat</button>`;
+						let name = toTitleCase(user.name);
+						let kode = user.kode;
+						li.innerHTML = `<span class="chatx-user-link" data-user-id="${user.id}" data-user-name="${name}">${name} (${kode})</span>`;
 						userList.appendChild(li);
 					});
 
-					document.getElementById("chat-user-count").innerText = users.length;
-
-					// Tambahkan event listener untuk semua tombol Chat setelah elemen dibuat
-					document.querySelectorAll(".chatx-button").forEach(button => {
-						button.addEventListener("click", function() {
+					// Bind klik ke setiap user
+					document.querySelectorAll(".chatx-user-link").forEach(link => {
+						link.addEventListener("click", function () {
 							let userId = this.getAttribute("data-user-id");
 							let userName = this.getAttribute("data-user-name");
 							openPrivateChat(userId, userName);
 						});
 					});
+
+					if (!isSearching) {
+						offset += limit;
+					}
+
+					isLoading = false;
 				})
-				.catch(error => console.error("Error fetching users:", error));
+				.catch(error => {
+					console.error("Error fetching users:", error);
+					isLoading = false;
+				});
 		}
+
 
 		// Membuka private chat dengan user tertentu
 		function openPrivateChat(userId, userName) {
@@ -503,49 +569,129 @@
 			fetchOldMessages(userId);
 		}
 
-		function fetchOldMessages(userId) {
-			fetch(`/get-messages/${userId}`)
+		function fetchOldMessages(userId, isReset = true) {
+			if (privateLoading || allPrivateLoaded) return;
+			privateLoading = true;
+
+			if (isReset) {
+				privateMessageOffset = 0;
+				allPrivateLoaded = false;
+				document.getElementById("private-chat-messages").innerHTML = "";
+			}
+
+			fetch(`/get-messages/${userId}?offset=${privateMessageOffset}&limit=${privateMessageLimit}`)
 				.then(response => response.json())
 				.then(messages => {
-					let chatBox = document.getElementById("private-chat-messages");
-					chatBox.innerHTML = ""; // Kosongkan chat lama sebelum menampilkan pesan baru
+					if (messages.length < privateMessageLimit) {
+						allPrivateLoaded = true;
+					}
+
+					const chatBox = document.getElementById("private-chat-messages");
+
+					const previousScrollHeight = chatBox.scrollHeight;
 
 					messages.forEach(message => {
 						let sender = (message.sender_id == "{{ Auth::id() }}") ? "Anda" : "User";
-						chatBox.innerHTML += `<p><strong>${sender}:</strong> ${message.message}</p>
-				<br><small>${message.created_at}</small><hr>`;
+						const p = document.createElement("p");
+						p.innerHTML = `<strong>${sender}:</strong> ${message.message}<br><small>${message.created_at}</small><hr>`;
+						chatBox.prepend(p); // Tambahkan ke atas
 					});
+
+					// Scroll tetap di posisi sebelumnya
+					if (!isReset) {
+						chatBox.scrollTop = chatBox.scrollHeight - previousScrollHeight;
+					} else {
+						chatBox.scrollTop = chatBox.scrollHeight;
+					}
+
+					privateMessageOffset += privateMessageLimit;
+					privateLoading = false;
 				})
-				.catch(error => console.error("Error fetching messages:", error));
+				.catch(error => {
+					console.error("Error fetching messages:", error);
+					privateLoading = false;
+				});
 		}
+
 		// Kirim pesan privat
 		function sendPrivateMessage() {
-			let message = document.getElementById("private-message").value;
+			let input = document.getElementById("private-message");
+			let message = input.value.trim();
+			const kirimButton = document.querySelector('#private-chat .chatx-footer button');
 
 			if (!selectedUserId) {
 				alert("Pilih user terlebih dahulu!");
 				return;
 			}
 
+			if (message === "") {
+				alert("Pesan tidak boleh kosong!");
+				return;
+			}
+
+			// Cegah spam: disable input & tombol
+			const cooldown = 10; // detik
+			let remaining = cooldown;
+
+			input.disabled = true;
+			kirimButton.disabled = true;
+			input.value = "";
+			input.placeholder = `Tunggu ${remaining} detik...`;
+
+			const countdownInterval = setInterval(() => {
+				remaining--;
+				if (remaining > 0) {
+					input.placeholder = `Tunggu ${remaining} detik...`;
+				} else {
+					clearInterval(countdownInterval);
+					input.disabled = false;
+					kirimButton.disabled = false;
+					input.placeholder = "Ketik pesan...";
+				}
+			}, 1000);
+
+			// Kirim pesan ke server
 			fetch('/send-private-message', {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-					},
-					body: JSON.stringify({
-						receiver_id: selectedUserId,
-						message
-					})
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+				},
+				body: JSON.stringify({
+					receiver_id: selectedUserId,
+					message
 				})
-				.then(response => response.json())
-				.then(data => {
-					let chatBox = document.getElementById("private-chat-messages");
-					chatBox.innerHTML += `<p><strong>Anda:</strong> ${message}</p>`;
-					document.getElementById("private-message").value = "";
-				})
-				.catch(error => console.error("Error sending message:", error));
+			})
+			.then(response => response.json())
+			.then(data => {
+				let chatBox = document.getElementById("private-chat-messages");
+				chatBox.innerHTML += `<p><strong>Anda:</strong> ${message}</p>`;
+				chatBox.scrollTop = chatBox.scrollHeight;
+			})
+			.catch(error => {
+				console.error("Error sending message:", error);
+			});
 		}
+
+
+		document.getElementById("search-user").addEventListener("keyup", function () {
+			searchKeyword = this.value.trim().toLowerCase();
+			isSearching = searchKeyword !== ""; // True kalau ada keyword pencarian
+
+			offset = 0;
+			allLoaded = false;
+			fetchOnlineUsers(true);
+		});
+
+		document.getElementById("chat-user-scroll").addEventListener("scroll", function () {
+			const scrollTop = this.scrollTop;
+			const scrollHeight = this.scrollHeight;
+			const offsetHeight = this.offsetHeight;
+
+			if (scrollTop + offsetHeight >= scrollHeight - 10) {
+				fetchOnlineUsers();
+			}
+		});
 
 		// Realtime dengan Pusher untuk menerima pesan
 		Echo.channel('private-chat')

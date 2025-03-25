@@ -50,35 +50,73 @@ class PrivateChatController extends Controller
         $limit = $request->input('limit', 20);
         $offset = $request->input('offset', 0);
         $search = $request->input('search');
+        $currentUserId = Auth::id();
 
-        $query = DB::table('users')
+        // ✅ User yang pernah chat dengan kita
+        $chatUsers = DB::table('users')
+            ->leftJoin('private_messages', function ($join) use ($currentUserId) {
+                $join->on('users.id', '=', 'private_messages.sender_id')
+                    ->where('private_messages.receiver_id', '=', $currentUserId)
+                    ->orOn('users.id', '=', 'private_messages.receiver_id')
+                    ->where('private_messages.sender_id', '=', $currentUserId);
+            })
             ->where('users.is_online', true)
             ->where('users.utype', 'MHS')
-            ->where('users.username', '<>', Auth::user()->username);
-
-        if ($search) {
-            $query->where('users.name', 'LIKE', '%' . $search . '%');
-        }
-
-        $total = $query->count(); // total semua user online
-
-        $data = $query
-            ->leftJoin('private_messages', function ($join) {
-                $join->on('users.id', '=', 'private_messages.sender_id')
-                    ->orOn('users.id', '=', 'private_messages.receiver_id');
+            ->where('users.id', '<>', $currentUserId)
+            ->when($search, function ($query) use ($search) {
+                $query->where('users.name', 'LIKE', '%' . $search . '%');
             })
-            ->select('users.*', 'private_messages.created_at as message_time', 'private_messages.message')
-            ->orderByDesc('private_messages.created_at')
-            ->groupBy('users.id')
-            ->offset($offset)
-            ->limit($limit)
+            ->select(
+                'users.id',
+                'users.name',
+                'users.username',
+                'users.kode',
+                DB::raw('MAX(private_messages.created_at) as last_chat_time')
+            )
+            ->groupBy('users.id', 'users.name', 'users.username', 'users.kode')
+            ->havingRaw('MAX(private_messages.created_at) IS NOT NULL') // hanya user yang pernah chat
+            ->orderByDesc('last_chat_time')
             ->get();
 
+
+        // ✅ User online tapi belum pernah chat dengan kita
+        $nonChatUsers = DB::table('users')
+            ->where('users.is_online', true)
+            ->where('users.utype', 'MHS')
+            ->where('users.id', '<>', $currentUserId)
+            ->whereNotIn('users.id', $chatUsers->pluck('id'))
+            ->when($search, function ($query) use ($search) {
+                $query->where('users.name', 'LIKE', '%' . $search . '%');
+            })
+            ->select(
+                'users.id',
+                'users.name',
+                'users.username',
+                'users.kode',
+                DB::raw('users.updated_at as last_chat_time')
+            )
+            ->orderByDesc('users.updated_at')
+            ->get();
+
+        // ✅ Gabungkan & batasi hasil
+        $merged = $chatUsers->merge($nonChatUsers)
+            ->slice($offset)
+            ->take($limit)
+            ->values();
+
+        // Total user online (selain diri sendiri)
+        $total = DB::table('users')
+            ->where('is_online', true)
+            ->where('utype', 'MHS')
+            ->where('id', '<>', $currentUserId)
+            ->count();
+
         return response()->json([
-            'users' => $data,
+            'users' => $merged,
             'total' => $total
         ]);
     }
+
 
 
     public function getMessages($userId, Request $request)

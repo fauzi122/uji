@@ -11,9 +11,12 @@ class UpdateUserStatus
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check()) {
-            Cache::put('user-is-online-' . Auth::id(), true, now()->addMinutes(5));
-            // Auth::user()->update(['is_online' => true, 'last_seen' => now()]);
+        $user = Auth::user();
+        if (!$user->is_online || $user->last_seen->diffInSeconds(now()) > 60) {
+            $user->update([
+                'is_online' => true,
+                'last_seen' => now()
+            ]);
         }
 
         return $next($request);

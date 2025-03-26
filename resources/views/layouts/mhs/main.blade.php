@@ -211,16 +211,25 @@
 		/* Styling untuk nama user yang bisa diklik */
 		.chatx-user-link {
 			cursor: pointer;
-			display: block;
-			padding: 6px 0;
 			color: #007bff;
-			transition: color 0.3s ease;
+			text-decoration: none;
+			display: inline-block;
+			padding: 5px;
+			border-radius: 8px;
+			transition: all 0.2s ease-in-out;
 		}
 
 		.chatx-user-link:hover {
-			text-decoration: underline;
-			color: #0056b3;
+			background-color: #f0f8ff;
 		}
+
+		.chatx-user-link.selected {
+			background-color: #007bff;
+			color: white;
+			font-weight: bold;
+			box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+		}
+
 
 		.chatx-search-input {
 			width: 100%;
@@ -245,6 +254,16 @@
 		#private-message:disabled::placeholder {
 			color: #888;
 			font-style: italic;
+		}
+
+		.badge-unread {
+			background-color: red;
+			color: white;
+			padding: 2px 6px;
+			border-radius: 12px;
+			font-size: 12px;
+			margin-left: 5px;
+			font-weight: bold;
 		}
 	</style>
 
@@ -525,7 +544,13 @@
 						let li = document.createElement("li");
 						let name = toTitleCase(user.name);
 						let kode = user.kode;
-						li.innerHTML = `<span class="chatx-user-link" data-user-id="${user.id}" data-user-name="${name}">${name} (${kode})</span>`;
+						let unread = user.unread_count || 0;
+						li.innerHTML = `
+							<span class="chatx-user-link" data-user-id="${user.id}" data-user-name="${name}">
+								${name} (${kode}) 
+								${unread > 0 ? `<span class="badge-unread">${unread}</span>` : ''}
+							</span>
+						`;
 						userList.appendChild(li);
 					});
 
@@ -534,6 +559,10 @@
 						link.addEventListener("click", function () {
 							let userId = this.getAttribute("data-user-id");
 							let userName = this.getAttribute("data-user-name");
+							document.querySelectorAll(".chatx-user-link").forEach(item => {
+								item.classList.remove("selected");
+							});
+							this.classList.add("selected");
 							openPrivateChat(userId, userName);
 						});
 					});

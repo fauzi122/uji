@@ -71,7 +71,10 @@ class PrivateChatController extends Controller
                 'users.name',
                 'users.username',
                 'users.kode',
-                DB::raw('MAX(private_messages.created_at) as last_chat_time')
+                DB::raw('MAX(private_messages.created_at) as last_chat_time'),
+                DB::raw('SUM(CASE 
+                WHEN private_messages.receiver_id = ' . $currentUserId . ' AND private_messages.is_read = 0 
+                THEN 1 ELSE 0 END) as unread_count')
             )
             ->groupBy('users.id', 'users.name', 'users.username', 'users.kode')
             ->havingRaw('MAX(private_messages.created_at) IS NOT NULL') // hanya user yang pernah chat
@@ -143,6 +146,10 @@ class PrivateChatController extends Controller
                 $message->receiver_name = $message->receiver->name;
                 return $message;
             });
+        PrivateMessage::where('sender_id', $userId)
+            ->where('receiver_id', Auth::id())
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
 
         return response()->json($messages);
     }

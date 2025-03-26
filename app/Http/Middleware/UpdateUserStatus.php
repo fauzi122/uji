@@ -12,17 +12,22 @@ class UpdateUserStatus
     public function handle($request, Closure $next)
     {
         if (Auth::check()) {
-            $user = Auth::user();
-            if (!$user->is_online || optional($user->last_seen)->diffInSeconds(now()) > 60) {
-                $user->update([
+            $userId = Auth::id();
+
+            // Kalau cache user online sudah expired, berarti user "baru aktif lagi"
+            if (!Cache::has('user-is-online-' . $userId)) {
+                // Update status online di database (opsional)
+                Auth::user()->update([
                     'is_online' => true,
                     'last_seen' => now()
                 ]);
             }
 
-            // atau pakai Cache:
-            // Cache::put('user-is-online-' . $user->id, true, now()->addMinutes(5));
+            // Refresh status online di cache
+            Cache::put('user-is-online-' . $userId, true, now()->addMinutes(5));
         }
+
+
         return $next($request);
     }
 }

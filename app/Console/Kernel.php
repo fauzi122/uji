@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use \App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,9 +16,25 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
-            User::where('is_online', true)
+            $offlineUsers = User::where('is_online', true)
                 ->where('last_seen', '<', now()->subMinutes(5))
-                ->update(['is_online' => false]);
+                ->get();
+
+            if ($offlineUsers->count() > 0) {
+                // Update status
+                User::whereIn('id', $offlineUsers->pluck('id'))->update(['is_online' => false]);
+
+                // Tulis log
+                Log::info('Scheduler: Menandai user offline', [
+                    'waktu' => now()->toDateTimeString(),
+                    'jumlah' => $offlineUsers->count(),
+                    'user_ids' => $offlineUsers->pluck('id')->toArray()
+                ]);
+            } else {
+                Log::info('Scheduler: Tidak ada user yang perlu di-set offline.', [
+                    'waktu' => now()->toDateTimeString()
+                ]);
+            }
         })->everyFiveMinutes();
     }
 

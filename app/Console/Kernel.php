@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use \App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
 
 class Kernel extends ConsoleKernel
 {
@@ -21,10 +22,18 @@ class Kernel extends ConsoleKernel
                 ->get();
 
             if ($offlineUsers->count() > 0) {
-                // Update status
-                User::whereIn('id', $offlineUsers->pluck('id'))->update(['is_online' => false]);
+                foreach ($offlineUsers as $user) {
+                    try {
+                        $user->update(['is_online' => false]);
+                    } catch (QueryException $e) {
+                        if ($e->getCode() == 1213) {
+                            Log::warning("Deadlock saat update is_online user ID: {$user->id}");
+                            continue;
+                        }
+                        throw $e;
+                    }
+                }
 
-                // Tulis log
                 Log::info('Scheduler: Menandai user offline', [
                     'waktu' => now()->toDateTimeString(),
                     'jumlah' => $offlineUsers->count(),

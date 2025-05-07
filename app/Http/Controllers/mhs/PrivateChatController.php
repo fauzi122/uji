@@ -36,7 +36,7 @@ class PrivateChatController extends Controller
         $message = PrivateMessage::create([
             'sender_id' => $senderId,
             'receiver_id' => $receiverId,
-            'message' => $request->message
+            'message' => e($request->message)
         ]);
 
         broadcast(new PrivateMessageSent($message))->toOthers();

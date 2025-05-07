@@ -714,9 +714,21 @@
 
 				if (e.message.receiver_id == selectedUserId) {
 					let chatBox = document.getElementById("private-chat-messages");
-					chatBox.innerHTML += `<p><strong>${e.message.sender.name}:</strong> ${e.message.message}</p>`;
+
+					// Membuat elemen baru untuk pesan
+					const p = document.createElement("p");
+					const sender = document.createElement("strong");
+					sender.textContent = `${e.message.sender.name}:`;
+
+					const messageText = document.createElement("span");
+					messageText.textContent = e.message.message;
+
+					p.appendChild(sender);
+					p.appendChild(messageText);
+					chatBox.appendChild(p);
 				}
 			});
+
 	</script>
 
 

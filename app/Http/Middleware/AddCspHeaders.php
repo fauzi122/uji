@@ -66,10 +66,6 @@ class AddCspHeaders
                 "connect-src 'self' ws://localhost:5173 http://127.0.0.1:8001 http://127.0.0.1:8000 https://127.0.0.1:8000 https://apibap.bsi.ac.id;" // Menambahkan http dan https di port 8000
         );
 
-
-
-
-
         return $response;
     }
 }

@@ -625,7 +625,7 @@
 		// Kirim pesan privat
 		function sendPrivateMessage() {
 			let input = document.getElementById("private-message");
-			let message = input.value.trim();
+			let message = escapeHtml(input.value.trim());
 			const kirimButton = document.querySelector('#private-chat .chatx-footer button');
 
 			if (!selectedUserId) {
@@ -673,9 +673,13 @@
 			})
 			.then(response => response.json())
 			.then(data => {
-				let chatBox = document.getElementById("private-chat-messages");
-				chatBox.innerHTML += `<p><strong>Anda:</strong> ${message}</p>`;
-				chatBox.scrollTop = chatBox.scrollHeight;
+				if (data.error) {
+					alert(data.error); // Tampilkan pesan error
+				} else {
+					let chatBox = document.getElementById("private-chat-messages");
+					chatBox.innerHTML += `<p><strong>Anda:</strong> ${message}</p>`;
+					chatBox.scrollTop = chatBox.scrollHeight;
+				}
 			})
 			.catch(error => {
 				console.error("Error sending message:", error);

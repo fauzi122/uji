@@ -9,8 +9,6 @@ use App\Models\PrivateMessage;
 use App\Events\PrivateMessageSent;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use HTMLPurifier;
-use HTMLPurifier_Config;
 
 class PrivateChatController extends Controller
 {
@@ -20,11 +18,6 @@ class PrivateChatController extends Controller
             'receiver_id' => 'required|exists:users,id',
             'message' => 'required|string'
         ]);
-        $message = $request->message;
-
-        $config = HTMLPurifier_Config::createDefault();
-        $purifier = new HTMLPurifier($config);
-        $cleanMessage = $purifier->purify($message);
 
         $senderId = Auth::id();
         $receiverId = $request->receiver_id;
@@ -43,7 +36,7 @@ class PrivateChatController extends Controller
         $message = PrivateMessage::create([
             'sender_id' => $senderId,
             'receiver_id' => $receiverId,
-            'message' => $cleanMessage
+            'message' => e($request->message)
         ]);
 
         broadcast(new PrivateMessageSent($message))->toOthers();

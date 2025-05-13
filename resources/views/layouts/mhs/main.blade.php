@@ -335,12 +335,12 @@
 	</div>
 	<!-- Page wrapper end -->
 	<!-- Floating Chat Icon -->
-	<div id="chat-icon" class="chatx-icon">
+	<!-- <div id="chat-icon" class="chatx-icon">
 		<div class="chatx-user">
 			<img src="{{ asset('assets/img/MyBest-chat.png') }}" alt="Chat">
 			<span id="chat-user-count" class="chatx-badge">0</span>
 		</div>
-	</div>
+	</div> -->
 
 	<!-- Chat Box -->
 	<div id="chat-box" class="chatx-box">
@@ -436,7 +436,7 @@
 	<script>
 		let selectedUserId = null;
 
-		document.getElementById("chat-icon").addEventListener("click", function () {
+		document.getElementById("chat-icon").addEventListener("click", function() {
 			let chatBox = document.getElementById("chat-box");
 			chatBox.style.display = (chatBox.style.display === "block") ? "none" : "block";
 
@@ -454,8 +454,9 @@
 		document.getElementById("close-private-chat").addEventListener("click", function() {
 			document.getElementById("private-chat").style.display = "none"; // Tutup private chat
 		});
+
 		function toTitleCase(str) {
-			return str.toLowerCase().split(' ').map(word => 
+			return str.toLowerCase().split(' ').map(word =>
 				word.charAt(0).toUpperCase() + word.slice(1)
 			).join(' ');
 		}
@@ -486,9 +487,9 @@
 
 			isLoading = true;
 
-			let url = isSearching
-				? `/users-online?search=${encodeURIComponent(searchKeyword)}`
-				: `/users-online?limit=${limit}&offset=${offset}`;
+			let url = isSearching ?
+				`/users-online?search=${encodeURIComponent(searchKeyword)}` :
+				`/users-online?limit=${limit}&offset=${offset}`;
 
 			fetch(url)
 				.then(response => response.json())
@@ -521,7 +522,7 @@
 
 					// Bind klik ke setiap user
 					document.querySelectorAll(".chatx-user-link").forEach(link => {
-						link.addEventListener("click", function () {
+						link.addEventListener("click", function() {
 							let userId = this.getAttribute("data-user-id");
 							let userName = this.getAttribute("data-user-name");
 							document.querySelectorAll(".chatx-user-link").forEach(item => {
@@ -661,33 +662,33 @@
 
 			// Kirim pesan ke server
 			fetch('/send-private-message', {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-				},
-				body: JSON.stringify({
-					receiver_id: selectedUserId,
-					message
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+					},
+					body: JSON.stringify({
+						receiver_id: selectedUserId,
+						message
+					})
 				})
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.error) {
-					alert(data.error); // Tampilkan pesan error
-				} else {
-					let chatBox = document.getElementById("private-chat-messages");
-					chatBox.innerHTML += `<p><strong>Anda:</strong> ${message}</p>`;
-					chatBox.scrollTop = chatBox.scrollHeight;
-				}
-			})
-			.catch(error => {
-				console.error("Error sending message:", error);
-			});
+				.then(response => response.json())
+				.then(data => {
+					if (data.error) {
+						alert(data.error); // Tampilkan pesan error
+					} else {
+						let chatBox = document.getElementById("private-chat-messages");
+						chatBox.innerHTML += `<p><strong>Anda:</strong> ${message}</p>`;
+						chatBox.scrollTop = chatBox.scrollHeight;
+					}
+				})
+				.catch(error => {
+					console.error("Error sending message:", error);
+				});
 		}
 
 
-		document.getElementById("search-user").addEventListener("keyup", function () {
+		document.getElementById("search-user").addEventListener("keyup", function() {
 			searchKeyword = this.value.trim().toLowerCase();
 			isSearching = searchKeyword !== ""; // True kalau ada keyword pencarian
 
@@ -696,7 +697,7 @@
 			fetchOnlineUsers(true);
 		});
 
-		document.getElementById("chat-user-scroll").addEventListener("scroll", function () {
+		document.getElementById("chat-user-scroll").addEventListener("scroll", function() {
 			const scrollTop = this.scrollTop;
 			const scrollHeight = this.scrollHeight;
 			const offsetHeight = this.offsetHeight;
@@ -705,6 +706,7 @@
 				fetchOnlineUsers();
 			}
 		});
+
 		function escapeHtml(text) {
 			const div = document.createElement("div");
 			div.innerText = text;
@@ -732,7 +734,6 @@
 					chatBox.appendChild(p);
 				}
 			});
-
 	</script>
 
 

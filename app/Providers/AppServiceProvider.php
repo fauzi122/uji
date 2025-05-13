@@ -28,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
+        Schema::defaultStringLength(191);
         RateLimiter::for('user-agent-based', function (Request $request) {
             $ip = $request->ip();
             // Ambil tiga bagian pertama dari IP (misal: 172.16.101)
@@ -73,10 +77,5 @@ class AppServiceProvider extends ServiceProvider
 
             return $limit;
         });
-
-        if ($this->app->environment('production')) {
-            URL::forceScheme('https');
-        }
-        Schema::defaultStringLength(191);
     }
 }

@@ -44,8 +44,8 @@ class LoginController extends Controller
 
         // Tentukan URL berdasarkan environment
         if (app()->environment('production')) {
-            $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
-            // $examSystemUrl = 'https://question.bsi.ac.id/authenticate';
+            // $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
+            $examSystemUrl = 'https://question.bsi.ac.id/authenticate';
         } else {
             // $examSystemUrl = 'https://ujiankampust.bsi.ac.id/authenticate';
             $examSystemUrl = 'http://127.0.0.1:8001/authenticate';
@@ -54,6 +54,7 @@ class LoginController extends Controller
         // Gunakan urlencode untuk memastikan token aman di URL
         return redirect()->away("{$examSystemUrl}?token=" . urlencode($token));
     }
+
     public function redirectToSays()
     {
         $user = Auth::user();
@@ -132,7 +133,7 @@ class LoginController extends Controller
         // Redirect ke sistem ujian online dengan token sebagai parameter
         return redirect()->away("{$examSystemUrl}?token={$token}");
     }
-    
+
 
     public function index(Request $request)
     {

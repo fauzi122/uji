@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  {{-- <title>Arsha Bootstrap Template - Index</title>  --}}
+  {{-- <title>Arsha Bootstrap Template - Index</title> --}}
   <script language='JavaScript'>
     var txt = " My Best | Universitas Bina Sarana Informatika |";
     var speed = 300;
@@ -48,7 +48,8 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
 
-      {{-- <h1 class="logo me-auto"><a href="/"><img src="{{ Storage::url('public/mybest_3.png') }}" alt="" loading="lazy" class="img-fluid" width="150" height="200"></a></h1> --}}
+      {{-- <h1 class="logo me-auto"><a href="/"><img src="{{ Storage::url('public/mybest_3.png') }}" alt=""
+            loading="lazy" class="img-fluid" width="150" height="200"></a></h1> --}}
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="{{ asset('home/assets/img/logo.png')}}" alt="" loading="lazy"  class="img-fluid"></a>-->
 
@@ -56,7 +57,7 @@
         <ul>
           <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
           <li><a class="nav-link scrollto" href="#skills">Fitur</a></li>
-          <li><a class="nav-link  scrollto" href="#cta">Daftar MBKM</a></li>
+          {{-- <li><a class="nav-link  scrollto" href="#cta">Daftar MBKM</a></li> --}}
           <li><a class="nav-link scrollto" href="#contact">Kontak Kami</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -68,7 +69,8 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+          data-aos="fade-up" data-aos-delay="200">
           <h1>MyBest</h1>
           <h2>Selamat datang dipembelajaran e-Learning Mybest Universitas Bina Sarana Informatika</h2>
           <div class="d-flex justify-content-center justify-content-lg-start">
@@ -151,42 +153,48 @@
               <div class="progress">
                 <span class="skill">Presensi & Rekapitulasi Kehadiran <i class="bi bi-bookmark-check val"></i></span>
                 <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
 
               <div class="progress">
                 <span class="skill">Materi, Slide, Modul, Silabus, RPS <i class="bi bi-bookmark-check val"></i></span>
                 <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
 
               <div class="progress">
                 <span class="skill">Tugas Pertemuan <i class="bi bi-bookmark-check val"></i></span>
                 <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
 
               <div class="progress">
                 <span class="skill">Referensi Materi/Video Tambahan <i class="bi bi-bookmark-check val"></i></span>
                 <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
 
               <div class="progress">
                 <span class="skill">Rangkuman Materi <i class="bi bi-bookmark-check val"></i></span>
                 <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
 
               <div class="progress">
                 <span class="skill">Kuliah Pengganti <i class="bi bi-bookmark-check val"></i></span>
                 <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
 
@@ -204,7 +212,9 @@
 
         <div class="section-title">
           <h2>Services</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p>
         </div>
 
         <div class="row">
@@ -216,7 +226,8 @@
             </div>
           </div>
 
-          <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+          <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in"
+            data-aos-delay="200">
             <div class="icon-box">
               <div class="icon"><i class="bx bx-file"></i></div>
               <h4><a href="">Sed ut perspici</a></h4>
@@ -224,7 +235,8 @@
             </div>
           </div>
 
-          <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="300">
+          <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in"
+            data-aos-delay="300">
             <div class="icon-box">
               <div class="icon"><i class="bx bx-tachometer"></i></div>
               <h4><a href="">Magni Dolores</a></h4>
@@ -232,7 +244,8 @@
             </div>
           </div>
 
-          <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="400">
+          <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in"
+            data-aos-delay="400">
             <div class="icon-box">
               <div class="icon"><i class="bx bx-layer"></i></div>
               <h4><a href="">Nemo Enim</a></h4>
@@ -243,20 +256,21 @@
         </div>
 
       </div>
-    </section>  --}}
+    </section> --}}
     <!-- End Services Section -->
 
     <!-- ======= Cta Section ======= -->
     <section id="cta" class="cta">
       <div class="container" data-aos="zoom-in">
         <div class="row">
-          <div class="col-lg-9 text-center text-lg-start">
+          {{-- <div class="col-lg-9 text-center text-lg-start">
             <h3>Merdeka Belajar Kampus Merdeka!</h3>
-            <p> Kampus Merdeka adalah cara terbaik berkuliah. Dapatkan kemerdekaan untuk membentuk masa depan yang sesuai dengan aspirasi kariermu..</p>
-          </div>
-          <div class="col-lg-3 cta-btn-container text-center">
+            <p> Kampus Merdeka adalah cara terbaik berkuliah. Dapatkan kemerdekaan untuk membentuk masa depan yang
+              sesuai dengan aspirasi kariermu..</p>
+          </div> --}}
+          {{-- <div class="col-lg-3 cta-btn-container text-center">
             <a class="cta-btn align-middle" href="#" data-toggle="modal" data-target="#exampleModalLong">Daftar MBKM</a>
-          </div>
+          </div> --}}
         </div>
 
       </div>
@@ -265,11 +279,13 @@
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
-      <div class="container" data-aos="fade-up">
+      <div class="container" data-aos="zoom-in">
 
         <div class="section-title">
           <h2>Contact</h2>
-          {{-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>  --}}
+          {{-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> --}}
         </div>
 
         <div class="row">
@@ -279,7 +295,8 @@
               <div class="address">
                 <i class="bi bi-geo-alt"></i>
                 <h4>Location:</h4>
-                <p>Jl. Kramat Raya No.98, RW.9, Kwitang, Kec. Senen, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10450</p>
+                <p>Jl. Kramat Raya No.98, RW.9, Kwitang, Kec. Senen, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta
+                  10450</p>
               </div>
 
               <div class="email">
@@ -305,7 +322,9 @@
                 <p>081381507125</p>
               </div>
 
-              {{-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d991.6515850141262!2d106.84221341517201!3d-6.183408590112826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5346b7c250b%3A0x189a490ffddab322!2sUBSI%20Kramat%2098!5e0!3m2!1sid!2sid!4v1582606989163!5m2!1sid!2sid" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>  --}}
+              {{-- <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d991.6515850141262!2d106.84221341517201!3d-6.183408590112826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5346b7c250b%3A0x189a490ffddab322!2sUBSI%20Kramat%2098!5e0!3m2!1sid!2sid!4v1582606989163!5m2!1sid!2sid"
+                frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe> --}}
             </div>
 
           </div>
@@ -331,7 +350,7 @@
                 <textarea class="form-control" name="message" rows="10" required></textarea>
               </div>
               <div class="my-3">
-                {{-- <div class="loading">Loading</div>  --}}
+                {{-- <div class="loading">Loading</div> --}}
                 <div class="error-message"></div>
                 <div class="sent-message">Your message has been sent. Thank you!</div>
               </div>
@@ -358,7 +377,7 @@
             <form action="" method="post">
               <input type="email" name="email"><input type="submit" value="Subscribe">
             </form>
-          </div>  --}}
+          </div> --}}
         </div>
       </div>
     </div>
@@ -368,9 +387,11 @@
         <div class="row">
 
           <div class="col-lg-3 col-md-6 footer-contact">
-            <h3><img src="{{ Storage::url('public/mybest_3.png') }}" alt="" loading="lazy" class="img-fluid" width="150" height="100"></h3>
+            <h3><img src="{{ Storage::url('public/mybest_3.png') }}" alt="" loading="lazy" class="img-fluid" width="150"
+                height="100"></h3>
             <p>
-              Jl. Kramat Raya No.98, RW.9, Kwitang, Kec. Senen, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10450<br><br>
+              Jl. Kramat Raya No.98, RW.9, Kwitang, Kec. Senen, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta
+              10450<br><br>
               <strong>Phone:</strong> (021) 8000063<br>
               <strong>Hotline 1:</strong> 081381507561<br>
               <strong>Hotline 2:</strong> 081381507125<br>
@@ -428,11 +449,13 @@
   <!-- End Footer -->
 
   <div id="preloader"></div>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
   <!-- Button trigger modal -->
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -448,9 +471,9 @@
               <input type="text" class="form-control" placeholder="example@gmail.com">
             </div>
             {{-- <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Nama Pengguna</label>
-            <input type="text" class="form-control" placeholder="Nama Pengguna">
-          </div>  --}}
+              <label for="recipient-name" class="col-form-label">Nama Pengguna</label>
+              <input type="text" class="form-control" placeholder="Nama Pengguna">
+            </div> --}}
             <div class="form-group">
               <label for="recipient-name" class="col-form-label">NIM</label>
               <input type="text" class="form-control" placeholder="NIM">

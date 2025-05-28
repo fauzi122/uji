@@ -335,12 +335,12 @@
 	</div>
 	<!-- Page wrapper end -->
 	<!-- Floating Chat Icon -->
-	<!-- <div id="chat-icon" class="chatx-icon">
+	<div id="chat-icon" class="chatx-icon">
 		<div class="chatx-user">
 			<img src="{{ asset('assets/img/MyBest-chat.png') }}" alt="Chat">
 			<span id="chat-user-count" class="chatx-badge">0</span>
 		</div>
-	</div> -->
+	</div>
 
 	<!-- Chat Box -->
 	<div id="chat-box" class="chatx-box">

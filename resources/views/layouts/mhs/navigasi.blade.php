@@ -24,7 +24,10 @@
                     <span class="menu-text">Ujian</span>
                 </a> -->
 
-
+                <a href="{{ url('/toefl') }}">
+                    <i class="icon-book"></i>
+                    <span class="menu-text">TOEFL</span>
+                </a>
 
             </li>
 

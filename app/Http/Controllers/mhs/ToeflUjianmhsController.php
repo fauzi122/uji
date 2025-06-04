@@ -18,6 +18,8 @@ use App\Models\Soal;
 use App\Models\User;
 use App\Models\Read_materi;
 use App\Models\Toef_mhs;
+use Illuminate\Support\Facades\Cache;
+
 
 // use App\Models\Session;
 use PDF;
@@ -156,37 +158,55 @@ class ToeflUjianmhsController extends Controller
 
   public function getSoal(Request $request)
   {
-    $waktu = DATE("Y-m-d H:i:s");
+    $waktu = now();
     $no_urut = $request->no_urut;
+    $id_soal = $request->id_soal;
+    $user = auth()->user();
 
-    $soal = Detailsoal::find($request->id_soal);
+    // Cache soal berdasarkan ID
+    $soal = Cache::remember("soal_toefl_bsi_$id_soal", 60, function () use ($id_soal) {
+      return Detailsoal::find($id_soal);
+    });
 
-    $where = ['id_soal' => $soal->id_soal, 'id_user' => auth()->user()->username];
-    $hasil_ujian = Hasiltoeflujian::where($where)->first();
-    $cek_soal = Soal::where('id', $soal->id_soal)->first();
-    $jml_jawab = Jawab::where(['id_soal' => $soal->id_soal, 'id_user' => auth()->user()->username])->count();
-    $soals = Detailsoal::where(['id_soal' => $soal->id_soal])
-      ->where('status', 'Y')
-      ->get();
-    if (STRTOTIME($hasil_ujian->akhir_ujian) < STRTOTIME(DATE("Y-m-d H:i:s"))) {
-      Hasiltoeflujian::where($where)
-        ->update([
-          'sts' => '1'
-        ]);
-      return response()->json(['success' => true, 'html' => "aktu habis"]);
-    } else {
-      if ($hasil_ujian == null) {
-        Hasiltoeflujian::where($where)
-          ->update([
-            'awal_ujian' => $waktu,
-            'akhir_ujian' => date('Y-m-d H:i:s', strtotime('+' . $cek_soal->waktu . ' minutes', strtotime($waktu))),
-          ]);
-      }
+    if (!$soal) {
+      return response()->json(['success' => false, 'html' => 'Soal tidak ditemukan.']);
     }
 
-    $html = view('mhs.toefl.jadwal.soal')->with(compact('soal', 'hasil_ujian', 'cek_soal', 'soals', 'no_urut', 'jml_jawab'))->render();
+    $where = [
+      'id_soal' => $soal->id_soal,
+      'id_user' => $user->username,
+    ];
+
+    $hasil_ujian = Hasiltoeflujian::where($where)->first();
+    $cek_soal = Soal::find($soal->id_soal);
+    $jml_jawab = Jawab::where([
+      'id_soal' => $soal->id_soal,
+      'id_user' => $user->username
+    ])->count();
+
+    $soals = Detailsoal::where([
+      'id_soal' => $soal->id_soal,
+      'status' => 'Y'
+    ])->get();
+
+    // Jika waktu ujian sudah habis
+    if ($hasil_ujian && strtotime($hasil_ujian->akhir_ujian) < strtotime($waktu)) {
+      Hasiltoeflujian::where($where)->update(['sts' => '1']);
+      return response()->json(['success' => true, 'html' => "Waktu habis"]);
+    }
+
+    // Jika belum ada hasil ujian, set awal dan akhir ujian
+    if ($hasil_ujian && !$hasil_ujian->awal_ujian) {
+      Hasiltoeflujian::where($where)->update([
+        'awal_ujian' => $waktu,
+        'akhir_ujian' => now()->addMinutes($cek_soal->waktu),
+      ]);
+    }
+
+    $html = view('mhs.toefl.jadwal.soal', compact('soal', 'hasil_ujian', 'cek_soal', 'soals', 'no_urut', 'jml_jawab'))->render();
     return response()->json(['success' => true, 'html' => $html]);
   }
+
 
   public function jawab(Request $request)
   {
@@ -362,7 +382,7 @@ class ToeflUjianmhsController extends Controller
       $existingRecord = Read_materi::where('id_soal', $request->id)
         ->where('nim', auth()->user()->username)
         ->first();
-        echo $existingRecord;
+      echo $existingRecord;
       if (!$existingRecord) {
         Read_materi::firstOrCreate([
           'id_soal' => $request->id,

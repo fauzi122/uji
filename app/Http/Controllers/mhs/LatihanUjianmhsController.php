@@ -16,6 +16,8 @@ use App\Models\Randomsoal;
 use App\Models\Jawab;
 use App\Models\Soal;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
+
 // use App\Models\Session;
 use PDF;
 
@@ -151,37 +153,52 @@ class LatihanUjianmhsController extends Controller
 
   public function getSoal(Request $request)
   {
-    $waktu = DATE("Y-m-d H:i:s");
+    $waktu = now();
     $no_urut = $request->no_urut;
+    $id_soal = $request->id_soal;
 
-    $soal = Detailsoal::find($request->id_soal);
+    // Key Redis
+    $redisKey = "soal_toefl_bsi_" . $id_soal;
 
-    $where = ['id_soal' => $soal->id_soal, 'id_user' => auth()->user()->username, 'kd_lokal' => auth()->user()->kode];
-    $hasil_ujian = Hasilujian::where($where)->first();
-    $cek_soal = Soal::where('id', $soal->id_soal)->first();
-    $jml_jawab = Jawab::where(['id_soal' => $soal->id_soal, 'id_user' => auth()->user()->username])->count();
-    $soals = Detailsoal::where(['id_soal' => $soal->id_soal])
-      ->where('status', 'Y')
-      ->get();
-    if (STRTOTIME($hasil_ujian->akhir_ujian) < STRTOTIME(DATE("Y-m-d H:i:s"))) {
-      Hasilujian::where($where)
-        ->update([
-          'sts' => '1'
-        ]);
-      return response()->json(['success' => true, 'html' => "aktu habis"]);
-    } else {
-      if ($hasil_ujian == null) {
-        Hasilujian::where($where)
-          ->update([
-            'awal_ujian' => $waktu,
-            'akhir_ujian' => date('Y-m-d H:i:s', strtotime('+' . $cek_soal->waktu . ' minutes', strtotime($waktu))),
-          ]);
-      }
+    // Ambil dari cache Redis, jika belum ada maka ambil dari DB dan simpan ke Redis
+    $soal = Cache::remember($redisKey, now()->addMinutes(60), function () use ($id_soal) {
+      return Detailsoal::find($id_soal);
+    });
+
+    if (!$soal) {
+      return response()->json(['success' => false, 'html' => 'Soal tidak ditemukan.']);
     }
 
-    $html = view('mhs.latihanujian.jadwal.soal')->with(compact('soal', 'hasil_ujian', 'cek_soal', 'soals', 'no_urut', 'jml_jawab'))->render();
+    $user = auth()->user();
+    $where = [
+      'id_soal' => $soal->id_soal,
+      'id_user' => $user->username,
+      'kd_lokal' => $user->kode
+    ];
+
+    $hasil_ujian = Hasilujian::where($where)->first();
+    $cek_soal = Soal::find($soal->id_soal);
+    $jml_jawab = Jawab::where(['id_soal' => $soal->id_soal, 'id_user' => $user->username])->count();
+    $soals = Detailsoal::where(['id_soal' => $soal->id_soal, 'status' => 'Y'])->get();
+
+    // Cek waktu habis
+    if ($hasil_ujian && strtotime($hasil_ujian->akhir_ujian) < strtotime($waktu)) {
+      Hasilujian::where($where)->update(['sts' => '1']);
+      return response()->json(['success' => true, 'html' => "Waktu habis"]);
+    }
+
+    // Update awal & akhir ujian jika belum mulai
+    if ($hasil_ujian && $hasil_ujian->awal_ujian == null) {
+      Hasilujian::where($where)->update([
+        'awal_ujian' => $waktu,
+        'akhir_ujian' => now()->addMinutes($cek_soal->waktu),
+      ]);
+    }
+
+    $html = view('mhs.latihanujian.jadwal.soal', compact('soal', 'hasil_ujian', 'cek_soal', 'soals', 'no_urut', 'jml_jawab'))->render();
     return response()->json(['success' => true, 'html' => $html]);
   }
+
 
   public function jawab(Request $request)
   {

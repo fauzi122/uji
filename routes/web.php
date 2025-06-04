@@ -636,7 +636,7 @@ Route::middleware(['auth', 'user-agent-based'])->group(function () {
             Route::get('/cetak-ujian-pdf/{id}', [LatihanUjianmhsController::class, 'cetak_pdf']);
 
             // Toefl
-            // Route::get('/toefl', [ToeflUjianmhsController::class, 'index']);
+            Route::get('/toefl', [ToeflUjianmhsController::class, 'index']);
             Route::get('/toefl-show/{id}', [ToeflUjianmhsController::class, 'show']);
             Route::post('/toefl-jawaban', [ToeflUjianmhsController::class, 'jawab']);
             Route::get('/toefl-penomoran', [ToeflUjianmhsController::class, 'getNomor']);
